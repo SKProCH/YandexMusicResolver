@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace YandexMusicResolver.Responces {
-    public class YandexApiResponse<T> {
+    internal class YandexApiResponse<T> {
         [JsonProperty("result")]
         public T? Result { get; set; }
         

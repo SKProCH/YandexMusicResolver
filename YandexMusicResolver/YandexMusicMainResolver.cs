@@ -6,7 +6,7 @@ using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver {
-    public class YandexMusicResolver {
+    public class YandexMusicMainResolver {
         private const string TrackUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)$";
         private const string AlbumUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)$";
         private const string PlaylistUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)$";
@@ -20,7 +20,7 @@ namespace YandexMusicResolver {
         public virtual YandexMusicDirectUrlLoader DirectUrlLoader { get; }
         public virtual YandexMusicSearchResultLoader SearchResultLoader { get; }
 
-        public YandexMusicResolver(bool allowSearch = true,
+        public YandexMusicMainResolver(bool allowSearch = true,
                                    YandexMusicPlaylistLoader? playlistLoader = null,
                                    YandexMusicTrackLoader? trackLoader = null,
                                    YandexMusicDirectUrlLoader? directUrlLoader = null,

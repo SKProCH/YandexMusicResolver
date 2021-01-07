@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace YandexMusicResolver {
-    public class Utilities {
+    internal class Utilities {
         public static string CreateMD5(string input)
         {
             // Use input string to calculate MD5 hash

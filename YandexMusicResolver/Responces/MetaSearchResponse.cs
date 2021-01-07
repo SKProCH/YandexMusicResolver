@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Responces {
-    public class MetaSearchResponse {
+    internal class MetaSearchResponse {
         [JsonProperty("albums")]
         public MetaSearchContentProxy<MetaAlbumSignature>? Albums { get; set; }
 
@@ -13,7 +13,7 @@ namespace YandexMusicResolver.Responces {
         public MetaSearchContentProxy<MetaTrack>? Tracks { get; set; }
     }
 
-    public class MetaSearchContentProxy<T> {
+    internal class MetaSearchContentProxy<T> {
         [JsonProperty("total")]
         public long Total { get; set; }
 

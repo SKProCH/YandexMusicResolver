@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Responces {
-    public class MetaTrackDownloadInfo
+    internal class MetaTrackDownloadInfo
     {
         [JsonProperty("codec")]
         public string Codec { get; set; }
