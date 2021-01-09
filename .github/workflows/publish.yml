@@ -1,0 +1,36 @@
+name: Publish package
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.101
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+  run_tests:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        run: dotnet test --no-build --verbosity normal 
+  publish:
+    needs: [run_tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish NuGet
+        uses: brandedoutcast/publish-nuget@v2.5.5
+        with:
+          PROJECT_FILE_PATH: YandexMusicResolver/YandexMusicResolver.csproj
+          NUGET_KEY: ${{secrets.NUGETAPIKEY}}
