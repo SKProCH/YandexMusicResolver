@@ -14,6 +14,7 @@ namespace YandexMusicResolver {
         private static Regex TrackUrlRegex = new Regex(TrackUrlPattern);
         private static Regex AlbumUrlRegex = new Regex(AlbumUrlPattern);
         private static Regex PlaylistUrlRegex = new Regex(PlaylistUrlPattern);
+        private string? _token;
 
         public virtual YandexMusicPlaylistLoader PlaylistLoader { get; }
         public virtual YandexMusicTrackLoader TrackLoader { get; }
@@ -21,17 +22,19 @@ namespace YandexMusicResolver {
         public virtual YandexMusicSearchResultLoader SearchResultLoader { get; }
 
         public YandexMusicMainResolver(bool allowSearch = true,
-                                   YandexMusicPlaylistLoader? playlistLoader = null,
-                                   YandexMusicTrackLoader? trackLoader = null,
-                                   YandexMusicDirectUrlLoader? directUrlLoader = null,
-                                   YandexMusicSearchResultLoader? searchResultLoader = null) {
-            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader();
-            TrackLoader = trackLoader ?? new YandexMusicTrackLoader();
-            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader();
-            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader();
+                                       string? token = null,
+                                       YandexMusicPlaylistLoader? playlistLoader = null,
+                                       YandexMusicTrackLoader? trackLoader = null,
+                                       YandexMusicDirectUrlLoader? directUrlLoader = null,
+                                       YandexMusicSearchResultLoader? searchResultLoader = null) {
+            _token = token;
+            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(token);
+            TrackLoader = trackLoader ?? new YandexMusicTrackLoader(token);
+            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(token);
+            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(token, null);
             AllowSearch = allowSearch;
         }
-        
+
         public bool AllowSearch { get; }
 
         public async Task<IAudioItem?> ResolveQuery(string query, bool? allowSearchOverride = null) {
@@ -49,15 +52,16 @@ namespace YandexMusicResolver {
             if (albumMatch.Success) {
                 return await PlaylistLoader.LoadPlaylist(trackMatch.Groups[1].Value, "volumes", GetTrack);
             }
-            
+
             if (allowSearchOverride ?? AllowSearch) {
                 return await SearchResultLoader.LoadSearchResult(query, PlaylistLoader, GetTrack);
             }
+
             return null;
         }
 
         private YandexMusicTrack GetTrack(AudioTrackInfo arg) {
-            return new YandexMusicTrack(arg, this);
+            return new(arg, this);
         }
     }
 }

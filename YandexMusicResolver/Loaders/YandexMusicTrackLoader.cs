@@ -7,6 +7,12 @@ using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
     public class YandexMusicTrackLoader {
+        protected string? _token;
+
+        public YandexMusicTrackLoader(string? token) {
+            _token = token;
+        }
+
         private const string TracksInfoFormat = "https://api.music.yandex.net/tracks?trackIds=";
         private const string TrackUrlFormat = "https://music.yandex.ru/album/{0}/track/{1}";
         public async Task<YandexMusicTrack?> LoadTrack(string albumId, string trackId, Func<AudioTrackInfo?, YandexMusicTrack?> trackFactory) {
@@ -14,7 +20,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         public async Task<AudioTrackInfo?> LoadTrackInfo(string albumId, string trackId) {
-            var response = await WebRequestUtils.ExecuteGet(TracksInfoFormat + $"{trackId}:{albumId}").Parse<List<MetaTrack>>();
+            var response = await WebRequestUtils.ExecuteGet(TracksInfoFormat + $"{trackId}:{albumId}", _token).Parse<List<MetaTrack>>();
             var entry = response.First();
             return await entry.ToAudioTrackInfo(this);
         }
