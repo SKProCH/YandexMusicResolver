@@ -6,42 +6,27 @@ using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicSearchResultLoaderTest {
+    public class YandexMusicSearchResultLoaderTest : YandexTestBase {
         [Fact]
         public void DoTrackSearch() {
-            var yandexMusicMainResolver = new YandexMusicMainResolver();
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(null);
-            Func<AudioTrackInfo, YandexMusicTrack> trackFactory = info => new YandexMusicTrack(info, yandexMusicMainResolver);
-            var yandexMusicPlaylistLoader = new YandexMusicPlaylistLoader(null);
-
-            var trackSearchResult = yandexMusicSearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over",
-                yandexMusicPlaylistLoader, trackFactory).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over",
+                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Tracks);
         }
         
         [Fact]
         public void DoAlbumSearch() {
-            var yandexMusicMainResolver = new YandexMusicMainResolver();
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(null);
-            Func<AudioTrackInfo, YandexMusicTrack> trackFactory = info => new YandexMusicTrack(info, yandexMusicMainResolver);
-            var yandexMusicPlaylistLoader = new YandexMusicPlaylistLoader(null);
-
-            var trackSearchResult = yandexMusicSearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over",
-                yandexMusicPlaylistLoader, trackFactory).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over",
+                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Albums);
         }
         
         [Fact]
         public void DoAllSearch() {
-            var yandexMusicMainResolver = new YandexMusicMainResolver();
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(null);
-            Func<AudioTrackInfo, YandexMusicTrack> trackFactory = info => new YandexMusicTrack(info, yandexMusicMainResolver);
-            var yandexMusicPlaylistLoader = new YandexMusicPlaylistLoader(null);
-
-            var trackSearchResult = yandexMusicSearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over",
-                yandexMusicPlaylistLoader, trackFactory).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over",
+                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Albums);
             Assert.NotNull(trackSearchResult?.Playlists);
@@ -50,13 +35,8 @@ namespace YandexMusicResolver.Tests {
         
         [Fact]
         public void DoPlaylistSearch() {
-            var yandexMusicMainResolver = new YandexMusicMainResolver();
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(null);
-            Func<AudioTrackInfo, YandexMusicTrack> trackFactory = info => new YandexMusicTrack(info, yandexMusicMainResolver);
-            var yandexMusicPlaylistLoader = new YandexMusicPlaylistLoader(null);
-
-            var trackSearchResult = yandexMusicSearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over",
-                yandexMusicPlaylistLoader, trackFactory).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over",
+                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Playlists);
         }
