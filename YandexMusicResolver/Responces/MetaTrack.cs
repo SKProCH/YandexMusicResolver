@@ -52,7 +52,7 @@ namespace YandexMusicResolver.Responces {
                 new AudioTrackInfo(
                     Title,
                     artists,
-                    DurationMs,
+                    TimeSpan.FromMilliseconds(DurationMs), 
                     Id.ToString(),
                     false,
                     string.Format(TrackUrlFormat, album.Id, Id),
