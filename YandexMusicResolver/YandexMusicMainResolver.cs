@@ -45,12 +45,12 @@ namespace YandexMusicResolver {
 
             var playlistMatch = PlaylistUrlRegex.Match(query);
             if (playlistMatch.Success) {
-                return await PlaylistLoader.LoadPlaylist(trackMatch.Groups[1].Value, trackMatch.Groups[2].Value, GetTrack);
+                return await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value, GetTrack);
             }
 
             var albumMatch = AlbumUrlRegex.Match(query);
             if (albumMatch.Success) {
-                return await PlaylistLoader.LoadPlaylist(trackMatch.Groups[1].Value, GetTrack);
+                return await PlaylistLoader.LoadPlaylist(albumMatch.Groups[1].Value, GetTrack);
             }
 
             if (allowSearchOverride ?? AllowSearch) {
