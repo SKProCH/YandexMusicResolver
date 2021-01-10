@@ -12,12 +12,13 @@ namespace YandexMusicResolver.Loaders {
         private const string TracksInfoFormat = "https://api.music.yandex.net/search?type={0}&page=0&text={1}";
         private Regex SearchRegex;
         private string? _token;
+        public string SearchPrefix { get; }
 
         public YandexMusicSearchResultLoader(string? token, string? searchPrefix = null) {
             // ReSharper disable once StringLiteralTypo
-            searchPrefix ??= "ymsearch";
+            SearchPrefix = searchPrefix ?? "ymsearch";
             _token = token;
-            SearchRegex = new Regex($"{searchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
+            SearchRegex = new Regex($"{SearchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
         }
 
         public Task<YandexMusicSearchResult?> LoadSearchResult(string query, YandexMusicPlaylistLoader playlistLoader,
@@ -31,6 +32,7 @@ namespace YandexMusicResolver.Loaders {
             limit = DefaultLimit;
             text = query;
 
+            if (!query.StartsWith(SearchPrefix + ":")) return false;
             var match = SearchRegex.Match(query);
             if (!match.Success) return false;
 
