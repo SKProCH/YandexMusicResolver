@@ -22,8 +22,8 @@ namespace YandexMusicResolver.Responces {
 
         [JsonProperty("tracks")]
         [Obsolete]
-        public List<MetaTrackSignature> PlaylistTracks {
-            set => Tracks = value.Cast<ITrackInfoContainer>().ToList();
+        public List<MetaPlaylistTrackContainer> PlaylistTracks {
+            set => Tracks = value.Select(container => container.Track).Cast<ITrackInfoContainer>().ToList();
         }
         
         [JsonProperty("volumes")]
