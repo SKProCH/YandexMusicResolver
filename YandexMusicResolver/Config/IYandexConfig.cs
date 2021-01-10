@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Config {
     public interface IYandexConfig {
@@ -10,6 +11,6 @@ namespace YandexMusicResolver.Config {
         
         string? YandexToken { get; set; }
         
-        IWebProxy? YandexProxy { get; set; }
+        [JsonIgnore] IWebProxy? YandexProxy { get; set; }
     }
 }
