@@ -23,7 +23,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: project
-        path: /
+        path: /home/runner/work/YandexMusicResolver/
   run_tests:
     needs: [build]
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: project
-          path: /
+          path: /home/runner/work/YandexMusicResolver/
       - name: Test
         run: dotnet test --no-build --verbosity normal 
         env:
@@ -45,7 +45,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: project
-          path: /
+          path: /home/runner/work/YandexMusicResolver/
       - name: Publish NuGet
         uses: brandedoutcast/publish-nuget@v2.5.5
         with:
