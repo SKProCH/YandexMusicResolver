@@ -4,10 +4,12 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using YandexMusicResolver.Config;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Requests {
     internal class YandexAuthRequest : YandexRequest {
+        public YandexAuthRequest(IYandexProxyHolder? proxyHolder) : base(proxyHolder, null) { }
         private const string ClientId = "23cabbbdc6cd418abb4b39c32c41195d";
         private const string ClientSecret = "53bc75238f0c4d08a118e51fe9203300";
 
