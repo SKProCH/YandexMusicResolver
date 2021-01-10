@@ -50,7 +50,7 @@ namespace YandexMusicResolver {
 
             var albumMatch = AlbumUrlRegex.Match(query);
             if (albumMatch.Success) {
-                return await PlaylistLoader.LoadPlaylist(trackMatch.Groups[1].Value, "volumes", GetTrack);
+                return await PlaylistLoader.LoadPlaylist(trackMatch.Groups[1].Value, GetTrack);
             }
 
             if (allowSearchOverride ?? AllowSearch) {
