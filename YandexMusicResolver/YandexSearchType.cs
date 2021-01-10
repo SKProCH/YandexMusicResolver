@@ -2,6 +2,7 @@
     public enum YandexSearchType {
         Track,
         Album,
-        Playlist
+        Playlist,
+        All
     }
 }
