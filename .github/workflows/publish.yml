@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Test
         run: dotnet test --no-build --verbosity normal 
+        env:
+          YandexProxy: {{secrets.YANDEXPROXYURL}}
   publish:
     needs: [run_tests]
     runs-on: ubuntu-latest
