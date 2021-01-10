@@ -25,4 +25,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       env:
-        YandexProxy: {{secrets.YANDEXPROXYURL}}
+        YandexProxy: ${{secrets.YANDEXPROXYURL}}
