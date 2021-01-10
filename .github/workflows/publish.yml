@@ -19,10 +19,20 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Upload aftifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: project
+        path: /
   run_tests:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
+      - name: Download project artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: project
+          path: /
       - name: Test
         run: dotnet test --no-build --verbosity normal 
         env:
@@ -31,6 +41,11 @@ jobs:
     needs: [run_tests]
     runs-on: ubuntu-latest
     steps:
+      - name: Download project artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: project
+          path: /
       - name: Publish NuGet
         uses: brandedoutcast/publish-nuget@v2.5.5
         with:
