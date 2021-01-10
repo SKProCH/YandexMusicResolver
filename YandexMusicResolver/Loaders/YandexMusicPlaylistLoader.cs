@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
     public class YandexMusicPlaylistLoader : YandexMusicTrackLoader {
-        public YandexMusicPlaylistLoader(string? token) : base(token) { }
+        public YandexMusicPlaylistLoader(IYandexConfig config) : base(config) { }
 
         private const string PlaylistInfoFormat = "https://api.music.yandex.net/users/{0}/playlists/{1}";
         private const string AlbumInfoFormat = "https://api.music.yandex.net/albums/{0}/with-tracks";
@@ -21,7 +22,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         private async Task<YandexMusicPlaylist?> LoadPlaylistUrl(string url, Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
-            var playlistData = await new YandexCustomRequest(_token).Create(url).GetResponseAsync<MetaPlaylist>();
+            var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaPlaylist>();
             if (playlistData.Tracks == null) {
                 throw new Exception("Empty album or playlist found.");
             }

@@ -8,16 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using YandexMusicResolver.Config;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Requests {
     internal class YandexRequest {
-        protected readonly string? Token;
         private HttpWebRequest? _fullRequest;
+        private IYandexProxyHolder? _proxyHolder;
+        private IYandexTokenHolder? _tokenHolder;
 
-        public YandexRequest(string? token = null) {
-            Token = token;
+        public YandexRequest(IYandexProxyHolder? proxyHolder, IYandexTokenHolder? tokenHolder) {
+            _tokenHolder = tokenHolder;
+            _proxyHolder = proxyHolder;
         }
+
+        public YandexRequest(IYandexProxyTokenHolder? config = null) : this(config, config) { }
 
         protected string GetQueryString(Dictionary<string, string> query) {
             return string.Join("&", query.Select(p => $"{p.Key}={HttpUtility.UrlEncode(p.Value)}"));
@@ -35,14 +40,16 @@ namespace YandexMusicResolver.Requests {
             afterCreate?.Invoke(request);
             request.Method = method;
 
+            if (_proxyHolder?.YandexProxy != null) request.Proxy = _proxyHolder.YandexProxy;
+
             if (headers != null && headers.Count > 0)
                 foreach (var header in headers)
                     request.Headers.Add(header.Key, header.Value);
-            
+
             TryAddHeader("User-Agent", "Yandex-Music-API");
             TryAddHeader("X-Yandex-Music-Client", "WindowsPhone/3.20");
-            if (Token != null) TryAddHeader("Authorization", "OAuth " + Token);
-            
+            if (_tokenHolder?.YandexToken != null) TryAddHeader("Authorization", "OAuth " + _tokenHolder.YandexToken);
+
             if (!string.IsNullOrEmpty(body)) {
                 byte[] bytes = Encoding.UTF8.GetBytes(body);
                 Stream s = request.GetRequestStream();
@@ -59,7 +66,7 @@ namespace YandexMusicResolver.Requests {
             _fullRequest = request;
 
             void TryAddHeader(string name, string value) {
-                if (request != null && request.Headers[name] == null) {
+                if (request.Headers[name] == null) {
                     request.Headers.Add(name, value);
                 }
             }

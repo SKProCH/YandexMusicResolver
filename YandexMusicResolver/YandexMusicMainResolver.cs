@@ -3,6 +3,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Config;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver {
@@ -15,23 +16,24 @@ namespace YandexMusicResolver {
         private static Regex AlbumUrlRegex = new Regex(AlbumUrlPattern);
         private static Regex PlaylistUrlRegex = new Regex(PlaylistUrlPattern);
         private string? _token;
+        private IYandexConfig _config;
 
         public virtual YandexMusicPlaylistLoader PlaylistLoader { get; }
         public virtual YandexMusicTrackLoader TrackLoader { get; }
         public virtual YandexMusicDirectUrlLoader DirectUrlLoader { get; }
         public virtual YandexMusicSearchResultLoader SearchResultLoader { get; }
 
-        public YandexMusicMainResolver(bool allowSearch = true,
-                                       string? token = null,
+        public YandexMusicMainResolver(IYandexConfig config,
+                                       bool allowSearch = true,
                                        YandexMusicPlaylistLoader? playlistLoader = null,
                                        YandexMusicTrackLoader? trackLoader = null,
                                        YandexMusicDirectUrlLoader? directUrlLoader = null,
                                        YandexMusicSearchResultLoader? searchResultLoader = null) {
-            _token = token;
-            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(token);
-            TrackLoader = trackLoader ?? new YandexMusicTrackLoader(token);
-            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(token);
-            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(token, null);
+            _config = config;
+            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(_config);
+            TrackLoader = trackLoader ?? new YandexMusicTrackLoader(_config);
+            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(_config);
+            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config, null);
             AllowSearch = allowSearch;
         }
 
