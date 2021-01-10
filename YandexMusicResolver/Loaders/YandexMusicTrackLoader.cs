@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
     public class YandexMusicTrackLoader {
-        protected string? _token;
+        protected readonly IYandexConfig Config;
 
-        public YandexMusicTrackLoader(string? token) {
-            _token = token;
+        public YandexMusicTrackLoader(IYandexConfig config) {
+            Config = config;
         }
 
         private const string TracksInfoFormat = "https://api.music.yandex.net/tracks?trackIds=";
@@ -21,7 +22,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         public async Task<AudioTrackInfo?> LoadTrackInfo(string albumId, string trackId) {
-            var response = await new YandexCustomRequest(_token).Create(TracksInfoFormat + $"{trackId}:{albumId}").GetResponseAsync<List<MetaTrack>>();
+            var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + $"{trackId}:{albumId}").GetResponseAsync<List<MetaTrack>>();
             var entry = response.First();
             return await entry.ToAudioTrackInfo(this);
         }

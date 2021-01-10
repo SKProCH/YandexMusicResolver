@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
     public class YandexMusicDirectUrlLoader {
-        private string? _token;
+        private IYandexConfig _config;
 
-        public YandexMusicDirectUrlLoader(string? token) {
-            _token = token;
+        public YandexMusicDirectUrlLoader(IYandexConfig config) {
+            _config = config;
         }
 
         private const string TrackDownloadInfoFormat = "https://api.music.yandex.net/tracks/{0}/download-info";
@@ -23,13 +24,13 @@ namespace YandexMusicResolver.Loaders {
         private const string Mp3Salt = "XGRlBW9FXlekgbPrRHuSiA";
 
         public async Task<string> GetDirectUrl(string trackId, string codec) {
-            var trackDownloadInfos = await new YandexCustomRequest(_token).Create(string.Format(TrackDownloadInfoFormat, trackId)).GetResponseAsync<List<MetaTrackDownloadInfo>>();
+            var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId)).GetResponseAsync<List<MetaTrackDownloadInfo>>();
             var track = trackDownloadInfos.FirstOrDefault(downloadInfo => downloadInfo.Codec == codec);
             if (track == null) {
                 throw new Exception("Couldn't find supported track format.");
             }
 
-            var downloadInfoContent = await new YandexCustomRequest(_token).Create(track.DownloadInfoUrl.ToString()).GetResponseBodyAsync();
+            var downloadInfoContent = await new YandexCustomRequest(_config).Create(track.DownloadInfoUrl.ToString()).GetResponseBodyAsync();
             var serializer = new XmlSerializer(typeof(MetaTrackDownloadInfoXml));
             using var reader = new StringReader(downloadInfoContent);
             var info = (MetaTrackDownloadInfoXml) serializer.Deserialize(reader);
