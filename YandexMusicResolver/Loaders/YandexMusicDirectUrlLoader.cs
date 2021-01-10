@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
@@ -22,13 +23,13 @@ namespace YandexMusicResolver.Loaders {
         private const string Mp3Salt = "XGRlBW9FXlekgbPrRHuSiA";
 
         public async Task<string> GetDirectUrl(string trackId, string codec) {
-            var trackDownloadInfos = await WebRequestUtils.ExecuteGet(string.Format(TrackDownloadInfoFormat, trackId), _token).Parse<List<MetaTrackDownloadInfo>>();
+            var trackDownloadInfos = await new YandexCustomRequest(_token).Create(string.Format(TrackDownloadInfoFormat, trackId)).GetResponseAsync<List<MetaTrackDownloadInfo>>();
             var track = trackDownloadInfos.FirstOrDefault(downloadInfo => downloadInfo.Codec == codec);
             if (track == null) {
                 throw new Exception("Couldn't find supported track format.");
             }
 
-            var downloadInfoContent = await WebRequestUtils.ExecuteGet(track.DownloadInfoUrl.ToString(), _token).GetContent();
+            var downloadInfoContent = await new YandexCustomRequest(_token).Create(track.DownloadInfoUrl.ToString()).GetResponseBodyAsync();
             var serializer = new XmlSerializer(typeof(MetaTrackDownloadInfoXml));
             using var reader = new StringReader(downloadInfoContent);
             var info = (MetaTrackDownloadInfoXml) serializer.Deserialize(reader);

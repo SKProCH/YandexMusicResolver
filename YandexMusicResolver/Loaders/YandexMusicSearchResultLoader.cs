@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
@@ -36,7 +37,7 @@ namespace YandexMusicResolver.Loaders {
         public async Task<YandexMusicSearchResult?> LoadSearchResult(YandexSearchType type, string query, YandexMusicPlaylistLoader playlistLoader,
                                                                      Func<AudioTrackInfo, YandexMusicTrack> trackFactory, int limit = DefaultLimit) {
             try {
-                var searchResponse = await WebRequestUtils.ExecuteGet(string.Format(TracksInfoFormat, type, query), _token).Parse<MetaSearchResponse>();
+                var searchResponse = await new YandexCustomRequest(_token).Create(string.Format(TracksInfoFormat, type, query)).GetResponseAsync<MetaSearchResponse>();
                 var albums = searchResponse.Albums?.Results.Take(limit);
                 var playlists = searchResponse.Playlists?.Results.Take(limit);
                 var tracks = searchResponse.Tracks?.Results.Take(limit);

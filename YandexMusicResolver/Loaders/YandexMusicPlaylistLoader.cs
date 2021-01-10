@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
@@ -20,7 +21,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         private async Task<YandexMusicPlaylist?> LoadPlaylistUrl(string url, Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
-            var playlistData = await WebRequestUtils.ExecuteGet(url, _token).Parse<MetaPlaylist>();
+            var playlistData = await new YandexCustomRequest(_token).Create(url).GetResponseAsync<MetaPlaylist>();
             if (playlistData.Tracks == null) {
                 throw new Exception("Empty album or playlist found.");
             }

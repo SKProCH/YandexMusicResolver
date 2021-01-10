@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
@@ -20,7 +21,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         public async Task<AudioTrackInfo?> LoadTrackInfo(string albumId, string trackId) {
-            var response = await WebRequestUtils.ExecuteGet(TracksInfoFormat + $"{trackId}:{albumId}", _token).Parse<List<MetaTrack>>();
+            var response = await new YandexCustomRequest(_token).Create(TracksInfoFormat + $"{trackId}:{albumId}").GetResponseAsync<List<MetaTrack>>();
             var entry = response.First();
             return await entry.ToAudioTrackInfo(this);
         }
