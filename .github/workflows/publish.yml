@@ -2,52 +2,40 @@ name: Publish package
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, publish_test ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.101
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Upload aftifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: project
-        path: /home/runner/work/YandexMusicResolver/
-  run_tests:
-    needs: [build]
+  build_and_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Download project artifacts
-        uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
         with:
-          name: project
-          path: /home/runner/work/YandexMusicResolver/
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal 
         env:
           YandexProxy: ${{secrets.YANDEXPROXYURL}}
   publish:
-    needs: [run_tests]
+    needs: [build_and_test]
     runs-on: ubuntu-latest
     steps:
-      - name: Download project artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: project
-          path: /home/runner/work/YandexMusicResolver/
+      - uses: actions/checkout@v2
       - name: Publish NuGet
-        uses: brandedoutcast/publish-nuget@v2.5.5
+        uses: Rebel028/publish-nuget@v2.6.0
         with:
           PROJECT_FILE_PATH: YandexMusicResolver/YandexMusicResolver.csproj
           NUGET_KEY: ${{secrets.NUGETAPIKEY}}
+          THOW_ERROR_IF_VERSION_EXISTS: false
+      - name: Publish Github Packages
+        uses: Rebel028/publish-nuget@v2.6.0
+        with:
+          PROJECT_FILE_PATH: YandexMusicResolver/YandexMusicResolver.csproj
+          NUGET_KEY: ${{secrets.GITHUB_TOKEN}}
+          NUGET_SOURCE: https://nuget.pkg.github.com/SKProCH
+          THOW_ERROR_IF_VERSION_EXISTS: false
