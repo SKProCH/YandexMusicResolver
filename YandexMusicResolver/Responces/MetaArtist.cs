@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Responces {
     public class MetaArtist
@@ -8,6 +7,6 @@ namespace YandexMusicResolver.Responces {
         public long Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

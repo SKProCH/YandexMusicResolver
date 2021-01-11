@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Config;
@@ -15,8 +13,8 @@ namespace YandexMusicResolver {
         private static Regex TrackUrlRegex = new Regex(TrackUrlPattern);
         private static Regex AlbumUrlRegex = new Regex(AlbumUrlPattern);
         private static Regex PlaylistUrlRegex = new Regex(PlaylistUrlPattern);
-        private string? _token;
-        private IYandexConfig _config;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly IYandexConfig _config;
 
         public virtual YandexMusicPlaylistLoader PlaylistLoader { get; }
         public virtual YandexMusicTrackLoader TrackLoader { get; }
@@ -33,7 +31,7 @@ namespace YandexMusicResolver {
             PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(_config);
             TrackLoader = trackLoader ?? new YandexMusicTrackLoader(_config);
             DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(_config);
-            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config, null);
+            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config);
             AllowSearch = allowSearch;
         }
 

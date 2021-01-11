@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver {
@@ -13,9 +12,5 @@ namespace YandexMusicResolver {
         public YandexApiResponseException(string message, MetaError apiMetaError) : base(message) {
             ApiMetaError = apiMetaError;
         }
-
-        protected YandexApiResponseException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context) { }
     }
 }

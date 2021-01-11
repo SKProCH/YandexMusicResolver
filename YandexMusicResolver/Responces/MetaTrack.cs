@@ -63,8 +63,8 @@ namespace YandexMusicResolver.Responces {
             return ToAudioTrackInfo();
         }
 
-        private static void TryApplyArtwork(ref string? final, string artwork) {
-            if (final != null) return;
+        private static void TryApplyArtwork(ref string? final, string? artwork) {
+            if (final != null || artwork == null) return;
             final = "https://" + artwork.Replace("%%", "200x200");
         }
     }

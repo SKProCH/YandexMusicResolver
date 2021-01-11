@@ -16,9 +16,9 @@ namespace YandexMusicResolver.Loaders {
         }
 
         private const string TracksInfoFormat = "https://api.music.yandex.net/tracks?trackIds=";
-        private const string TrackUrlFormat = "https://music.yandex.ru/album/{0}/track/{1}";
-        public async Task<YandexMusicTrack?> LoadTrack(string albumId, string trackId, Func<AudioTrackInfo?, YandexMusicTrack?> trackFactory) {
-            return trackFactory(await LoadTrackInfo(albumId, trackId));
+
+        public async Task<YandexMusicTrack?> LoadTrack(string albumId, string trackId, Func<AudioTrackInfo, YandexMusicTrack?> trackFactory) {
+            return trackFactory((await LoadTrackInfo(albumId, trackId))!);
         }
 
         public async Task<AudioTrackInfo?> LoadTrackInfo(string albumId, string trackId) {

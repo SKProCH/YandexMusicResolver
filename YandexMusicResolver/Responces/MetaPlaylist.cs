@@ -32,6 +32,6 @@ namespace YandexMusicResolver.Responces {
             set => Tracks = value.SelectMany(list => list).Cast<ITrackInfoContainer>().ToList();
         }
         
-        public List<ITrackInfoContainer> Tracks { get; set; }
+        public List<ITrackInfoContainer> Tracks { get; set; } = null!;
     }
 }

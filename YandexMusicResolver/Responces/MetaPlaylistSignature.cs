@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using YandexMusicResolver.AudioItems;
@@ -16,7 +15,7 @@ namespace YandexMusicResolver.Responces {
         [JsonProperty("owner")]
         public MetaOwner Owner { get; set; } = null!;
         
-        public async Task<YandexMusicPlaylist> GetPlaylist(YandexMusicPlaylistLoader yandexMusicPlaylistLoader, Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
+        public override async Task<YandexMusicPlaylist> GetPlaylist(YandexMusicPlaylistLoader yandexMusicPlaylistLoader, Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
             return (await yandexMusicPlaylistLoader.LoadPlaylist(Owner.Uid.ToString(), Id.ToString(), trackFactory))!;
         }
     }

@@ -6,10 +6,10 @@ namespace YandexMusicResolver.Responces {
         public long Uid { get; set; }
 
         [JsonProperty("login")]
-        public string Login { get; set; }
+        public string Login { get; set; } = null!;
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [JsonProperty("verified")]
         public bool Verified { get; set; }

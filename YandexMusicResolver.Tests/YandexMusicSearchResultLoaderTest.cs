@@ -1,8 +1,5 @@
 ﻿#nullable enable
-using System;
-using System.Runtime.InteropServices.ComTypes;
 using Xunit;
-using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.Tests {
@@ -46,7 +43,9 @@ namespace YandexMusicResolver.Tests {
         [InlineData("")]
         [InlineData("myprefix")]
         public void TestPrefixes(string? prefix) {
+            #pragma warning disable 8625
             var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(null, prefix);
+            #pragma warning restore 8625
             prefix ??= "ymsearch";
             var correctQuery = $"{prefix}:playlist:25:take over";
             Assert.True(yandexMusicSearchResultLoader.TryParseQuery(correctQuery, out var text1, out var type1, out var limit1));

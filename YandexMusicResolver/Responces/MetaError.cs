@@ -4,9 +4,9 @@ namespace YandexMusicResolver.Responces {
     public class MetaError
     {
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [JsonProperty("message")]
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
     }
 }

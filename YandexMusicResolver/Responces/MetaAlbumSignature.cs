@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using YandexMusicResolver.AudioItems;
@@ -12,7 +11,7 @@ namespace YandexMusicResolver.Responces {
         public long Id { get; set; }
 
         [JsonProperty("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
 
         [JsonProperty("coverUri")]
         public string? CoverUri { get; set; }

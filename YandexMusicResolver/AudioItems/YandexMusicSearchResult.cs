@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Newtonsoft.Json;
-using YandexMusicResolver.Loaders;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.AudioItems {

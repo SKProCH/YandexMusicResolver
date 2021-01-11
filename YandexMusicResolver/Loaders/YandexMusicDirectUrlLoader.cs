@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
@@ -35,7 +32,7 @@ namespace YandexMusicResolver.Loaders {
             using var reader = new StringReader(downloadInfoContent);
             var info = (MetaTrackDownloadInfoXml) serializer.Deserialize(reader);
 
-            var sign = Utilities.CreateMD5(Mp3Salt + info.Path.Substring(1) + info.S);
+            var sign = Utilities.CreateMd5(Mp3Salt + info.Path.Substring(1) + info.S);
 
             return string.Format(DirectUrlFormat, info.Host, codec, sign, info.Ts, info.Path);
         }
