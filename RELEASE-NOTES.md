@@ -1,3 +1,6 @@
+# v2.1.0
+- Add public members documentation
+
 # v2.0.0
 - Add new config system
 - Query parser in yandex searches now separated
