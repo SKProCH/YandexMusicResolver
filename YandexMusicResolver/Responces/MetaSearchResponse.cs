@@ -24,6 +24,6 @@ namespace YandexMusicResolver.Responces {
         public long Order { get; set; }
 
         [JsonProperty("results")]
-        public List<T> Results { get; set; }
+        public List<T> Results { get; set; } = null!;
     }
 }

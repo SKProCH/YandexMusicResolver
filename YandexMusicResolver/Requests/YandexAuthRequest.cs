@@ -24,7 +24,7 @@ namespace YandexMusicResolver.Requests {
 
             FormRequest("https://oauth.yandex.ru/token", WebRequestMethods.Http.Post,
                 body: string.Join("&", body.Select(p => $"{p.Key}={HttpUtility.UrlEncode(p.Value)}")),
-                afterCreate:request => request.ContentType = "application/x-www-form-urlencoded");
+                afterCreate: request => request.ContentType = "application/x-www-form-urlencoded");
 
             return this;
         }

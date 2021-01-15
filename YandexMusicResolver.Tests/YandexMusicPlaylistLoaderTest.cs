@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 using YandexMusicResolver.AudioItems;
-using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.Tests {
     public class YandexMusicPlaylistLoaderTest : YandexTestBase {

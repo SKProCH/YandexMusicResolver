@@ -1,12 +1,20 @@
 ﻿using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Responces {
-    public class MetaError
-    {
+    /// <summary>
+    /// Represents error that returned from Yandex Music
+    /// </summary>
+    public class MetaError {
+        /// <summary>
+        /// Error name
+        /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
+        /// <summary>
+        /// Error message
+        /// </summary>
         [JsonProperty("message")]
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
     }
 }

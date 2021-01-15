@@ -3,6 +3,7 @@
         public TokenHolder(string? yandexToken) {
             YandexToken = yandexToken;
         }
+
         public string? YandexToken { get; set; }
     }
 }

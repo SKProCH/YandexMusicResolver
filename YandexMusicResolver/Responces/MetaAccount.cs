@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
+
 #pragma warning disable 8618
 
 namespace YandexMusicResolver.Responces {
