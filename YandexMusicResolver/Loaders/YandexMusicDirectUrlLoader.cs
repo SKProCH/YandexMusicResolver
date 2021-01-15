@@ -9,9 +9,16 @@ using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responces;
 
 namespace YandexMusicResolver.Loaders {
+    /// <summary>
+    /// Represents class to getting direct links from tracks
+    /// </summary>
     public class YandexMusicDirectUrlLoader {
         private IYandexConfig _config;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YandexMusicDirectUrlLoader"/> class.
+        /// </summary>
+        /// <param name="config">Config instance for performing requests</param>
         public YandexMusicDirectUrlLoader(IYandexConfig config) {
             _config = config;
         }
@@ -20,8 +27,17 @@ namespace YandexMusicResolver.Loaders {
         private const string DirectUrlFormat = "https://{0}/get-{1}/{2}/{3}{4}";
         private const string Mp3Salt = "XGRlBW9FXlekgbPrRHuSiA";
 
+        /// <summary>
+        /// Get direct url to download track
+        /// </summary>
+        /// <remarks>If you not authorized will return 30s track version. This is YandexMusic restriction</remarks>
+        /// <param name="trackId">Target track id</param>
+        /// <param name="codec">Target codec. mp3 by default</param>
+        /// <returns>Direct url to download track</returns>
+        /// <exception cref="Exception">Couldn't find supported track format</exception>
         public async Task<string> GetDirectUrl(string trackId, string codec) {
-            var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId)).GetResponseAsync<List<MetaTrackDownloadInfo>>();
+            var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId))
+                                                                           .GetResponseAsync<List<MetaTrackDownloadInfo>>();
             var track = trackDownloadInfos.FirstOrDefault(downloadInfo => downloadInfo.Codec == codec);
             if (track == null) {
                 throw new Exception("Couldn't find supported track format.");

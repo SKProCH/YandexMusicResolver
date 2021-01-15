@@ -7,16 +7,29 @@ using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.Responces {
+    /// <summary>
+    /// Represent
+    /// </summary>
     public class MetaPlaylistTrack : ITrackInfoContainer {
+        /// <summary>
+        /// Track id
+        /// </summary>
         [JsonProperty("id")]
         public long Id { get; set; }
-        
+
+        /// <summary>
+        /// List of albums that contain this track
+        /// </summary>
         [JsonProperty("albums")]
         public List<MetaAlbumSignature> Albums { get; set; } = null!;
 
+        /// <summary>
+        /// Creation timestamp
+        /// </summary>
         [JsonProperty("timestamp")]
         public DateTimeOffset Timestamp { get; set; }
-        
+
+        /// <inheritdoc />
         public async Task<AudioTrackInfo> ToAudioTrackInfo(YandexMusicTrackLoader loader) {
             return (await loader.LoadTrack(Albums.First().Id.ToString(), Id.ToString(), TrackFactory))?.TrackInfo!;
         }

@@ -3,11 +3,9 @@ using System.Text;
 
 namespace YandexMusicResolver {
     internal class Utilities {
-        public static string CreateMd5(string input)
-        {
+        public static string CreateMd5(string input) {
             // Use input string to calculate MD5 hash
-            using (MD5 md5 = MD5.Create())
-            {
+            using (MD5 md5 = MD5.Create()) {
                 byte[] inputBytes = Encoding.ASCII.GetBytes(input);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
@@ -16,6 +14,7 @@ namespace YandexMusicResolver {
                 foreach (var t in hashBytes) {
                     sb.Append(t.ToString("X2"));
                 }
+
                 return sb.ToString();
             }
         }

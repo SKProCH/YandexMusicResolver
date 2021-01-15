@@ -2,7 +2,14 @@
 using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Config {
+    /// <summary>
+    /// Represents entity that must contains proxy
+    /// </summary>
     public interface IYandexProxyHolder {
-        [JsonIgnore] IWebProxy? YandexProxy { get; set; }
+        /// <summary>
+        /// Gets or sets proxy to use with requests
+        /// </summary>
+        [JsonIgnore]
+        IWebProxy? YandexProxy { get; set; }
     }
 }

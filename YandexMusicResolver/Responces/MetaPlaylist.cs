@@ -13,7 +13,7 @@ namespace YandexMusicResolver.Responces {
 
         [JsonProperty("ogImage")]
         public string? OgImage { get; set; }
-        
+
         [JsonProperty("coverUri")]
         public string? CoverUri { get; set; }
 
@@ -25,13 +25,13 @@ namespace YandexMusicResolver.Responces {
         public List<MetaPlaylistTrackContainer> PlaylistTracks {
             set => Tracks = value.Select(container => container.Track).Cast<ITrackInfoContainer>().ToList();
         }
-        
+
         [JsonProperty("volumes")]
         [Obsolete]
         public List<List<MetaTrack>> AlbumVolumes {
             set => Tracks = value.SelectMany(list => list).Cast<ITrackInfoContainer>().ToList();
         }
-        
+
         public List<ITrackInfoContainer> Tracks { get; set; } = null!;
     }
 }

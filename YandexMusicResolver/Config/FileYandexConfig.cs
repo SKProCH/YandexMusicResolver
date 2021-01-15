@@ -4,13 +4,21 @@ using System.Net;
 using Newtonsoft.Json;
 
 namespace YandexMusicResolver.Config {
+    /// <summary>
+    /// Represents <see cref="IYandexConfig"/> implementation that stores data in a file
+    /// </summary>
     public class FileYandexConfig : IYandexConfig {
         private string? _filePath;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileYandexConfig"/> class.
+        /// </summary>
+        /// <param name="filePath">Target file path</param>
         public FileYandexConfig(string? filePath = null) {
             _filePath = filePath ?? "YandexConfig.json";
         }
 
+        /// <inheritdoc />
         public virtual void Load() {
             try {
                 if (File.Exists(_filePath)) {
@@ -33,15 +41,26 @@ namespace YandexMusicResolver.Config {
             }
         }
 
+        /// <inheritdoc />
         public virtual void Save() {
             File.WriteAllText(_filePath, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
 
+        /// <inheritdoc />
         public string? YandexLogin { get; set; }
+
+        /// <inheritdoc />
         public string? YandexPassword { get; set; }
+
+        /// <inheritdoc />
         public string? YandexToken { get; set; }
+
+        /// <summary>
+        /// Uri to create proxy
+        /// </summary>
         public string? YandexProxyAddress { get; set; }
 
+        /// <inheritdoc />
         [JsonIgnore]
         public IWebProxy? YandexProxy { get; set; }
     }
