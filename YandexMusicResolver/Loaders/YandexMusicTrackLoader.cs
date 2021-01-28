@@ -34,8 +34,19 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="trackId">Target track id</param>
         /// <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
         /// <returns>Instance of <see cref="YandexMusicTrack"/></returns>
-        public async Task<YandexMusicTrack?> LoadTrack(string albumId, string trackId, Func<AudioTrackInfo, YandexMusicTrack?> trackFactory) {
-            return trackFactory((await LoadTrackInfo(albumId, trackId))!);
+        [Obsolete("We do not need an album ID to load track information. \nWill be removed in 3.0")]
+        public Task<YandexMusicTrack?> LoadTrack(string albumId, string trackId, Func<AudioTrackInfo, YandexMusicTrack?> trackFactory) {
+            return LoadTrack(trackId, trackFactory);
+        }
+        
+        /// <summary>
+        /// Load track
+        /// </summary>
+        /// <param name="trackId">Target track id</param>
+        /// <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
+        /// <returns>Instance of <see cref="YandexMusicTrack"/></returns>
+        public async Task<YandexMusicTrack?> LoadTrack(string trackId, Func<AudioTrackInfo, YandexMusicTrack?> trackFactory) {
+            return trackFactory((await LoadTrackInfo(trackId))!);
         }
 
         /// <summary>
@@ -44,8 +55,18 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="albumId">Album id with track</param>
         /// <param name="trackId">Target track id</param>
         /// <returns>Instance of <see cref="AudioTrackInfo"/></returns>
-        public async Task<AudioTrackInfo?> LoadTrackInfo(string albumId, string trackId) {
-            var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + $"{trackId}:{albumId}").GetResponseAsync<List<MetaTrack>>();
+        [Obsolete("We do not need an album ID to load track information. \nWill be removed in 3.0")]
+        public Task<AudioTrackInfo?> LoadTrackInfo(string albumId, string trackId) {
+            return LoadTrackInfo(trackId);
+        }
+        
+        /// <summary>
+        /// Load track info
+        /// </summary>
+        /// <param name="trackId">Target track id</param>
+        /// <returns>Instance of <see cref="AudioTrackInfo"/></returns>
+        public async Task<AudioTrackInfo?> LoadTrackInfo(string trackId) {
+            var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + trackId).GetResponseAsync<List<MetaTrack>>();
             var entry = response.First();
             return await entry.ToAudioTrackInfo(this);
         }
