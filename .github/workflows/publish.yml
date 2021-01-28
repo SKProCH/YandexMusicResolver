@@ -5,7 +5,7 @@ on:
     branches: [ master, publish_test ]
 
 jobs:
-  build_and_test:
+  build_and_publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,27 +16,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore
-#      - name: Test
-#        run: dotnet test --no-build --verbosity normal 
-#        env:
-#          YandexProxy: ${{secrets.YANDEXPROXYURL}}
-  publish:
-    needs: [build_and_test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Publish NuGet
-        uses: Rebel028/publish-nuget@v2.6.0
-        with:
-          PROJECT_FILE_PATH: YandexMusicResolver/YandexMusicResolver.csproj
-          NUGET_KEY: ${{secrets.NUGETAPIKEY}}
-          NUGET_SOURCE: https://api.nuget.org/v3
-          THOW_ERROR_IF_VERSION_EXISTS: false
-      - name: Publish Github Packages
-        uses: Rebel028/publish-nuget@v2.6.0
-        with:
-          PROJECT_FILE_PATH: YandexMusicResolver/YandexMusicResolver.csproj
-          NUGET_KEY: ${{secrets.GITHUB_TOKEN}}
-          NUGET_SOURCE: https://nuget.pkg.github.com/SKProCH
-          THOW_ERROR_IF_VERSION_EXISTS: false
+        run: dotnet build --no-restore --configuration Release
+      - name: Publish to Nuget
+        run: dotnet nuget push "YandexMusicResolver/bin/Release/*.nupkg" --api-key ${{secrets.NUGETAPIKEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push "YandexMusicResolver/bin/Release/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source https://nuget.pkg.github.com/SKProCH/index.json --skip-duplicate
