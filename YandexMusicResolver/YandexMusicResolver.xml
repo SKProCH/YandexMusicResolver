@@ -326,6 +326,14 @@
             <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
             <returns>Playlist instance</returns>
         </member>
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.LoadAlbum(System.String,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
+            <summary>
+            Loads the album from Yandex Music
+            </summary>
+            <param name="albumId">Target album id</param>
+            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
+            <returns>Playlist instance</returns>
+        </member>
         <member name="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader">
             <summary>
             Represents search on Yandex Music
@@ -698,6 +706,16 @@
             </summary>
             <param name="config">Yandex config instance</param>
             <param name="allowSearch">Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean})"/> can be resolved with search</param>
+            <param name="playlistLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader"/></param>
+            <param name="trackLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicTrackLoader"/></param>
+            <param name="directUrlLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader"/></param>
+            <param name="searchResultLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader"/></param>
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicMainResolver.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,YandexMusicResolver.Loaders.YandexMusicTrackLoader,YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader,YandexMusicResolver.Loaders.YandexMusicSearchResultLoader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:YandexMusicResolver.YandexMusicMainResolver"/> class.
+            </summary>
+            <param name="config">Yandex config instance</param>
             <param name="playlistLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader"/></param>
             <param name="trackLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicTrackLoader"/></param>
             <param name="directUrlLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader"/></param>
