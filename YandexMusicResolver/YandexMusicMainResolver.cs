@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Config;
@@ -13,9 +14,9 @@ namespace YandexMusicResolver {
         private const string AlbumUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)$";
         private const string PlaylistUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)$";
 
-        private static Regex TrackUrlRegex = new Regex(TrackUrlPattern);
-        private static Regex AlbumUrlRegex = new Regex(AlbumUrlPattern);
-        private static Regex PlaylistUrlRegex = new Regex(PlaylistUrlPattern);
+        private static readonly Regex TrackUrlRegex = new Regex(TrackUrlPattern);
+        private static readonly Regex AlbumUrlRegex = new Regex(AlbumUrlPattern);
+        private static readonly Regex PlaylistUrlRegex = new Regex(PlaylistUrlPattern);
 
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IYandexConfig _config;
@@ -49,6 +50,7 @@ namespace YandexMusicResolver {
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
         /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
         /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
+        [Obsolete("Use another ctor and set AllowSearch property after that. \nWill be removed in 3.0")]
         public YandexMusicMainResolver(IYandexConfig config,
                                        bool allowSearch = true,
                                        YandexMusicPlaylistLoader? playlistLoader = null,
@@ -62,11 +64,31 @@ namespace YandexMusicResolver {
             SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config);
             AllowSearch = allowSearch;
         }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
+        /// </summary>
+        /// <param name="config">Yandex config instance</param>
+        /// <param name="playlistLoader">Instance of <see cref="YandexMusicPlaylistLoader"/></param>
+        /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
+        /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
+        /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
+        public YandexMusicMainResolver(IYandexConfig config,
+                                       YandexMusicPlaylistLoader? playlistLoader = null,
+                                       YandexMusicTrackLoader? trackLoader = null,
+                                       YandexMusicDirectUrlLoader? directUrlLoader = null,
+                                       YandexMusicSearchResultLoader? searchResultLoader = null) {
+            _config = config;
+            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(_config);
+            TrackLoader = trackLoader ?? new YandexMusicTrackLoader(_config);
+            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(_config);
+            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config);
+        }
 
         /// <summary>
         /// Is query in <see cref="ResolveQuery"/> can be resolved with search
         /// </summary>
-        public bool AllowSearch { get; }
+        public bool AllowSearch { get; set; } = true;
 
         /// <summary>
         /// Resolves yandex query. Can directly resolve playlists, albums, tracks by url and search queries

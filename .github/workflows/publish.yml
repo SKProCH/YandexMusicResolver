@@ -31,6 +31,7 @@ jobs:
         with:
           PROJECT_FILE_PATH: YandexMusicResolver/YandexMusicResolver.csproj
           NUGET_KEY: ${{secrets.NUGETAPIKEY}}
+          NUGET_SOURCE: https://api.nuget.org/v3
           THOW_ERROR_IF_VERSION_EXISTS: false
       - name: Publish Github Packages
         uses: Rebel028/publish-nuget@v2.6.0

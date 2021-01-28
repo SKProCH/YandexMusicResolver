@@ -35,7 +35,7 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="codec">Target codec. mp3 by default</param>
         /// <returns>Direct url to download track</returns>
         /// <exception cref="Exception">Couldn't find supported track format</exception>
-        public async Task<string> GetDirectUrl(string trackId, string codec) {
+        public async Task<string> GetDirectUrl(string trackId, string codec = "mp3") {
             var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId))
                                                                            .GetResponseAsync<List<MetaTrackDownloadInfo>>();
             var track = trackDownloadInfos.FirstOrDefault(downloadInfo => downloadInfo.Codec == codec);
