@@ -155,6 +155,11 @@
             Additional track metadata
             </summary>
         </member>
+        <member name="P:YandexMusicResolver.AudioTrackInfo.ArtworkUrl">
+            <summary>
+            Track image uri
+            </summary>
+        </member>
         <member name="T:YandexMusicResolver.Config.EmptyYandexConfig">
             <summary>
             Represents <see cref="T:YandexMusicResolver.Config.IYandexConfig"/> implementation placeholder
@@ -401,11 +406,26 @@
             <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
             <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
         </member>
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTrack(System.String,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
+            <summary>
+            Load track
+            </summary>
+            <param name="trackId">Target track id</param>
+            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
+            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
+        </member>
         <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTrackInfo(System.String,System.String)">
             <summary>
             Load track info
             </summary>
             <param name="albumId">Album id with track</param>
+            <param name="trackId">Target track id</param>
+            <returns>Instance of <see cref="T:YandexMusicResolver.AudioTrackInfo"/></returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTrackInfo(System.String)">
+            <summary>
+            Load track info
+            </summary>
             <param name="trackId">Target track id</param>
             <returns>Instance of <see cref="T:YandexMusicResolver.AudioTrackInfo"/></returns>
         </member>
