@@ -1,3 +1,6 @@
+# v2.2.1
+- Add some missing xml docs
+
 # v2.2.0
 - Add ArtworkUrl to TrackInfo and mark Metadata obsolete, mark IsStream obsolete
 - Add default codec to GetDirectUrl
