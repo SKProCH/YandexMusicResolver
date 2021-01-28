@@ -10,7 +10,7 @@ namespace YandexMusicResolver.Responces {
     /// <summary>
     /// Represent
     /// </summary>
-    public class MetaPlaylistTrack : ITrackInfoContainer {
+    internal class MetaPlaylistTrack : ITrackInfoContainer {
         /// <summary>
         /// Track id
         /// </summary>

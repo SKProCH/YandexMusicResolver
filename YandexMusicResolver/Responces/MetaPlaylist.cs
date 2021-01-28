@@ -21,14 +21,12 @@ namespace YandexMusicResolver.Responces {
         public bool Available { get; set; } = true;
 
         [JsonProperty("tracks")]
-        [Obsolete]
-        public List<MetaPlaylistTrackContainer> PlaylistTracks {
+        private List<MetaPlaylistTrackContainer> PlaylistTracks {
             set => Tracks = value.Select(container => container.Track).Cast<ITrackInfoContainer>().ToList();
         }
 
         [JsonProperty("volumes")]
-        [Obsolete]
-        public List<List<MetaTrack>> AlbumVolumes {
+        private List<List<MetaTrack>> AlbumVolumes {
             set => Tracks = value.SelectMany(list => list).Cast<ITrackInfoContainer>().ToList();
         }
 
