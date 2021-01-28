@@ -29,6 +29,7 @@ namespace YandexMusicResolver {
         /// <summary>
         /// Is track live stream
         /// </summary>
+        [Obsolete("There is no streams support in library. \nWill removed in 3.0")]
         public bool IsStream { get; }
 
         /// <summary>
