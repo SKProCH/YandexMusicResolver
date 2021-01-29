@@ -613,15 +613,15 @@
             Represents a set of methods that serve for authorization in Yandex Music
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.YandexMusicAuth.CheckToken(System.String,YandexMusicResolver.Config.IYandexProxyHolder)">
+        <member name="M:YandexMusicResolver.YandexMusicAuth.ValidateTokenAsync(System.String,YandexMusicResolver.Config.IYandexProxyHolder)">
             <summary>
             Validates token
             </summary>
             <param name="token">Token to validate</param>
             <param name="proxyHolder">Container for proxy, which should be used for request</param>
-            <returns>True if token correct</returns>
+            <returns>True if token valid</returns>
         </member>
-        <member name="M:YandexMusicResolver.YandexMusicAuth.GetToken(System.String,System.String,YandexMusicResolver.Config.IYandexProxyHolder)">
+        <member name="M:YandexMusicResolver.YandexMusicAuth.LoginAsync(System.String,System.String,YandexMusicResolver.Config.IYandexProxyHolder)">
             <summary>
             Attempt to authorise
             </summary>
@@ -630,7 +630,7 @@
             <param name="proxyHolder">Container for proxy, which should be used for request</param>
             <returns>Token</returns>
         </member>
-        <member name="M:YandexMusicResolver.YandexMusicAuth.GetToken(System.String,System.String,System.String,YandexMusicResolver.Config.IYandexProxyHolder)">
+        <member name="M:YandexMusicResolver.YandexMusicAuth.ValidateOrLoginAsync(System.String,System.String,System.String,YandexMusicResolver.Config.IYandexProxyHolder)">
             <summary>
             Try to validate token or get new one using login and password
             </summary>

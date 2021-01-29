@@ -37,7 +37,7 @@ namespace YandexMusicResolver.Config {
         /// <exception cref="AuthenticationException">Will be thrown if we cant authorize and <see cref="allowRunWithoutAuth"/> is false</exception>
         public async Task AuthorizeAsync(bool allowRunWithoutAuth = true) {
             if (YandexToken != null)
-                if (await YandexMusicAuth.CheckToken(YandexToken, this))
+                if (await YandexMusicAuth.ValidateTokenAsync(YandexToken, this))
                     return;
 
             if (YandexLogin == null || YandexPassword == null) {
@@ -46,7 +46,7 @@ namespace YandexMusicResolver.Config {
             }
 
             try {
-                YandexToken = await YandexMusicAuth.GetToken(YandexLogin, YandexPassword, this);
+                YandexToken = await YandexMusicAuth.LoginAsync(YandexLogin, YandexPassword, this);
                 Save();
             }
             catch (Exception e) {
