@@ -8,7 +8,7 @@ namespace YandexMusicResolver.Config {
     /// </summary>
     public interface IYandexConfig : IYandexProxyTokenHolder {
         /// <summary>
-        /// Load config
+        /// Load config. This method can be called multiple times
         /// </summary>
         void Load();
 

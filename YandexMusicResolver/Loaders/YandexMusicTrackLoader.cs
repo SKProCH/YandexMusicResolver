@@ -22,6 +22,7 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="config">Config instance for performing requests</param>
         public YandexMusicTrackLoader(IYandexConfig config) {
+            config.Load();
             Config = config;
         }
 

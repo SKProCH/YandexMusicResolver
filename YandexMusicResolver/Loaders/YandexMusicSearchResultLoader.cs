@@ -34,6 +34,7 @@ namespace YandexMusicResolver.Loaders {
         public YandexMusicSearchResultLoader(IYandexConfig config, string? searchPrefix = null) {
             // ReSharper disable once StringLiteralTypo
             SearchPrefix = searchPrefix ?? "ymsearch";
+            config.Load();
             _config = config;
             SearchRegex = new Regex($"{SearchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
         }

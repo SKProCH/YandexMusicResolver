@@ -214,7 +214,7 @@
         </member>
         <member name="M:YandexMusicResolver.Config.IYandexConfig.Load">
             <summary>
-            Load config
+            Load config. This method can be called multiple times
             </summary>
         </member>
         <member name="M:YandexMusicResolver.Config.IYandexConfig.Save">
