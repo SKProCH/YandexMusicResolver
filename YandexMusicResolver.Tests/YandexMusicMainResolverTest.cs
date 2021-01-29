@@ -29,7 +29,7 @@ namespace YandexMusicResolver.Tests {
 
         [Fact]
         public void TestDisabledSearch() {
-            var yandexMusicMainResolver = new YandexMusicMainResolver(Config, false);
+            var yandexMusicMainResolver = new YandexMusicMainResolver(Config) {AllowSearch = false};
             var audioItem = yandexMusicMainResolver.ResolveQuery("Take Over").GetAwaiter().GetResult();
             Assert.Null(audioItem);
         }

@@ -8,7 +8,7 @@ namespace YandexMusicResolver.Tests {
         [InlineData("12033669", "Take Over", 1)]
         public void LoadAlbum(string albumId, string expectedName, int trackCount) {
             TrackFactory = info => new YandexMusicTrack(info, MainResolver);
-            var playlist = MainResolver.PlaylistLoader.LoadPlaylist(albumId, TrackFactory).GetAwaiter().GetResult();
+            var playlist = MainResolver.PlaylistLoader.LoadAlbum(albumId, TrackFactory).GetAwaiter().GetResult();
             Assert.NotNull(playlist);
             Assert.Equal(expectedName, playlist.Title);
             Assert.Equal(trackCount, playlist.Tracks.Count);

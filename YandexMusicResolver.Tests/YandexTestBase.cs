@@ -18,7 +18,7 @@ namespace YandexMusicResolver.Tests {
             }
             
             Config.Load();
-            MainResolver = new YandexMusicMainResolver(Config, true);
+            MainResolver = new YandexMusicMainResolver(Config);
             TrackFactory = info => new YandexMusicTrack(info, MainResolver);
         }
     }

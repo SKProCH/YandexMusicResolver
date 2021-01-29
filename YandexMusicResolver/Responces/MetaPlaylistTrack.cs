@@ -31,7 +31,7 @@ namespace YandexMusicResolver.Responces {
 
         /// <inheritdoc />
         public async Task<AudioTrackInfo> ToAudioTrackInfo(YandexMusicTrackLoader loader) {
-            return (await loader.LoadTrack(Albums.First().Id.ToString(), Id.ToString(), TrackFactory))?.TrackInfo!;
+            return (await loader.LoadTrack(Id.ToString(), TrackFactory))?.TrackInfo!;
         }
 
         private YandexMusicTrack TrackFactory(AudioTrackInfo arg) {

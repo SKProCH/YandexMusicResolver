@@ -10,8 +10,7 @@ namespace YandexMusicResolver.Responces {
     /// </summary>
     public class MetaPlaylistSignature : MetaAlbumSignature {
         [JsonProperty("uid")]
-        [Obsolete]
-        public long PlaylistId {
+        private long PlaylistId {
             set => Id = value;
         }
 

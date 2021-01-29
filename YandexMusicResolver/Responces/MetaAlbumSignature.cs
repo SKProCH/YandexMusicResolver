@@ -53,7 +53,7 @@ namespace YandexMusicResolver.Responces {
         /// <returns>Playlist with tracks</returns>
         public virtual async Task<YandexMusicPlaylist> GetPlaylist(YandexMusicPlaylistLoader yandexMusicPlaylistLoader,
                                                                    Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
-            return (await yandexMusicPlaylistLoader.LoadPlaylist(Id.ToString(), trackFactory))!;
+            return (await yandexMusicPlaylistLoader.LoadAlbum(Id.ToString(), trackFactory))!;
         }
     }
 }

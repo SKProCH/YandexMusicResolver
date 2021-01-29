@@ -89,9 +89,8 @@ namespace YandexMusicResolver.Responces {
                     artists,
                     TimeSpan.FromMilliseconds(DurationMs),
                     Id.ToString(),
-                    false,
                     string.Format(TrackUrlFormat, album.Id, Id),
-                    new Dictionary<string, string> {{"artworkUrl", artworkUrl!}}));
+                    artworkUrl));
         }
 
         /// <inheritdoc />

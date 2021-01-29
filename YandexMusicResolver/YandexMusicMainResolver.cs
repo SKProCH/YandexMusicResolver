@@ -45,30 +45,6 @@ namespace YandexMusicResolver {
         /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
         /// </summary>
         /// <param name="config">Yandex config instance</param>
-        /// <param name="allowSearch">Is query in <see cref="ResolveQuery"/> can be resolved with search</param>
-        /// <param name="playlistLoader">Instance of <see cref="YandexMusicPlaylistLoader"/></param>
-        /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
-        /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
-        /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
-        [Obsolete("Use another ctor and set AllowSearch property after that. \nWill be removed in 3.0")]
-        public YandexMusicMainResolver(IYandexConfig config,
-                                       bool allowSearch = true,
-                                       YandexMusicPlaylistLoader? playlistLoader = null,
-                                       YandexMusicTrackLoader? trackLoader = null,
-                                       YandexMusicDirectUrlLoader? directUrlLoader = null,
-                                       YandexMusicSearchResultLoader? searchResultLoader = null) {
-            _config = config;
-            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(_config);
-            TrackLoader = trackLoader ?? new YandexMusicTrackLoader(_config);
-            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(_config);
-            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config);
-            AllowSearch = allowSearch;
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
-        /// </summary>
-        /// <param name="config">Yandex config instance</param>
         /// <param name="playlistLoader">Instance of <see cref="YandexMusicPlaylistLoader"/></param>
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
         /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
@@ -99,7 +75,7 @@ namespace YandexMusicResolver {
         public async Task<IAudioItem?> ResolveQuery(string query, bool? allowSearchOverride = null) {
             var trackMatch = TrackUrlRegex.Match(query);
             if (trackMatch.Success) {
-                return await TrackLoader.LoadTrack(trackMatch.Groups[1].Value, trackMatch.Groups[2].Value, GetTrack);
+                return await TrackLoader.LoadTrack(trackMatch.Groups[2].Value, GetTrack);
             }
 
             var playlistMatch = PlaylistUrlRegex.Match(query);
@@ -109,7 +85,7 @@ namespace YandexMusicResolver {
 
             var albumMatch = AlbumUrlRegex.Match(query);
             if (albumMatch.Success) {
-                return await PlaylistLoader.LoadPlaylist(albumMatch.Groups[1].Value, GetTrack);
+                return await PlaylistLoader.LoadAlbum(albumMatch.Groups[1].Value, GetTrack);
             }
 
             if (allowSearchOverride ?? AllowSearch) {

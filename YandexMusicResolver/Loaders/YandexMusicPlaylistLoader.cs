@@ -30,17 +30,6 @@ namespace YandexMusicResolver.Loaders {
         public Task<YandexMusicPlaylist?> LoadPlaylist(string userId, string playlistId, Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
             return LoadPlaylistUrl(string.Format(PlaylistInfoFormat, userId, playlistId), trackFactory);
         }
-
-        /// <summary>
-        /// Loads the album from Yandex Music
-        /// </summary>
-        /// <param name="albumId">Target album id</param>
-        /// <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
-        /// <returns>Playlist instance</returns>
-        [Obsolete("For album loading use LoadAlbum method. \nWill be removed in 3.0")]
-        public Task<YandexMusicPlaylist?> LoadPlaylist(string albumId, Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
-            return LoadPlaylistUrl(string.Format(AlbumInfoFormat, albumId), trackFactory);
-        }
         
         /// <summary>
         /// Loads the album from Yandex Music
