@@ -18,10 +18,6 @@ Add [nuget package](https://www.nuget.org/packages/YandexMusicResolver/) to your
 ```
 dotnet add package YandexMusicResolver
 ```
-or
-```
-Install-Package YandexMusicResolver -Version 2.0.0
-```
 </li>
 
 <li>
@@ -57,7 +53,7 @@ Example code for getting direct track download url:
 var fileYandexConfig = new FileYandexConfig("yandex.config");
 fileYandexConfig.Load();
 var yandexMusicMainResolver = new YandexMusicMainResolver(fileYandexConfig);
-var directUrl = await yandexMusicMainResolver.DirectUrlLoader.GetDirectUrl("55561798", "mp3");
+var directUrl = await yandexMusicMainResolver.DirectUrlLoader.GetDirectUrl("55561798");
 Console.WriteLine(directUrl);
 ```
 **Warn:** Yandex will return a link to a 30-seconds track if you do not log in (do not use a config with a valid token).
