@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     internal class MetaSearchResponse {
         [JsonProperty("albums")]
         public MetaSearchContentProxy<MetaAlbumSignature>? Albums { get; set; }

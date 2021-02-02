@@ -8,7 +8,7 @@ namespace YandexMusicResolver.Tests {
         [Fact]
         public void DoTrackSearch() {
             var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over",
-                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
+                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Tracks);
         }
@@ -16,7 +16,7 @@ namespace YandexMusicResolver.Tests {
         [Fact]
         public void DoAlbumSearch() {
             var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over",
-                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
+                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Albums);
         }
@@ -24,7 +24,7 @@ namespace YandexMusicResolver.Tests {
         [Fact]
         public void DoAllSearch() {
             var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over",
-                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
+                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Albums);
             Assert.NotNull(trackSearchResult?.Playlists);
@@ -34,7 +34,7 @@ namespace YandexMusicResolver.Tests {
         [Fact]
         public void DoPlaylistSearch() {
             var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over",
-                MainResolver.PlaylistLoader, TrackFactory).GetAwaiter().GetResult();
+                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Playlists);
         }

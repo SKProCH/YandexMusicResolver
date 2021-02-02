@@ -8,7 +8,12 @@ namespace YandexMusicResolver.Tests {
         public void GetTrack(string url) {
             var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
             Assert.NotNull(audioItem);
-            Assert.IsType<YandexMusicTrack>(audioItem);
+            Assert.False(audioItem.IsSearchResult);
+            Assert.NotNull(audioItem.Tracks);
+            Assert.Null(audioItem.Playlists);
+            Assert.Null(audioItem.Albums);
+            Assert.NotEmpty(audioItem.Tracks);
+            Assert.Equal(YandexSearchType.Track, YandexSearchType.Track);
         }
         
         [Theory]
@@ -16,7 +21,12 @@ namespace YandexMusicResolver.Tests {
         public void GetAlbum(string url) {
             var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
             Assert.NotNull(audioItem);
-            Assert.IsType<YandexMusicPlaylist>(audioItem);
+            Assert.False(audioItem.IsSearchResult);
+            Assert.NotNull(audioItem.Albums);
+            Assert.Null(audioItem.Tracks);
+            Assert.Null(audioItem.Playlists);
+            Assert.NotEmpty(audioItem.Albums);
+            Assert.Equal(YandexSearchType.Album, audioItem.Type);
         }
         
         [Theory]
@@ -24,7 +34,12 @@ namespace YandexMusicResolver.Tests {
         public void GetPlaylist(string url) {
             var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
             Assert.NotNull(audioItem);
-            Assert.IsType<YandexMusicPlaylist>(audioItem);
+            Assert.False(audioItem.IsSearchResult);
+            Assert.NotNull(audioItem.Playlists);
+            Assert.Null(audioItem.Tracks);
+            Assert.Null(audioItem.Albums);
+            Assert.NotEmpty(audioItem.Playlists);
+            Assert.Equal(YandexSearchType.Playlist, audioItem.Type);
         }
 
         [Fact]

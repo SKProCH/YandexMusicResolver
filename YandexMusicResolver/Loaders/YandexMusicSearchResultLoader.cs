@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
-using YandexMusicResolver.Responces;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
     /// <summary>
@@ -45,12 +45,10 @@ namespace YandexMusicResolver.Loaders {
         /// <remarks>Complicated query is <see cref="SearchPrefix"/>:<see cref="YandexSearchType"/>:limit:text</remarks>
         /// <param name="query">Search query. May be complicated or default values will be used</param>
         /// <param name="playlistLoader">Playlist loader instance</param>
-        /// <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
         /// <returns>Instance of YandexMusicSearchResult</returns>
-        public Task<YandexMusicSearchResult?> LoadSearchResult(string query, YandexMusicPlaylistLoader playlistLoader,
-                                                               Func<AudioTrackInfo, YandexMusicTrack> trackFactory) {
+        public Task<YandexMusicSearchResult?> LoadSearchResult(string query, YandexMusicPlaylistLoader playlistLoader) {
             TryParseQuery(query, out var text, out var type, out var limit);
-            return LoadSearchResult(type, text, playlistLoader, trackFactory, limit);
+            return LoadSearchResult(type, text, playlistLoader, limit);
         }
 
         /// <summary>
@@ -83,24 +81,23 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="type">Search type</param>
         /// <param name="query">Search text</param>
         /// <param name="playlistLoader">Playlist loader instance</param>
-        /// <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
         /// <param name="limit">Search results limit count</param>
         /// <returns>Instance of YandexMusicSearchResult</returns>
         /// <exception cref="Exception">Throws exception if something went wrong</exception>
-        public async Task<YandexMusicSearchResult?> LoadSearchResult(YandexSearchType type, string query, YandexMusicPlaylistLoader playlistLoader,
-                                                                     Func<AudioTrackInfo, YandexMusicTrack> trackFactory, int limit = DefaultLimit) {
+        public async Task<YandexMusicSearchResult?> LoadSearchResult(YandexSearchType type, string query, YandexMusicPlaylistLoader playlistLoader, int limit = DefaultLimit) {
             try {
                 var searchResponse = await new YandexCustomRequest(_config)
                                           .Create(string.Format(TracksInfoFormat, type, query))
                                           .GetResponseAsync<MetaSearchResponse>();
-                var albums = searchResponse.Albums?.Results.Take(limit);
-                var playlists = searchResponse.Playlists?.Results.Take(limit);
-                var tracks = searchResponse.Tracks?.Results.Take(limit);
+                var albums = searchResponse.Albums?.Results.Take(limit).Select(signature => signature.ToYmAlbum(playlistLoader));
+                var playlists = searchResponse.Playlists?.Results.Take(limit).Select(signature => signature.ToYaPlaylist(playlistLoader));
+                var tracks = searchResponse.Tracks?.Results.Take(limit).Select(track => track.ToYmTrack());
 
-                return new YandexMusicSearchResult(query, limit, type,
+                return new YandexMusicSearchResult(query, true, type,
                     albums?.ToList().AsReadOnly(),
                     playlists?.ToList().AsReadOnly(),
-                    tracks?.ToList().AsReadOnly());
+                    tracks?.ToList().AsReadOnly(),
+                    limit);
             }
             catch (Exception e) {
                 throw new Exception("Could not load search results", e);

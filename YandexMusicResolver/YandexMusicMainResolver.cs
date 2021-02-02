@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
@@ -14,9 +15,9 @@ namespace YandexMusicResolver {
         private const string AlbumUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)$";
         private const string PlaylistUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)$";
 
-        private static readonly Regex TrackUrlRegex = new Regex(TrackUrlPattern);
-        private static readonly Regex AlbumUrlRegex = new Regex(AlbumUrlPattern);
-        private static readonly Regex PlaylistUrlRegex = new Regex(PlaylistUrlPattern);
+        private static readonly Regex TrackUrlRegex = new(TrackUrlPattern);
+        private static readonly Regex AlbumUrlRegex = new(AlbumUrlPattern);
+        private static readonly Regex PlaylistUrlRegex = new(PlaylistUrlPattern);
 
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IYandexConfig _config;
@@ -72,32 +73,43 @@ namespace YandexMusicResolver {
         /// </summary>
         /// <param name="query">Direct url or search query</param>
         /// <param name="allowSearchOverride">Is query in <see cref="ResolveQuery"/> can be resolved with search. This parameter overrides <see cref="AllowSearch"/></param>
-        /// <returns>Instance of <see cref="IAudioItem"/></returns>
-        public async Task<IAudioItem?> ResolveQuery(string query, bool? allowSearchOverride = null) {
+        /// <returns>Instance of <see cref="YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="AllowSearch"/> is false.</returns>
+        public async Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null) {
             var trackMatch = TrackUrlRegex.Match(query);
             if (trackMatch.Success) {
-                return await TrackLoader.LoadTrack(trackMatch.Groups[2].Value, GetTrack);
+                var tracks = new List<YandexMusicTrack>();
+                
+                var yandexMusicTrack = await TrackLoader.LoadTrack(trackMatch.Groups[2].Value);
+                if (yandexMusicTrack != null) tracks.Add(yandexMusicTrack);
+
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null, tracks.AsReadOnly());
             }
 
             var playlistMatch = PlaylistUrlRegex.Match(query);
             if (playlistMatch.Success) {
-                return await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value, GetTrack);
-            }
+                var playlists = new List<YandexMusicPlaylist>();
+                
+                var playlist = await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
+                if (playlist != null) playlists.Add(playlist);
 
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null, playlists.AsReadOnly(), null);
+            }
+            
             var albumMatch = AlbumUrlRegex.Match(query);
             if (albumMatch.Success) {
-                return await PlaylistLoader.LoadAlbum(albumMatch.Groups[1].Value, GetTrack);
-            }
+                var albums = new List<YandexMusicAlbum>();
+                
+                var album = await PlaylistLoader.LoadAlbum(albumMatch.Groups[1].Value);
+                if (album != null) albums.Add(album);
 
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Album, albums.AsReadOnly(), null, null);
+            }
+            
             if (allowSearchOverride ?? AllowSearch) {
-                return await SearchResultLoader.LoadSearchResult(query, PlaylistLoader, GetTrack);
+                return await SearchResultLoader.LoadSearchResult(query, PlaylistLoader);
             }
 
             return null;
-        }
-
-        private YandexMusicTrack GetTrack(AudioTrackInfo arg) {
-            return new(arg, this);
         }
     }
 }

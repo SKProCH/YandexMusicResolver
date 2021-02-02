@@ -14,15 +14,119 @@
             Contains info about error from yandex api
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.YandexApiResponseException.#ctor(YandexMusicResolver.Responces.MetaError)">
+        <member name="M:YandexMusicResolver.YandexApiResponseException.#ctor(YandexMusicResolver.Responses.MetaError)">
             <inheritdoc />
         </member>
-        <member name="M:YandexMusicResolver.YandexApiResponseException.#ctor(System.String,YandexMusicResolver.Responces.MetaError)">
+        <member name="M:YandexMusicResolver.YandexApiResponseException.#ctor(System.String,YandexMusicResolver.Responses.MetaError)">
             <inheritdoc />
         </member>
-        <member name="T:YandexMusicResolver.AudioItems.IAudioItem">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.Id">
             <summary>
-            Marker interface for all loadable items
+            Album id
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.Year">
+            <summary>
+            Album release year
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.Artists">
+            <summary>
+            Album artists
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.ArtworkUrl">
+            <summary>
+            Track image uri
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.TrackCount">
+            <summary>
+            Album tracks count
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.Genre">
+            <summary>
+            Album genre
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.Title">
+            <summary>
+            Track title
+            </summary>
+        </member>
+        <member name="T:YandexMusicResolver.AudioItems.YandexMusicArtist">
+            <summary>
+            Represent a artist in Yandex Music
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicArtist.Id">
+            <summary>
+            Artist ID
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicArtist.Name">
+            <summary>
+            Artist name
+            </summary>
+        </member>
+        <member name="T:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1">
+            <summary>
+            Represents class that contains data which could be loaded
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1.#ctor(System.Func{System.Threading.Tasks.Task{`0}})">
+            <summary>
+            Create instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1"/>
+            </summary>
+            <param name="loadDataFactory">Data creation factory</param>
+        </member>
+        <member name="M:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1.#ctor(`0)">
+            <summary>
+            Create instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1"/>
+            </summary>
+            <param name="data">Target data</param>
+        </member>
+        <member name="M:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1.LoadDataAsync">
+            <summary>
+            Load target data
+            </summary>
+            <returns>Task</returns>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1.IsDataLoaded">
+            <summary>
+            Return true if data already loaded
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicDataContainer`1.Data">
+            <summary>
+            Synchronously wait for data loading
+            </summary>
+        </member>
+        <member name="T:YandexMusicResolver.AudioItems.YandexMusicOwner">
+            <summary>
+            Represent playlist owner
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicOwner.Uid">
+            <summary>
+            Owner ID
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicOwner.Login">
+            <summary>
+            Owner login
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicOwner.Name">
+            <summary>
+            Owner name
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicOwner.Verified">
+            <summary>
+            Is owner verified
             </summary>
         </member>
         <member name="T:YandexMusicResolver.AudioItems.YandexMusicPlaylist">
@@ -30,27 +134,34 @@
             Represents playlist from Yandex Music
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.AudioItems.YandexMusicPlaylist.#ctor(System.String,System.Collections.ObjectModel.ReadOnlyCollection{YandexMusicResolver.AudioItems.YandexMusicTrack},System.Boolean)">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.Uid">
             <summary>
-            Initializes a new instance of the <see cref="T:YandexMusicResolver.AudioItems.YandexMusicPlaylist"/> class.
+            Playlist UID
             </summary>
-            <param name="title">Playlist title</param>
-            <param name="tracks">Collection with tracks</param>
-            <param name="isSearchResult">Is this playlist is search result</param>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.Kind">
+            <summary>
+            Playlist kind (something like the user's playlist index)
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.TrackCount">
+            <summary>
+            Playlist tracks count
+            </summary>
         </member>
         <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.Title">
             <summary>
             Playlist title
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.Tracks">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.Owner">
             <summary>
-            Collection with tracks in playlist
+            Playlist owner
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.IsSearchResult">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.ArtworkUrl">
             <summary>
-            Is this playlist a search result
+            Playlist artwork url
             </summary>
         </member>
         <member name="T:YandexMusicResolver.AudioItems.YandexMusicSearchResult">
@@ -65,12 +176,18 @@
         </member>
         <member name="P:YandexMusicResolver.AudioItems.YandexMusicSearchResult.Limit">
             <summary>
-            Tracks limit count
+            Tracks limit count.
+            Will be <code>null</code> if the <see cref="P:YandexMusicResolver.AudioItems.YandexMusicSearchResult.IsSearchResult"/> is <code>false</code>
             </summary>
         </member>
         <member name="P:YandexMusicResolver.AudioItems.YandexMusicSearchResult.Type">
             <summary>
             Search data type
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicSearchResult.IsSearchResult">
+            <summary>
+            Is this playlist a search result
             </summary>
         </member>
         <member name="P:YandexMusicResolver.AudioItems.YandexMusicSearchResult.Albums">
@@ -96,56 +213,37 @@
             AudioTrackInfo wrapper to resolve track direct url
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.TrackInfo">
-            <summary>
-            Get track info
-            </summary>
-        </member>
-        <member name="M:YandexMusicResolver.AudioItems.YandexMusicTrack.#ctor(YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.YandexMusicMainResolver)">
-            <summary>
-            Initializes a new instance of the <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/> class.
-            </summary>
-            <param name="trackInfo">Track info</param>
-            <param name="mainResolver">Resolver for direct url getting</param>
-        </member>
-        <member name="M:YandexMusicResolver.AudioItems.YandexMusicTrack.GetDirectUrl">
-            <summary>
-            Get direct url to track
-            </summary>
-            <remarks>If you not authorized will return 30s track version. This is YandexMusic restriction</remarks>
-            <returns>Direct url to download track</returns>
-        </member>
-        <member name="T:YandexMusicResolver.AudioTrackInfo">
-            <summary>
-            Contains info about track
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.AudioTrackInfo.Title">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Title">
             <summary>
             Track title
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioTrackInfo.Author">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Authors">
             <summary>
-            Track author
+            Track authors
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioTrackInfo.Length">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Author">
+            <summary>
+            Compose <see cref="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Authors"/> names into single string
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Length">
             <summary>
             Track lenght
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioTrackInfo.Identifier">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Id">
             <summary>
-            Track identifier
+            Track id
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioTrackInfo.Uri">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.Uri">
             <summary>
             Track link
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.AudioTrackInfo.ArtworkUrl">
+        <member name="P:YandexMusicResolver.AudioItems.YandexMusicTrack.ArtworkUrl">
             <summary>
             Track image uri
             </summary>
@@ -299,21 +397,19 @@
             </summary>
             <param name="config">Config instance for performing requests</param>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.LoadPlaylist(System.String,System.String,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.LoadPlaylist(System.String,System.String)">
             <summary>
             Loads the playlist from Yandex Music
             </summary>
             <param name="userId">Id of user who created the playlist</param>
-            <param name="playlistId">Target playlist id</param>
-            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
+            <param name="playlistKind">Target playlist id</param>
             <returns>Playlist instance</returns>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.LoadAlbum(System.String,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.LoadAlbum(System.String)">
             <summary>
             Loads the album from Yandex Music
             </summary>
             <param name="albumId">Target album id</param>
-            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
             <returns>Playlist instance</returns>
         </member>
         <member name="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader">
@@ -338,14 +434,13 @@
             <param name="config">Config instance for performing requests</param>
             <param name="searchPrefix"></param>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(System.String,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(System.String,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader)">
             <summary>
             Perform search request on Yandex Music
             </summary>
             <remarks>Complicated query is <see cref="P:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.SearchPrefix"/>:<see cref="T:YandexMusicResolver.YandexSearchType"/>:limit:text</remarks>
             <param name="query">Search query. May be complicated or default values will be used</param>
             <param name="playlistLoader">Playlist loader instance</param>
-            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
             <returns>Instance of YandexMusicSearchResult</returns>
         </member>
         <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.TryParseQuery(System.String,System.String@,YandexMusicResolver.YandexSearchType@,System.Int32@)">
@@ -359,14 +454,13 @@
             <param name="limit">Search limit</param>
             <returns>True if is this complicated query</returns>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(YandexMusicResolver.YandexSearchType,System.String,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack},System.Int32)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(YandexMusicResolver.YandexSearchType,System.String,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,System.Int32)">
             <summary>
             Perform search request on Yandex Music
             </summary>
             <param name="type">Search type</param>
             <param name="query">Search text</param>
             <param name="playlistLoader">Playlist loader instance</param>
-            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
             <param name="limit">Search results limit count</param>
             <returns>Instance of YandexMusicSearchResult</returns>
             <exception cref="T:System.Exception">Throws exception if something went wrong</exception>
@@ -387,226 +481,32 @@
             </summary>
             <param name="config">Config instance for performing requests</param>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTrack(System.String,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
-            <summary>
-            Load track
-            </summary>
-            <param name="trackId">Target track id</param>
-            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
-            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
-        </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTrackInfo(System.String)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTrack(System.String)">
             <summary>
             Load track info
             </summary>
             <param name="trackId">Target track id</param>
-            <returns>Instance of <see cref="T:YandexMusicResolver.AudioTrackInfo"/></returns>
+            <returns>Instance of <see cref="!:AudioTrackInfo"/></returns>
         </member>
-        <member name="T:YandexMusicResolver.Responces.ITrackInfoContainer">
-            <summary>
-            Represents entity from which we can get <see cref="T:YandexMusicResolver.AudioTrackInfo"/>
-            </summary>
-        </member>
-        <member name="M:YandexMusicResolver.Responces.ITrackInfoContainer.ToAudioTrackInfo(YandexMusicResolver.Loaders.YandexMusicTrackLoader)">
-            <summary>
-            Get related <see cref="T:YandexMusicResolver.AudioTrackInfo"/>
-            </summary>
-            <param name="loader">Track loader instance</param>
-            <returns>Instance of <see cref="T:YandexMusicResolver.AudioTrackInfo"/></returns>
-        </member>
-        <member name="T:YandexMusicResolver.Responces.MetaAlbumSignature">
-            <summary>
-            Represents data to resolve album
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaAlbumSignature.Id">
-            <summary>
-            Id of this entity
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaAlbumSignature.Title">
-            <summary>
-            Title of this album
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaAlbumSignature.CoverUri">
-            <summary>
-            Cover link
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaAlbumSignature.OgImage">
-            <summary>
-            Opengraph image (alternative cover) url
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaAlbumSignature.TrackCount">
-            <summary>
-            Count of tracks
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaAlbumSignature.Available">
-            <summary>
-            Is this playlist available now
-            </summary>
-        </member>
-        <member name="M:YandexMusicResolver.Responces.MetaAlbumSignature.GetPlaylist(YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
-            <summary>
-            Get full playlist with tracks
-            </summary>
-            <param name="yandexMusicPlaylistLoader">Instance of playlist loader to load playlist</param>
-            <param name="trackFactory">Track factory to create YandexMusicTrack from AudioTrackInfo</param>
-            <returns>Playlist with tracks</returns>
-        </member>
-        <member name="T:YandexMusicResolver.Responces.MetaArtist">
-            <summary>
-            Represent a artist in Yandex Music
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaArtist.Id">
-            <summary>
-            Artist ID
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaArtist.Name">
-            <summary>
-            Artist name
-            </summary>
-        </member>
-        <member name="T:YandexMusicResolver.Responces.MetaError">
+        <member name="T:YandexMusicResolver.Responses.MetaError">
             <summary>
             Represents error that returned from Yandex Music
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.Responces.MetaError.Name">
+        <member name="P:YandexMusicResolver.Responses.MetaError.Name">
             <summary>
             Error name
             </summary>
         </member>
-        <member name="P:YandexMusicResolver.Responces.MetaError.Message">
+        <member name="P:YandexMusicResolver.Responses.MetaError.Message">
             <summary>
             Error message
             </summary>
         </member>
-        <member name="T:YandexMusicResolver.Responces.MetaOwner">
-            <summary>
-            Represent playlist owner
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaOwner.Uid">
-            <summary>
-            Owner ID
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaOwner.Login">
-            <summary>
-            Owner login
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaOwner.Name">
-            <summary>
-            Owner name
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaOwner.Verified">
-            <summary>
-            Is owner verified
-            </summary>
-        </member>
-        <member name="T:YandexMusicResolver.Responces.MetaPlaylistSignature">
-            <summary>
-            Represents data to resolve playlist
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaPlaylistSignature.Owner">
-            <summary>
-            Playlist owner info
-            </summary>
-        </member>
-        <member name="M:YandexMusicResolver.Responces.MetaPlaylistSignature.GetPlaylist(YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,System.Func{YandexMusicResolver.AudioTrackInfo,YandexMusicResolver.AudioItems.YandexMusicTrack})">
-            <inheritdoc />
-        </member>
-        <member name="T:YandexMusicResolver.Responces.MetaPlaylistTrack">
-            <summary>
-            Represent
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaPlaylistTrack.Id">
-            <summary>
-            Track id
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaPlaylistTrack.Albums">
-            <summary>
-            List of albums that contain this track
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaPlaylistTrack.Timestamp">
-            <summary>
-            Creation timestamp
-            </summary>
-        </member>
-        <member name="M:YandexMusicResolver.Responces.MetaPlaylistTrack.ToAudioTrackInfo(YandexMusicResolver.Loaders.YandexMusicTrackLoader)">
-            <inheritdoc />
-        </member>
-        <member name="T:YandexMusicResolver.Responces.MetaTrack">
+        <member name="T:YandexMusicResolver.Responses.MetaTrack">
             <summary>
             Track data from Yandex Music
             </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.Id">
-            <summary>
-            Track ID
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.Title">
-            <summary>
-            Track title
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.Available">
-            <summary>
-            Is track available
-            </summary>
-            <remarks>If false, then most likely you are trying to get this information while not in the CIS. At the moment, you need to use a proxy in the CIS or log in with an account that has Yandex Plus (a subscription from Yandex)</remarks>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.DurationMs">
-            <summary>
-            Track duration in ms
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.Artists">
-            <summary>
-            Track authors list
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.Albums">
-            <summary>
-            List of albums that contain this track
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.CoverUri">
-            <summary>
-            Cover link
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.OgImage">
-            <summary>
-            Opengraph image (alternative cover) link
-            </summary>
-        </member>
-        <member name="P:YandexMusicResolver.Responces.MetaTrack.LyricsAvailable">
-            <summary>
-            Is lyrics available for this track
-            </summary>
-        </member>
-        <member name="M:YandexMusicResolver.Responces.MetaTrack.ToAudioTrackInfo">
-            <summary>
-            Convert this meta class to <see cref="T:YandexMusicResolver.AudioTrackInfo"/>
-            </summary>
-            <returns>Instance of <see cref="T:YandexMusicResolver.AudioTrackInfo"/></returns>
-        </member>
-        <member name="M:YandexMusicResolver.Responces.MetaTrack.ToAudioTrackInfo(YandexMusicResolver.Loaders.YandexMusicTrackLoader)">
-            <inheritdoc />
         </member>
         <member name="T:YandexMusicResolver.YandexMusicAuth">
             <summary>
@@ -686,7 +586,7 @@
             </summary>
             <param name="query">Direct url or search query</param>
             <param name="allowSearchOverride">Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean})"/> can be resolved with search. This parameter overrides <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/></param>
-            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.IAudioItem"/></returns>
+            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/> is false.</returns>
         </member>
         <member name="T:YandexMusicResolver.YandexSearchType">
             <summary>

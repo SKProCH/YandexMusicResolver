@@ -23,12 +23,18 @@
     
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    
+
+    <ItemGroup>
+      <None Remove="YandexMusicResolver.xml" />
     </ItemGroup>
 
     <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
         <ReadLinesFromFile File="../RELEASE-NOTES.md">
-            <Output TaskParameter="Lines" ItemName="ReleaseNoteLines"/>
+            <Output TaskParameter="Lines" ItemName="ReleaseNoteLines" />
         </ReadLinesFromFile>
         <PropertyGroup>
             <PackageReleaseNotes>@(ReleaseNoteLines, '%0a')</PackageReleaseNotes>

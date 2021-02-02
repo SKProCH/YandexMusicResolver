@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
-using YandexMusicResolver.Responces;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
     /// <summary>

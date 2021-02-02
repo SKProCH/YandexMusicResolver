@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// Represent playlist owner
     /// </summary>
-    public class MetaOwner {
+    public class YandexMusicOwner {
         /// <summary>
         /// Owner ID
         /// </summary>

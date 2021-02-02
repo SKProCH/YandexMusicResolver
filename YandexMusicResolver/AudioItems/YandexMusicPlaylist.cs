@@ -1,21 +1,48 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// Represents playlist from Yandex Music
     /// </summary>
-    public class YandexMusicPlaylist : IAudioItem {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YandexMusicPlaylist"/> class.
-        /// </summary>
-        /// <param name="title">Playlist title</param>
-        /// <param name="tracks">Collection with tracks</param>
-        /// <param name="isSearchResult">Is this playlist is search result</param>
-        public YandexMusicPlaylist(string title, ReadOnlyCollection<YandexMusicTrack> tracks, bool isSearchResult) {
+    public class YandexMusicPlaylist : YandexMusicDataContainer<List<YandexMusicTrack>> {
+        internal YandexMusicPlaylist(long uid, long kind, long trackCount, string title, YandexMusicOwner owner, string? artworkUrl,
+                                     YandexMusicPlaylistLoader loader) :
+            base(async () => (await loader.LoadPlaylist(owner.Login, kind.ToString()))!.Data.ToList()) {
+            Uid = uid;
+            Kind = kind;
+            TrackCount = trackCount;
             Title = title;
-            Tracks = tracks;
-            IsSearchResult = isSearchResult;
+            Owner = owner;
+            ArtworkUrl = artworkUrl;
         }
+
+        internal YandexMusicPlaylist(long uid, long kind, long trackCount, string title, YandexMusicOwner owner, string? artworkUrl,
+                                     List<YandexMusicTrack> tracks) : base(tracks) {
+            Uid = uid;
+            Kind = kind;
+            TrackCount = trackCount;
+            Title = title;
+            Owner = owner;
+            ArtworkUrl = artworkUrl;
+        }
+
+        /// <summary>
+        /// Playlist UID
+        /// </summary>
+        public long Uid { get; }
+
+        /// <summary>
+        /// Playlist kind (something like the user's playlist index)
+        /// </summary>
+        public long Kind { get; }
+
+        /// <summary>
+        /// Playlist tracks count
+        /// </summary>
+        public long TrackCount { get; }
 
         /// <summary>
         /// Playlist title
@@ -23,13 +50,13 @@ namespace YandexMusicResolver.AudioItems {
         public string Title { get; }
 
         /// <summary>
-        /// Collection with tracks in playlist
+        /// Playlist owner
         /// </summary>
-        public ReadOnlyCollection<YandexMusicTrack> Tracks { get; }
+        public YandexMusicOwner Owner { get; }
 
         /// <summary>
-        /// Is this playlist a search result
+        /// Playlist artwork url
         /// </summary>
-        public bool IsSearchResult { get; }
+        public string? ArtworkUrl { get; }
     }
 }

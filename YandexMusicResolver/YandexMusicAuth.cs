@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
-using YandexMusicResolver.Responces;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver {
     /// <summary>

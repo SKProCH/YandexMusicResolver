@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// Represent a artist in Yandex Music
     /// </summary>
-    public class MetaArtist {
+    public class YandexMusicArtist {
         /// <summary>
         /// Artist ID
         /// </summary>
