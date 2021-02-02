@@ -7,24 +7,21 @@ namespace YandexMusicResolver.Tests {
     public class YandexMusicSearchResultLoaderTest : YandexTestBase {
         [Fact]
         public void DoTrackSearch() {
-            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over",
-                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over").GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Tracks);
         }
         
         [Fact]
         public void DoAlbumSearch() {
-            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over",
-                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over").GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Albums);
         }
         
         [Fact]
         public void DoAllSearch() {
-            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over",
-                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over").GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Albums);
             Assert.NotNull(trackSearchResult?.Playlists);
@@ -33,8 +30,7 @@ namespace YandexMusicResolver.Tests {
         
         [Fact]
         public void DoPlaylistSearch() {
-            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over",
-                MainResolver.PlaylistLoader).GetAwaiter().GetResult();
+            var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over").GetAwaiter().GetResult();
             Assert.NotNull(trackSearchResult);
             Assert.NotNull(trackSearchResult?.Playlists);
         }
@@ -45,7 +41,8 @@ namespace YandexMusicResolver.Tests {
         [InlineData("myprefix")]
         public void TestPrefixes(string? prefix) {
             #pragma warning disable 8625
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(new EmptyYandexConfig(), prefix);
+            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(new EmptyYandexConfig(), null);
+            yandexMusicSearchResultLoader.SetSearchPrefix(prefix);
             #pragma warning restore 8625
             prefix ??= "ymsearch";
             var correctQuery = $"{prefix}:playlist:25:take over";

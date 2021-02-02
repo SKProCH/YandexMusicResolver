@@ -18,25 +18,35 @@ namespace YandexMusicResolver.Loaders {
         public const int DefaultLimit = 10;
 
         private const string TracksInfoFormat = "https://api.music.yandex.net/search?type={0}&page=0&text={1}";
-        private Regex SearchRegex;
+        private Regex SearchRegex = new Regex($"ymsearch(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
         private IYandexConfig _config;
+        private string _searchPrefix = "ymsearch";
+        #pragma warning disable 1591
+        protected YandexMusicPlaylistLoader PlaylistLoader;
+        #pragma warning restore 1591
 
         /// <summary>
         /// Special prefix for complicated requests
         /// </summary>
-        public string SearchPrefix { get; }
+        public string SearchPrefix => _searchPrefix;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicSearchResultLoader"/> class.
         /// </summary>
         /// <param name="config">Config instance for performing requests</param>
-        /// <param name="searchPrefix"></param>
-        public YandexMusicSearchResultLoader(IYandexConfig config, string? searchPrefix = null) {
-            // ReSharper disable once StringLiteralTypo
-            SearchPrefix = searchPrefix ?? "ymsearch";
+        public YandexMusicSearchResultLoader(IYandexConfig config, YandexMusicPlaylistLoader playlistLoader) {
+            PlaylistLoader = playlistLoader;
             config.Load();
             _config = config;
-            SearchRegex = new Regex($"{SearchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
+        }
+
+        /// <summary>
+        /// Set a new search prefix for complicated queries
+        /// </summary>
+        /// <param name="prefix">New prefix. <code>null</code> will be replaced with "ymsearch"</param>
+        public void SetSearchPrefix(string? prefix = null) {
+            _searchPrefix = prefix ?? "ymsearch";
+            SearchRegex = new Regex($"{_searchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
         }
 
         /// <summary>
@@ -44,11 +54,10 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <remarks>Complicated query is <see cref="SearchPrefix"/>:<see cref="YandexSearchType"/>:limit:text</remarks>
         /// <param name="query">Search query. May be complicated or default values will be used</param>
-        /// <param name="playlistLoader">Playlist loader instance</param>
         /// <returns>Instance of YandexMusicSearchResult</returns>
-        public Task<YandexMusicSearchResult?> LoadSearchResult(string query, YandexMusicPlaylistLoader playlistLoader) {
+        public Task<YandexMusicSearchResult?> LoadSearchResult(string query) {
             TryParseQuery(query, out var text, out var type, out var limit);
-            return LoadSearchResult(type, text, playlistLoader, limit);
+            return LoadSearchResult(type, text, limit);
         }
 
         /// <summary>
@@ -84,13 +93,13 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="limit">Search results limit count</param>
         /// <returns>Instance of YandexMusicSearchResult</returns>
         /// <exception cref="Exception">Throws exception if something went wrong</exception>
-        public async Task<YandexMusicSearchResult?> LoadSearchResult(YandexSearchType type, string query, YandexMusicPlaylistLoader playlistLoader, int limit = DefaultLimit) {
+        public async Task<YandexMusicSearchResult?> LoadSearchResult(YandexSearchType type, string query, int limit = DefaultLimit) {
             try {
                 var searchResponse = await new YandexCustomRequest(_config)
                                           .Create(string.Format(TracksInfoFormat, type, query))
                                           .GetResponseAsync<MetaSearchResponse>();
-                var albums = searchResponse.Albums?.Results.Take(limit).Select(signature => signature.ToYmAlbum(playlistLoader));
-                var playlists = searchResponse.Playlists?.Results.Take(limit).Select(signature => signature.ToYaPlaylist(playlistLoader));
+                var albums = searchResponse.Albums?.Results.Take(limit).Select(signature => signature.ToYmAlbum(PlaylistLoader));
+                var playlists = searchResponse.Playlists?.Results.Take(limit).Select(signature => signature.ToYaPlaylist(PlaylistLoader));
                 var tracks = searchResponse.Tracks?.Results.Take(limit).Select(track => track.ToYmTrack());
 
                 return new YandexMusicSearchResult(query, true, type,

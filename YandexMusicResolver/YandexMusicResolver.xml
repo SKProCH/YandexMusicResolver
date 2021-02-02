@@ -427,20 +427,24 @@
             Special prefix for complicated requests
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,System.String)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader"/> class.
             </summary>
             <param name="config">Config instance for performing requests</param>
-            <param name="searchPrefix"></param>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(System.String,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.SetSearchPrefix(System.String)">
+            <summary>
+            Set a new search prefix for complicated queries
+            </summary>
+            <param name="prefix">New prefix. <code>null</code> will be replaced with "ymsearch"</param>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(System.String)">
             <summary>
             Perform search request on Yandex Music
             </summary>
             <remarks>Complicated query is <see cref="P:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.SearchPrefix"/>:<see cref="T:YandexMusicResolver.YandexSearchType"/>:limit:text</remarks>
             <param name="query">Search query. May be complicated or default values will be used</param>
-            <param name="playlistLoader">Playlist loader instance</param>
             <returns>Instance of YandexMusicSearchResult</returns>
         </member>
         <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.TryParseQuery(System.String,System.String@,YandexMusicResolver.YandexSearchType@,System.Int32@)">
@@ -454,7 +458,7 @@
             <param name="limit">Search limit</param>
             <returns>True if is this complicated query</returns>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(YandexMusicResolver.YandexSearchType,System.String,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,System.Int32)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.LoadSearchResult(YandexMusicResolver.YandexSearchType,System.String,System.Int32)">
             <summary>
             Perform search request on Yandex Music
             </summary>

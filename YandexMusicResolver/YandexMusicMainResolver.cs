@@ -60,7 +60,7 @@ namespace YandexMusicResolver {
             PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(_config);
             TrackLoader = trackLoader ?? new YandexMusicTrackLoader(_config);
             DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(_config);
-            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config);
+            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config, PlaylistLoader);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace YandexMusicResolver {
             }
             
             if (allowSearchOverride ?? AllowSearch) {
-                return await SearchResultLoader.LoadSearchResult(query, PlaylistLoader);
+                return await SearchResultLoader.LoadSearchResult(query);
             }
 
             return null;
