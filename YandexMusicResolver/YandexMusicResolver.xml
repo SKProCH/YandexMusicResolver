@@ -581,15 +581,27 @@
         </member>
         <member name="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch">
             <summary>
-            Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean})"/> can be resolved with search
+            Is complicated query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> can be resolved
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean})">
+        <member name="P:YandexMusicResolver.YandexMusicMainResolver.PlainTextIsSearchQueryType">
+            <summary>
+            If we pass plain text to <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> it will be interpreted as search query with this search type. Set <see cref="P:YandexMusicResolver.YandexMusicMainResolver.PlainTextIsSearchQuery"/> to <code>false</code> to disable this
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.YandexMusicMainResolver.PlainTextIsSearchQuery">
+            <summary>
+            Will plain text be interpreted as a search query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/>
+            </summary>
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})">
             <summary>
             Resolves yandex query. Can directly resolve playlists, albums, tracks by url and search queries
             </summary>
             <param name="query">Direct url or search query</param>
-            <param name="allowSearchOverride">Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean})"/> can be resolved with search. This parameter overrides <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/></param>
+            <param name="allowSearchOverride">Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> can be resolved with search. This parameter overrides <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/></param>
+            <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/></param>
+            <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> it will be interpreted as search query with this search type</param>
             <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/> is false.</returns>
         </member>
         <member name="T:YandexMusicResolver.YandexSearchType">

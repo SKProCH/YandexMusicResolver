@@ -42,11 +42,22 @@ namespace YandexMusicResolver.Tests {
             Assert.Equal(YandexSearchType.Playlist, audioItem.Type);
         }
 
-        [Fact]
-        public void TestDisabledSearch() {
+        [Theory]
+        [InlineData("Take over")]
+        [InlineData("ymsearch:Track:10:Take over")]
+        public void TestDisabledSearch(string query) {
             var yandexMusicMainResolver = new YandexMusicMainResolver(Config) {AllowSearch = false};
-            var audioItem = yandexMusicMainResolver.ResolveQuery("Take Over").GetAwaiter().GetResult();
+            var audioItem = yandexMusicMainResolver.ResolveQuery(query).GetAwaiter().GetResult();
             Assert.Null(audioItem);
+        }
+
+        [Theory]
+        [InlineData("Take over", true)]
+        [InlineData("ymsearch:Track:10:Take over", false)]
+        public void TestDisabledPlainTextSearch(string query, bool isPlainText) {
+            var yandexMusicMainResolver = new YandexMusicMainResolver(Config) {PlainTextIsSearchQuery = false};
+            var audioItem = yandexMusicMainResolver.ResolveQuery(query).GetAwaiter().GetResult();
+            Assert.Equal(isPlainText, audioItem == null);
         }
 
         [Theory]

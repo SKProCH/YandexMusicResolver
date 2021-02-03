@@ -64,21 +64,35 @@ namespace YandexMusicResolver {
         }
 
         /// <summary>
-        /// Is query in <see cref="ResolveQuery"/> can be resolved with search
+        /// Is complicated query in <see cref="ResolveQuery"/> can be resolved
         /// </summary>
         public bool AllowSearch { get; set; } = true;
+
+        /// <summary>
+        /// If we pass plain text to <see cref="ResolveQuery"/> it will be interpreted as search query with this search type. Set <see cref="PlainTextIsSearchQuery"/> to <code>false</code> to disable this
+        /// </summary>
+        public YandexSearchType PlainTextIsSearchQueryType { get; set; } = YandexSearchType.Track;
+
+        /// <summary>
+        /// Will plain text be interpreted as a search query in <see cref="ResolveQuery"/>
+        /// </summary>
+        public bool PlainTextIsSearchQuery { get; set; } = true;
 
         /// <summary>
         /// Resolves yandex query. Can directly resolve playlists, albums, tracks by url and search queries
         /// </summary>
         /// <param name="query">Direct url or search query</param>
         /// <param name="allowSearchOverride">Is query in <see cref="ResolveQuery"/> can be resolved with search. This parameter overrides <see cref="AllowSearch"/></param>
+        /// <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="ResolveQuery"/></param>
+        /// <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="ResolveQuery"/> it will be interpreted as search query with this search type</param>
         /// <returns>Instance of <see cref="YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="AllowSearch"/> is false.</returns>
-        public async Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null) {
+        public async Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null,
+                                                                 bool? plainTextIsSearchQueryOverride = null,
+                                                                 YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
             var trackMatch = TrackUrlRegex.Match(query);
             if (trackMatch.Success) {
                 var tracks = new List<YandexMusicTrack>();
-                
+
                 var yandexMusicTrack = await TrackLoader.LoadTrack(trackMatch.Groups[2].Value);
                 if (yandexMusicTrack != null) tracks.Add(yandexMusicTrack);
 
@@ -88,27 +102,36 @@ namespace YandexMusicResolver {
             var playlistMatch = PlaylistUrlRegex.Match(query);
             if (playlistMatch.Success) {
                 var playlists = new List<YandexMusicPlaylist>();
-                
+
                 var playlist = await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
                 if (playlist != null) playlists.Add(playlist);
 
                 return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null, playlists.AsReadOnly(), null);
             }
-            
+
             var albumMatch = AlbumUrlRegex.Match(query);
             if (albumMatch.Success) {
                 var albums = new List<YandexMusicAlbum>();
-                
+
                 var album = await PlaylistLoader.LoadAlbum(albumMatch.Groups[1].Value);
                 if (album != null) albums.Add(album);
 
                 return new YandexMusicSearchResult(query, false, YandexSearchType.Album, albums.AsReadOnly(), null, null);
             }
-            
-            if (allowSearchOverride ?? AllowSearch) {
-                return await SearchResultLoader.LoadSearchResult(query);
+
+            if (!(allowSearchOverride ?? AllowSearch)) return null;
+            string searchText = query;
+            var searchType = plainTextAsSearchQueryTypeOverride ?? PlainTextIsSearchQueryType;
+            var searchLimit = 10;
+            var needSearch = plainTextIsSearchQueryOverride ?? PlainTextIsSearchQuery;
+            if (SearchResultLoader.TryParseQuery(query, out var text, out var type, out var limit)) {
+                searchText = text;
+                searchType = type;
+                searchLimit = limit;
+                needSearch = true;
             }
 
+            if (needSearch) return await SearchResultLoader.LoadSearchResult(searchType, searchText, searchLimit);
             return null;
         }
     }
