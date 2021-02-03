@@ -2,7 +2,7 @@
 
 #pragma warning disable 1591
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     [XmlRoot(ElementName = "download-info")]
     public class MetaTrackDownloadInfoXml {
         [XmlElement(ElementName = "host")]

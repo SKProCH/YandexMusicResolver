@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     internal class MetaAuthResponse {
         [JsonProperty("access_token")]
         public string AccessToken { get; set; } = null!;

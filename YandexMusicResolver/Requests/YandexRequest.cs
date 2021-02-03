@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using YandexMusicResolver.Config;
-using YandexMusicResolver.Responces;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Requests {
     internal class YandexRequest {

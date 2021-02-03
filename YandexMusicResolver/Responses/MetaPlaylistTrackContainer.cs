@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     internal class MetaPlaylistTrackContainer {
         [JsonProperty("id")]
         public long Id { get; set; }
 
         [JsonProperty("track")]
-        public MetaPlaylistTrack Track { get; set; } = null!;
+        public MetaTrack Track { get; set; } = null!;
     }
 }

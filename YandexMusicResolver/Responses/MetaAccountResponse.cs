@@ -2,7 +2,7 @@
 
 #pragma warning disable 8618
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     internal class MetaAccountResponse {
         [JsonProperty("account")]
         public MetaAccount? Account { get; set; }

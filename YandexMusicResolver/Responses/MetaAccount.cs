@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 #pragma warning disable 8618
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     internal class MetaAccount {
         [JsonProperty("now")]
         public DateTimeOffset Now { get; set; }

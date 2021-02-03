@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
-using YandexMusicResolver.Responces;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
     /// <summary>
@@ -20,6 +20,7 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="config">Config instance for performing requests</param>
         public YandexMusicDirectUrlLoader(IYandexConfig config) {
+            config.Load();
             _config = config;
         }
 

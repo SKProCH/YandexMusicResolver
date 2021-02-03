@@ -5,7 +5,9 @@ using YandexMusicResolver.Config;
 
 namespace YandexMusicResolver.Tests {
     public class EnvironmentConfig : IYandexConfig {
+        private bool isLoaded;
         public void Load() {
+            if (isLoaded) return;
             YandexLogin = Environment.GetEnvironmentVariable("YandexLogin");
             YandexPassword = Environment.GetEnvironmentVariable("YandexPassword");
             YandexToken = Environment.GetEnvironmentVariable("YandexToken");
@@ -14,6 +16,8 @@ namespace YandexMusicResolver.Tests {
             if (proxyUrl != null) {
                 YandexProxy = new WebProxy(proxyUrl);
             }
+
+            isLoaded = true;
         }
 
         public void Save() { }

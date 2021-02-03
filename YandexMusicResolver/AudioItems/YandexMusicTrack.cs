@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,37 +8,49 @@ namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// AudioTrackInfo wrapper to resolve track direct url
     /// </summary>
-    public class YandexMusicTrack : IAudioItem {
-        /// <summary>
-        /// Get track info
-        /// </summary>
-        public AudioTrackInfo TrackInfo { get; }
-
-        private YandexMusicMainResolver _mainResolver;
-        private readonly Lazy<Task<string>> _directUrlLoader;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YandexMusicTrack"/> class.
-        /// </summary>
-        /// <param name="trackInfo">Track info</param>
-        /// <param name="mainResolver">Resolver for direct url getting</param>
-        public YandexMusicTrack(AudioTrackInfo trackInfo, YandexMusicMainResolver mainResolver) {
-            _mainResolver = mainResolver;
-            TrackInfo = trackInfo;
-            _directUrlLoader = new Lazy<Task<string>>(GetDirectUrlInternal, LazyThreadSafetyMode.ExecutionAndPublication);
+    public class YandexMusicTrack  {
+        internal YandexMusicTrack(string title, List<YandexMusicArtist> authors, TimeSpan length, string id, string uri, string? artworkUrl = null) {
+            Title = title;
+            Authors = authors;
+            Length = length;
+            Id = id;
+            Uri = uri;
+            ArtworkUrl = artworkUrl;
         }
+        
+        /// <summary>
+        /// Track title
+        /// </summary>
+        public string Title { get; }
 
         /// <summary>
-        /// Get direct url to track
+        /// Track authors
         /// </summary>
-        /// <remarks>If you not authorized will return 30s track version. This is YandexMusic restriction</remarks>
-        /// <returns>Direct url to download track</returns>
-        public Task<string> GetDirectUrl() {
-            return _directUrlLoader.Value;
-        }
+        public List<YandexMusicArtist> Authors { get; }
 
-        private async Task<string> GetDirectUrlInternal() {
-            return await _mainResolver.DirectUrlLoader.GetDirectUrl(TrackInfo.Identifier, "mp3");
-        }
+        /// <summary>
+        /// Compose <see cref="Authors"/> names into single string
+        /// </summary>
+        public string Author => string.Join(", ", Authors.Select(artist => artist.Name));
+
+        /// <summary>
+        /// Track lenght
+        /// </summary>
+        public TimeSpan Length { get; }
+
+        /// <summary>
+        /// Track id
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// Track link
+        /// </summary>
+        public string Uri { get; }
+
+        /// <summary>
+        /// Track image uri
+        /// </summary>
+        public string? ArtworkUrl { get; }
     }
 }

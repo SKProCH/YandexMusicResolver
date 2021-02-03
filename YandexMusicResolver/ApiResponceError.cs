@@ -1,5 +1,5 @@
 ﻿using System;
-using YandexMusicResolver.Responces;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver {
     /// <summary>

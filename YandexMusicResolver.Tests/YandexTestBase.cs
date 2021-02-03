@@ -7,7 +7,6 @@ namespace YandexMusicResolver.Tests {
     public class YandexTestBase {
         public IYandexConfig Config;
         public YandexMusicMainResolver MainResolver;
-        public Func<AudioTrackInfo, YandexMusicTrack> TrackFactory;
 
         public YandexTestBase() {
             if (File.Exists("TestData.json")) {
@@ -17,9 +16,7 @@ namespace YandexMusicResolver.Tests {
                 Config = new EnvironmentConfig();
             }
             
-            Config.Load();
-            MainResolver = new YandexMusicMainResolver(Config, true);
-            TrackFactory = info => new YandexMusicTrack(info, MainResolver);
+            MainResolver = new YandexMusicMainResolver(Config);
         }
     }
 }

@@ -8,7 +8,8 @@ namespace YandexMusicResolver.Config {
     /// Represents <see cref="IYandexConfig"/> implementation that stores data in a file
     /// </summary>
     public class FileYandexConfig : IYandexConfig {
-        private string? _filePath;
+        private string _filePath;
+        private bool isLoaded;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileYandexConfig"/> class.
@@ -20,6 +21,7 @@ namespace YandexMusicResolver.Config {
 
         /// <inheritdoc />
         public virtual void Load() {
+            if (isLoaded) return;
             try {
                 if (File.Exists(_filePath)) {
                     var fileYandexConfig = JsonConvert.DeserializeObject<FileYandexConfig>(File.ReadAllText(_filePath));
@@ -39,6 +41,8 @@ namespace YandexMusicResolver.Config {
             catch (Exception) {
                 // ignored
             }
+
+            isLoaded = true;
         }
 
         /// <inheritdoc />

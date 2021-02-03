@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     /// <summary>
     /// Represents error that returned from Yandex Music
     /// </summary>

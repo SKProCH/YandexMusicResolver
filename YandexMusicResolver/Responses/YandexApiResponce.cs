@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace YandexMusicResolver.Responces {
+namespace YandexMusicResolver.Responses {
     internal class YandexApiResponse<T> {
         [JsonProperty("result")]
         public T? Result { get; set; }
