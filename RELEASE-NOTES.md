@@ -1,3 +1,9 @@
+# v3.0.0
+- ***BREAKING CHANGES***: `LoadPlaylist` -> `LoadAlbum`, remove `almubId` from `LoadTrack`, remove track `Metadata` `IsStream`, rework `YandexMusicMainResolver` and `YandexMusicSearchResultLoader` ctors, new `YandexMusicAuth` method names, ***`Load` in config now called by loaders and can be called multiple times***
+- Global type system rework: playlist now differs from album, no more meta classes as public API, new load on demand system for tracks in playlists and albums, remove `AudioTrackInfo`, now `YandexMusicTrack` are standalone, remove `IAudioItem` - `ResolveQueue` now return `YandexMusicSearchResult` and other changes
+- Extend MainResolver `ResolveQuery` functionality
+
+
 # v2.2.1
 - Add some missing xml docs
 
