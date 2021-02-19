@@ -57,10 +57,10 @@ namespace YandexMusicResolver {
                                        YandexMusicSearchResultLoader? searchResultLoader = null) {
             config.Load();
             _config = config;
-            PlaylistLoader = playlistLoader ?? new YandexMusicPlaylistLoader(_config);
-            TrackLoader = trackLoader ?? new YandexMusicTrackLoader(_config);
-            DirectUrlLoader = directUrlLoader ?? new YandexMusicDirectUrlLoader(_config);
-            SearchResultLoader = searchResultLoader ?? new YandexMusicSearchResultLoader(_config, PlaylistLoader);
+            TrackLoader = trackLoader ??= new YandexMusicTrackLoader(_config);
+            DirectUrlLoader = directUrlLoader ??= new YandexMusicDirectUrlLoader(_config);
+            PlaylistLoader = playlistLoader ??= new YandexMusicPlaylistLoader(_config, trackLoader);
+            SearchResultLoader = searchResultLoader ??= new YandexMusicSearchResultLoader(_config, playlistLoader);
         }
 
         /// <summary>
