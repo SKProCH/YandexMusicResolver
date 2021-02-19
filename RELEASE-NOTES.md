@@ -1,3 +1,6 @@
+# v3.1.1
+- Fixes for some playlists give NullReferenceException while loading tracks
+
 # v3.1.0
 - Add bulk track loading
 

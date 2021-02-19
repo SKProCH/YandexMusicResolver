@@ -14,13 +14,15 @@ namespace YandexMusicResolver.Tests {
         }
 
         [Theory]
-        [InlineData("enlivenbot", "1000", "Test1", 60)]
-        [InlineData("enlivenbot", "1001", "Test2", 36)]
-        public void LoadPlaylist(string userId, string playlistId, string expectedName, int trackCount) {
+        [InlineData("enlivenbot", "1000")]
+        [InlineData("universe0122", "1000")]
+        [InlineData("olga--g", "1001")]
+        [InlineData("ShadowKillerProPro", "1006")]
+        public void LoadPlaylist(string userId, string playlistId) {
             var playlist = MainResolver.PlaylistLoader.LoadPlaylist(userId, playlistId).GetAwaiter().GetResult();
             Assert.NotNull(playlist);
-            Assert.Equal(expectedName, playlist.Title);
-            Assert.Equal(trackCount, playlist.Data.Count);
+            Assert.False(string.IsNullOrWhiteSpace(playlist.Title));
+            Assert.True(playlist.Data.Count > 0);
         }
     }
 }

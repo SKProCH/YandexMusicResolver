@@ -6,6 +6,6 @@ namespace YandexMusicResolver.Responses {
         public long Id { get; set; }
 
         [JsonProperty("track")]
-        public MetaTrack Track { get; set; } = null!;
+        public MetaTrack? Track { get; set; }
     }
 }

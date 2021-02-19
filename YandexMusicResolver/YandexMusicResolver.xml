@@ -397,6 +397,13 @@
             </summary>
             <param name="config">Config instance for performing requests</param>
         </member>
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.YandexMusicTrackLoader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader"/> class.
+            </summary>
+            <param name="config">Config instance for performing requests</param>
+            <param name="trackLoader">Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicTrackLoader"/> for resolving some strange playlists</param>
+        </member>
         <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.LoadPlaylist(System.String,System.String)">
             <summary>
             Loads the playlist from Yandex Music
