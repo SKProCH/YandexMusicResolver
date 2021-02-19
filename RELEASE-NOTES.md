@@ -1,3 +1,6 @@
+# v3.2.0
+- Make IYandexConfig's AuthorizeAsync extension method
+
 # v3.1.1
 - Fixes for some playlists give NullReferenceException while loading tracks
 
