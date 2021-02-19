@@ -490,7 +490,14 @@
             Load track info
             </summary>
             <param name="trackId">Target track id</param>
-            <returns>Instance of <see cref="!:AudioTrackInfo"/></returns>
+            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicTrackLoader.LoadTracks(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Load track infos
+            </summary>
+            <param name="trackIds">Target track ids</param>
+            <returns>List of instances of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
         </member>
         <member name="T:YandexMusicResolver.Responses.MetaError">
             <summary>

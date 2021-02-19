@@ -32,10 +32,20 @@ namespace YandexMusicResolver.Loaders {
         /// Load track info
         /// </summary>
         /// <param name="trackId">Target track id</param>
-        /// <returns>Instance of <see cref="AudioTrackInfo"/></returns>
+        /// <returns>Instance of <see cref="YandexMusicTrack"/></returns>
         public async Task<YandexMusicTrack?> LoadTrack(string trackId) {
             var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + trackId).GetResponseAsync<List<MetaTrack>>();
             return response.FirstOrDefault()?.ToYmTrack();
+        }
+        
+        /// <summary>
+        /// Load track infos
+        /// </summary>
+        /// <param name="trackIds">Target track ids</param>
+        /// <returns>List of instances of <see cref="YandexMusicTrack"/></returns>
+        public async Task<List<YandexMusicTrack>> LoadTracks(IEnumerable<string> trackIds) {
+            var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + string.Join(',', trackIds)).GetResponseAsync<List<MetaTrack>>();
+            return response.Select(track => track.ToYmTrack()).ToList();
         }
     }
 }
