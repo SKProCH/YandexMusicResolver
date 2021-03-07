@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
@@ -30,6 +31,10 @@ namespace YandexMusicResolver.Requests {
         }
 
         public async Task<MetaAuthResponse> ParseResponseAsync() {
+            var httpWebResponse = await GetResponseAsync();
+            if (httpWebResponse.StatusCode == HttpStatusCode.BadRequest) {
+                throw new InvalidCredentialException("Failed to authorize with provided login and password");
+            }
             return JsonConvert.DeserializeObject<MetaAuthResponse>(await GetResponseBodyAsync());
         }
     }
