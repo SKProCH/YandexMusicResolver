@@ -365,6 +365,20 @@
             Gets or sets proxy to use with requests
             </summary>
         </member>
+        <member name="T:YandexMusicResolver.YandexExtensionMethods">
+            <summary>
+            Contains extension methods from YandexMusicResolver
+            </summary>
+        </member>
+        <member name="M:YandexMusicResolver.YandexExtensionMethods.AuthorizeAsync(YandexMusicResolver.Config.IYandexConfig,System.Boolean)">
+            <summary>
+            Try perform authorization
+            </summary>
+            <param name="yandexConfig"></param>
+            <param name="allowRunWithoutAuth">If false will throw error if we cant authorize</param>
+            <returns>Task represent current async operation</returns>
+            <exception cref="T:System.Security.Authentication.AuthenticationException">Will be thrown if we cant authorize and <see cref="!:allowRunWithoutAuth"/> is false</exception>
+        </member>
         <member name="T:YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader">
             <summary>
             Represents class to getting direct links from tracks
@@ -546,6 +560,7 @@
             <param name="login">Login from Yandex account</param>
             <param name="password">Password from Yandex account</param>
             <param name="proxyHolder">Container for proxy, which should be used for request</param>
+            <exception cref="T:System.Security.Authentication.InvalidCredentialException">Throws when failed to authorize with provided login and password</exception>
             <returns>Token</returns>
         </member>
         <member name="M:YandexMusicResolver.YandexMusicAuth.ValidateOrLoginAsync(System.String,System.String,System.String,YandexMusicResolver.Config.IYandexProxyHolder)">

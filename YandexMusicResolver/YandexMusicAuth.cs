@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Authentication;
+using System.Threading.Tasks;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responses;
@@ -27,6 +28,7 @@ namespace YandexMusicResolver {
         /// <param name="login">Login from Yandex account</param>
         /// <param name="password">Password from Yandex account</param>
         /// <param name="proxyHolder">Container for proxy, which should be used for request</param>
+        /// <exception cref="InvalidCredentialException">Throws when failed to authorize with provided login and password</exception>
         /// <returns>Token</returns>
         public static async Task<string> LoginAsync(string login, string password, IYandexProxyHolder? proxyHolder = null) {
             return (await new YandexAuthRequest(proxyHolder).Create(login, password).ParseResponseAsync()).AccessToken;
