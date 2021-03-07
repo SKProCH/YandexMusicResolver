@@ -1,3 +1,6 @@
+# v3.3.0
+- Failed login now throws InvalidCredentialException exception
+
 # v3.2.0
 - Make IYandexConfig's AuthorizeAsync extension method
 
