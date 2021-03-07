@@ -29,9 +29,12 @@ namespace YandexMusicResolver {
                 yandexConfig.YandexToken = await YandexMusicAuth.LoginAsync(yandexConfig.YandexLogin, yandexConfig.YandexPassword, yandexConfig);
                 yandexConfig.Save();
             }
-            catch (Exception e) {
+            catch (InvalidCredentialException e) {
                 if (allowRunWithoutAuth) return;
                 throw new AuthenticationException("Unable to obtain token. Credentials are wrong.", e);
+            }
+            catch (Exception) {
+                if (!allowRunWithoutAuth) throw;
             }
         }
     }

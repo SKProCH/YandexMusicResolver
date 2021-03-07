@@ -1,3 +1,6 @@
+# v3.3.1
+- Fix exceptions in AuthorizeAsync extension method
+
 # v3.3.0
 - Failed login now throws InvalidCredentialException exception
 
