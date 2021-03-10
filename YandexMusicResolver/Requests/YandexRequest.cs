@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -80,9 +81,21 @@ namespace YandexMusicResolver.Requests {
         }
 
         public async Task<HttpWebResponse> GetResponseAsync() {
-            if (_fullRequest != null)
+            if (_fullRequest == null)
+                throw new NullReferenceException("Create request before getting response");
+            try
+            {
                 return (HttpWebResponse) await _fullRequest.GetResponseAsync();
-            throw new NullReferenceException("Create request before getting response");
+            }
+            catch (WebException e)
+            {
+                if (e.Response is HttpWebResponse {StatusCode: HttpStatusCode.Unauthorized})
+                {
+                    throw new AuthenticationException(e.Message, e);
+                }
+
+                throw;
+            }
         }
 
         public async Task<T> GetResponseAsync<T>() {
