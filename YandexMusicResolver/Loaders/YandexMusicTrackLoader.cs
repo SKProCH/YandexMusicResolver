@@ -11,7 +11,7 @@ namespace YandexMusicResolver.Loaders {
     /// <summary>
     /// Represents track info loader from Yandex Music
     /// </summary>
-    public class YandexMusicTrackLoader {
+    public class YandexMusicTrackLoader : IYandexMusicTrackLoader {
         /// <summary>
         /// Config instance for performing requests
         /// </summary>

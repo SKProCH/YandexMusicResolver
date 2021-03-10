@@ -24,7 +24,7 @@ namespace YandexMusicResolver.Responses {
         [JsonProperty("cover")]
         public MetaCover Cover { get; set; }
 
-        public virtual YandexMusicPlaylist ToYaPlaylist(YandexMusicPlaylistLoader loader) {
+        public virtual YandexMusicPlaylist ToYaPlaylist(IYandexMusicPlaylistLoader loader) {
             return new(Uid, Kind, TrackCount, Title, Owner, Cover.GetCoverUrl(), loader);
         }
     }

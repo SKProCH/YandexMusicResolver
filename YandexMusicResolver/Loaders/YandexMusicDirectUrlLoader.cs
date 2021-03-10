@@ -12,7 +12,7 @@ namespace YandexMusicResolver.Loaders {
     /// <summary>
     /// Represents class to getting direct links from tracks
     /// </summary>
-    public class YandexMusicDirectUrlLoader {
+    public class YandexMusicDirectUrlLoader : IYandexMusicDirectUrlLoader {
         private IYandexConfig _config;
 
         /// <summary>

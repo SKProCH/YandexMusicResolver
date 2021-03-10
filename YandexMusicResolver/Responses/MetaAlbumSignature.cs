@@ -33,7 +33,7 @@ namespace YandexMusicResolver.Responses {
         [JsonProperty("title")]
         public string Title { get; set; }
 
-        public virtual YandexMusicAlbum ToYmAlbum(YandexMusicPlaylistLoader loader) {
+        public virtual YandexMusicAlbum ToYmAlbum(IYandexMusicPlaylistLoader loader) {
             return new(Id, Year, Artists, CoverUri, TrackCount, Genre, Title, loader);
         }
     }

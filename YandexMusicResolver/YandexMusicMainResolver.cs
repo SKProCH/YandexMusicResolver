@@ -10,7 +10,7 @@ namespace YandexMusicResolver {
     /// <summary>
     /// Represent main class for interacting with Yandex Music
     /// </summary>
-    public class YandexMusicMainResolver {
+    public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
         private const string TrackUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)$";
         private const string AlbumUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)$";
         private const string PlaylistUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)$";
@@ -25,22 +25,22 @@ namespace YandexMusicResolver {
         /// <summary>
         /// Instance of <see cref="YandexMusicPlaylistLoader"/>
         /// </summary>
-        public virtual YandexMusicPlaylistLoader PlaylistLoader { get; }
+        public IYandexMusicPlaylistLoader PlaylistLoader { get; }
 
         /// <summary>
         /// Instance of <see cref="YandexMusicTrackLoader"/>
         /// </summary>
-        public virtual YandexMusicTrackLoader TrackLoader { get; }
+        public IYandexMusicTrackLoader TrackLoader { get; }
 
         /// <summary>
         /// Instance of <see cref="YandexMusicDirectUrlLoader"/>
         /// </summary>
-        public virtual YandexMusicDirectUrlLoader DirectUrlLoader { get; }
+        public IYandexMusicDirectUrlLoader DirectUrlLoader { get; }
 
         /// <summary>
         /// Instance of <see cref="YandexMusicSearchResultLoader"/>
         /// </summary>
-        public virtual YandexMusicSearchResultLoader SearchResultLoader { get; }
+        public IYandexMusicSearchResultLoader SearchResultLoader { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
@@ -51,10 +51,10 @@ namespace YandexMusicResolver {
         /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
         /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
         public YandexMusicMainResolver(IYandexConfig config,
-                                       YandexMusicPlaylistLoader? playlistLoader = null,
-                                       YandexMusicTrackLoader? trackLoader = null,
-                                       YandexMusicDirectUrlLoader? directUrlLoader = null,
-                                       YandexMusicSearchResultLoader? searchResultLoader = null) {
+                                       IYandexMusicPlaylistLoader? playlistLoader = null,
+                                       IYandexMusicTrackLoader? trackLoader = null,
+                                       IYandexMusicDirectUrlLoader? directUrlLoader = null,
+                                       IYandexMusicSearchResultLoader? searchResultLoader = null) {
             config.Load();
             _config = config;
             TrackLoader = trackLoader ??= new YandexMusicTrackLoader(_config);

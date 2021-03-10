@@ -12,7 +12,7 @@ namespace YandexMusicResolver.Responses {
         [JsonProperty("ogImage")]
         public string OgImage { get; set; }
 
-        public override YandexMusicAlbum ToYmAlbum(YandexMusicPlaylistLoader loader) {
+        public override YandexMusicAlbum ToYmAlbum(IYandexMusicPlaylistLoader loader) {
             var artwork = CoverUri;
             if (string.IsNullOrEmpty(artwork)) {
                 artwork = OgImage;

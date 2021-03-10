@@ -11,7 +11,7 @@ namespace YandexMusicResolver.Loaders {
     /// <summary>
     /// Represents search on Yandex Music
     /// </summary>
-    public class YandexMusicSearchResultLoader {
+    public class YandexMusicSearchResultLoader : IYandexMusicSearchResultLoader {
         /// <summary>
         /// Default limit for searching
         /// </summary>
@@ -22,7 +22,7 @@ namespace YandexMusicResolver.Loaders {
         private readonly IYandexConfig _config;
         private string _searchPrefix = "ymsearch";
         #pragma warning disable 1591
-        private readonly YandexMusicPlaylistLoader _playlistLoader;
+        private readonly IYandexMusicPlaylistLoader _playlistLoader;
         #pragma warning restore 1591
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="config">Config instance for performing requests</param>
         /// <param name="playlistLoader">Playlist loader instance for resolving albums and playlists</param>
-        public YandexMusicSearchResultLoader(IYandexConfig config, YandexMusicPlaylistLoader playlistLoader) {
+        public YandexMusicSearchResultLoader(IYandexConfig config, IYandexMusicPlaylistLoader playlistLoader) {
             _playlistLoader = playlistLoader;
             config.Load();
             _config = config;

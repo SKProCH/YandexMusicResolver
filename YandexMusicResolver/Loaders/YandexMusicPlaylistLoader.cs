@@ -10,9 +10,9 @@ namespace YandexMusicResolver.Loaders {
     /// <summary>
     /// Represents class to getting playlists and albums from Yandex Music
     /// </summary>
-    public class YandexMusicPlaylistLoader {
+    public class YandexMusicPlaylistLoader : IYandexMusicPlaylistLoader {
         private readonly IYandexConfig _config;
-        private readonly YandexMusicTrackLoader? _trackLoader;
+        private readonly IYandexMusicTrackLoader _trackLoader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicPlaylistLoader"/> class.
@@ -30,7 +30,7 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="config">Config instance for performing requests</param>
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/> for resolving some strange playlists</param>
-        public YandexMusicPlaylistLoader(IYandexConfig config, YandexMusicTrackLoader trackLoader) {
+        public YandexMusicPlaylistLoader(IYandexConfig config, IYandexMusicTrackLoader trackLoader) {
             _trackLoader = trackLoader;
             _config = config;
         }
