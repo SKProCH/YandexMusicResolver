@@ -35,7 +35,7 @@ namespace YandexMusicResolver.Requests {
             if (httpWebResponse.StatusCode == HttpStatusCode.BadRequest) {
                 throw new InvalidCredentialException("Failed to authorize with provided login and password");
             }
-            return JsonConvert.DeserializeObject<MetaAuthResponse>(await GetResponseBodyAsync());
+            return JsonConvert.DeserializeObject<MetaAuthResponse>(await GetResponseBodyAsync(httpWebResponse));
         }
     }
 }

@@ -100,8 +100,8 @@ namespace YandexMusicResolver.Requests {
             throw new Exception("Couldn't get API response result.");
         }
 
-        public async Task<string> GetResponseBodyAsync() {
-            var response = await GetResponseAsync();
+        public async Task<string> GetResponseBodyAsync(HttpWebResponse? response = null) {
+            response ??= await GetResponseAsync();
             using var streamReader = new StreamReader(response.GetResponseStream()!);
             return await streamReader.ReadToEndAsync();
         }
