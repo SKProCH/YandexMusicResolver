@@ -89,7 +89,6 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="type">Search type</param>
         /// <param name="query">Search text</param>
-        /// <param name="playlistLoader">Playlist loader instance</param>
         /// <param name="limit">Search results limit count</param>
         /// <returns>Instance of YandexMusicSearchResult</returns>
         /// <exception cref="Exception">Throws exception if something went wrong</exception>
@@ -109,7 +108,7 @@ namespace YandexMusicResolver.Loaders {
                     limit);
             }
             catch (Exception e) {
-                throw new Exception("Could not load search results", e);
+                throw new YandexMusicException("Exception while loading search results", e);
             }
         }
     }

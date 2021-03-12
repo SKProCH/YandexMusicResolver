@@ -45,41 +45,51 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="playlistKind">Target playlist id</param>
         /// <returns>Playlist instance</returns>
         public async Task<YandexMusicPlaylist?> LoadPlaylist(string userId, string playlistKind) {
-            string url = string.Format(PlaylistInfoFormat, userId, playlistKind);
-            var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaPlaylist>();
-            if (playlistData.Tracks == null) {
-                throw new Exception("Empty playlist found.");
-            }
-
-            if (playlistData.Tracks.Any(container => container.Value == null)) {
-                if (_trackLoader == null) {
-                    throw new Exception("Yandex Music for some reason gives a different response format (no tracks) for some playlists. " +
-                                        "Use another ctor and pass YandexMusicTrackLoader to ctor to get proper response");
+            try {
+                string url = string.Format(PlaylistInfoFormat, userId, playlistKind);
+                var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaPlaylist>();
+                if (playlistData.Tracks == null) {
+                    throw new Exception("Empty playlist found.");
                 }
 
-                var yandexMusicTracks = await _trackLoader.LoadTracks(playlistData.Tracks.Where(pair => pair.Value == null)
-                                                                                  .Select(pair => pair.Key));
-                foreach (var yandexMusicTrack in yandexMusicTracks) {
-                    playlistData.Tracks[yandexMusicTrack.Id] = yandexMusicTrack;
-                }
-            }
+                if (playlistData.Tracks.Any(container => container.Value == null)) {
+                    if (_trackLoader == null) {
+                        throw new Exception("Yandex Music for some reason gives a different response format (no tracks) for some playlists. " +
+                                            "Use another ctor and pass YandexMusicTrackLoader to ctor to get proper response");
+                    }
 
-            return playlistData.ToYaPlaylist(this);
+                    var yandexMusicTracks = await _trackLoader.LoadTracks(playlistData.Tracks.Where(pair => pair.Value == null)
+                                                                                      .Select(pair => pair.Key));
+                    foreach (var yandexMusicTrack in yandexMusicTracks) {
+                        playlistData.Tracks[yandexMusicTrack.Id] = yandexMusicTrack;
+                    }
+                }
+
+                return playlistData.ToYaPlaylist(this);
+            }
+            catch (Exception e) {
+                throw new YandexMusicException("Exception while loading playlist", e);
+            }
         }
-        
+
         /// <summary>
         /// Loads the album from Yandex Music
         /// </summary>
         /// <param name="albumId">Target album id</param>
         /// <returns>Playlist instance</returns>
         public async Task<YandexMusicAlbum?> LoadAlbum(string albumId) {
-            string url = string.Format(AlbumInfoFormat, albumId);
-            var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaAlbum>();
-            if (playlistData.Tracks == null) {
-                throw new Exception("Empty album or playlist found.");
-            }
+            try {
+                string url = string.Format(AlbumInfoFormat, albumId);
+                var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaAlbum>();
+                if (playlistData.Tracks == null) {
+                    throw new Exception("Empty album or playlist found.");
+                }
 
-            return playlistData.ToYmAlbum(this);
+                return playlistData.ToYmAlbum(this);
+            }
+            catch (Exception e) {
+                throw new YandexMusicException("Exception while loading album", e);
+            }
         }
     }
 }

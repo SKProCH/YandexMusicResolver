@@ -485,7 +485,6 @@
             </summary>
             <param name="type">Search type</param>
             <param name="query">Search text</param>
-            <param name="playlistLoader">Playlist loader instance</param>
             <param name="limit">Search results limit count</param>
             <returns>Instance of YandexMusicSearchResult</returns>
             <exception cref="T:System.Exception">Throws exception if something went wrong</exception>
@@ -572,6 +571,24 @@
             <param name="fallbackPassword">Password from Yandex account</param>
             <param name="proxyHolder">Container for proxy, which should be used for request</param>
             <returns>Valid token, true if this is new token otherwise false</returns>
+        </member>
+        <member name="T:YandexMusicResolver.YandexMusicException">
+            <summary>
+            Represents errors that occurs in YandexMusicResolver
+            For more info see InnerException
+            </summary>
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicException.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicException.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicException.#ctor(System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc />
         </member>
         <member name="T:YandexMusicResolver.YandexMusicMainResolver">
             <summary>
