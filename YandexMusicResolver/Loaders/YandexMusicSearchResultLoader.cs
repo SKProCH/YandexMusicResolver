@@ -18,11 +18,11 @@ namespace YandexMusicResolver.Loaders {
         public const int DefaultLimit = 10;
 
         private const string TracksInfoFormat = "https://api.music.yandex.net/search?type={0}&page=0&text={1}";
-        private Regex SearchRegex = new Regex($"ymsearch(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
-        private IYandexConfig _config;
+        private Regex _searchRegex = new Regex($"ymsearch(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
+        private readonly IYandexConfig _config;
         private string _searchPrefix = "ymsearch";
         #pragma warning disable 1591
-        protected YandexMusicPlaylistLoader PlaylistLoader;
+        private readonly YandexMusicPlaylistLoader _playlistLoader;
         #pragma warning restore 1591
 
         /// <summary>
@@ -34,8 +34,9 @@ namespace YandexMusicResolver.Loaders {
         /// Initializes a new instance of the <see cref="YandexMusicSearchResultLoader"/> class.
         /// </summary>
         /// <param name="config">Config instance for performing requests</param>
+        /// <param name="playlistLoader">Playlist loader instance for resolving albums and playlists</param>
         public YandexMusicSearchResultLoader(IYandexConfig config, YandexMusicPlaylistLoader playlistLoader) {
-            PlaylistLoader = playlistLoader;
+            _playlistLoader = playlistLoader;
             config.Load();
             _config = config;
         }
@@ -46,7 +47,7 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="prefix">New prefix. <code>null</code> will be replaced with "ymsearch"</param>
         public void SetSearchPrefix(string? prefix = null) {
             _searchPrefix = prefix ?? "ymsearch";
-            SearchRegex = new Regex($"{_searchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
+            _searchRegex = new Regex($"{_searchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace YandexMusicResolver.Loaders {
             text = query;
 
             if (!query.StartsWith(SearchPrefix + ":")) return false;
-            var match = SearchRegex.Match(query);
+            var match = _searchRegex.Match(query);
             if (!match.Success) return false;
 
             type = Enum.TryParse(typeof(YandexSearchType), match.Groups[2].Value, true, out var o) ? (YandexSearchType) o : YandexSearchType.Track;
@@ -97,8 +98,8 @@ namespace YandexMusicResolver.Loaders {
                 var searchResponse = await new YandexCustomRequest(_config)
                                           .Create(string.Format(TracksInfoFormat, type, query))
                                           .GetResponseAsync<MetaSearchResponse>();
-                var albums = searchResponse.Albums?.Results.Take(limit).Select(signature => signature.ToYmAlbum(PlaylistLoader));
-                var playlists = searchResponse.Playlists?.Results.Take(limit).Select(signature => signature.ToYaPlaylist(PlaylistLoader));
+                var albums = searchResponse.Albums?.Results.Take(limit).Select(signature => signature.ToYmAlbum(_playlistLoader));
+                var playlists = searchResponse.Playlists?.Results.Take(limit).Select(signature => signature.ToYaPlaylist(_playlistLoader));
                 var tracks = searchResponse.Tracks?.Results.Take(limit).Select(track => track.ToYmTrack());
 
                 return new YandexMusicSearchResult(query, true, type,

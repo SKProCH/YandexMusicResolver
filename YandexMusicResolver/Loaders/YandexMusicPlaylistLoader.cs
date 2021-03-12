@@ -11,8 +11,8 @@ namespace YandexMusicResolver.Loaders {
     /// Represents class to getting playlists and albums from Yandex Music
     /// </summary>
     public class YandexMusicPlaylistLoader {
-        protected readonly IYandexConfig Config;
-        private YandexMusicTrackLoader? _trackLoader;
+        private readonly IYandexConfig _config;
+        private readonly YandexMusicTrackLoader? _trackLoader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicPlaylistLoader"/> class.
@@ -22,7 +22,7 @@ namespace YandexMusicResolver.Loaders {
                   "Use another ctor.\n" +
                   "This left for backward compability and will be removed in next major version")]
         public YandexMusicPlaylistLoader(IYandexConfig config) {
-            Config = config;
+            _config = config;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/> for resolving some strange playlists</param>
         public YandexMusicPlaylistLoader(IYandexConfig config, YandexMusicTrackLoader trackLoader) {
             _trackLoader = trackLoader;
-            Config = config;
+            _config = config;
         }
 
         private const string PlaylistInfoFormat = "https://api.music.yandex.net/users/{0}/playlists/{1}";
@@ -47,7 +47,7 @@ namespace YandexMusicResolver.Loaders {
         public async Task<YandexMusicPlaylist?> LoadPlaylist(string userId, string playlistKind) {
             try {
                 string url = string.Format(PlaylistInfoFormat, userId, playlistKind);
-                var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaPlaylist>();
+                var playlistData = await new YandexCustomRequest(_config).Create(url).GetResponseAsync<MetaPlaylist>();
                 if (playlistData.Tracks == null) {
                     throw new Exception("Empty playlist found.");
                 }
@@ -80,7 +80,7 @@ namespace YandexMusicResolver.Loaders {
         public async Task<YandexMusicAlbum?> LoadAlbum(string albumId) {
             try {
                 string url = string.Format(AlbumInfoFormat, albumId);
-                var playlistData = await new YandexCustomRequest(Config).Create(url).GetResponseAsync<MetaAlbum>();
+                var playlistData = await new YandexCustomRequest(_config).Create(url).GetResponseAsync<MetaAlbum>();
                 if (playlistData.Tracks == null) {
                     throw new Exception("Empty album or playlist found.");
                 }

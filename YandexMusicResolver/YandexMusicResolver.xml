@@ -20,6 +20,11 @@
         <member name="M:YandexMusicResolver.YandexApiResponseException.#ctor(System.String,YandexMusicResolver.Responses.MetaError)">
             <inheritdoc />
         </member>
+        <member name="T:YandexMusicResolver.AudioItems.YandexMusicAlbum">
+            <summary>
+            Represents album from Yandex Music
+            </summary>
+        </member>
         <member name="P:YandexMusicResolver.AudioItems.YandexMusicAlbum.Id">
             <summary>
             Album id
@@ -131,7 +136,7 @@
         </member>
         <member name="T:YandexMusicResolver.AudioItems.YandexMusicPlaylist">
             <summary>
-            Represents playlist from Yandex Music
+            Represents album from Yandex Music
             </summary>
         </member>
         <member name="P:YandexMusicResolver.AudioItems.YandexMusicPlaylist.Uid">
@@ -338,7 +343,7 @@
             </summary>
             <param name="allowRunWithoutAuth">If false will throw error if we cant authorize</param>
             <returns>Task represent current async operation</returns>
-            <exception cref="T:System.Security.Authentication.AuthenticationException">Will be thrown if we cant authorize and <see cref="!:allowRunWithoutAuth"/> is false</exception>
+            <exception cref="T:System.Security.Authentication.AuthenticationException">Will be thrown if we cant authorize and allowRunWithoutAuth is false</exception>
         </member>
         <member name="T:YandexMusicResolver.Config.IYandexTokenHolder">
             <summary>
@@ -377,7 +382,7 @@
             <param name="yandexConfig"></param>
             <param name="allowRunWithoutAuth">If false will throw error if we cant authorize</param>
             <returns>Task represent current async operation</returns>
-            <exception cref="T:System.Security.Authentication.AuthenticationException">Will be thrown if we cant authorize and <see cref="!:allowRunWithoutAuth"/> is false</exception>
+            <exception cref="T:System.Security.Authentication.AuthenticationException">Will be thrown if we cant authorize and allowRunWithoutAuth is false</exception>
         </member>
         <member name="T:YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader">
             <summary>
@@ -453,6 +458,7 @@
             Initializes a new instance of the <see cref="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader"/> class.
             </summary>
             <param name="config">Config instance for performing requests</param>
+            <param name="playlistLoader">Playlist loader instance for resolving albums and playlists</param>
         </member>
         <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.SetSearchPrefix(System.String)">
             <summary>

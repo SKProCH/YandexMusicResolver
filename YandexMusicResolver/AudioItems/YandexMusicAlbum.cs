@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.AudioItems {
+    /// <summary>
+    /// Represents album from Yandex Music
+    /// </summary>
     public class YandexMusicAlbum : YandexMusicDataContainer<List<YandexMusicTrack>> {
         internal YandexMusicAlbum(long id, long year, List<YandexMusicArtist> artists, string? artworkUrl, long trackCount, string genre, string title,
                                   YandexMusicPlaylistLoader loader) : base(async () => (await loader.LoadAlbum(id.ToString()))!.Data.ToList()) {
