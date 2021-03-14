@@ -134,5 +134,30 @@ namespace YandexMusicResolver {
             if (needSearch) return await SearchResultLoader.LoadSearchResult(searchType, searchText, searchLimit);
             return null;
         }
+
+        /// <summary>
+        /// Determine is query can be resolved with target parameters
+        /// </summary>
+        /// <param name="query">Direct url or search query</param>
+        /// <param name="allowSearchOverride">Is query in <see cref="ResolveQuery"/> can be resolved with search. This parameter overrides <see cref="AllowSearch"/></param>
+        /// <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="ResolveQuery"/></param>
+        /// <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="ResolveQuery"/> it will be interpreted as search query with this search type</param>
+        /// <returns>True if query can be resolved</returns>
+        public bool CanResolveQuery(string query, bool? allowSearchOverride = null,
+                                    bool? plainTextIsSearchQueryOverride = null,
+                                    YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
+            var trackMatch = TrackUrlRegex.Match(query);
+            if (trackMatch.Success) return true;
+
+            var playlistMatch = PlaylistUrlRegex.Match(query);
+            if (playlistMatch.Success) return true;
+
+            var albumMatch = AlbumUrlRegex.Match(query);
+            if (albumMatch.Success) return true;
+
+            if (!(allowSearchOverride ?? AllowSearch)) return false;
+            var needSearch = plainTextIsSearchQueryOverride ?? PlainTextIsSearchQuery;
+            return SearchResultLoader.TryParseQuery(query, out _, out _, out _) || needSearch;
+        }
     }
 }

@@ -384,6 +384,130 @@
             <returns>Task represent current async operation</returns>
             <exception cref="T:System.Security.Authentication.AuthenticationException">Will be thrown if we cant authorize and allowRunWithoutAuth is false</exception>
         </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.PlaylistLoader">
+            <summary>
+            Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader"/>
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.TrackLoader">
+            <summary>
+            Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicTrackLoader"/>
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.DirectUrlLoader">
+            <summary>
+            Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader"/>
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.SearchResultLoader">
+            <summary>
+            Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader"/>
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.AllowSearch">
+            <summary>
+            Is complicated query in <see cref="M:YandexMusicResolver.IYandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> can be resolved
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.PlainTextIsSearchQueryType">
+            <summary>
+            If we pass plain text to <see cref="M:YandexMusicResolver.IYandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> it will be interpreted as search query with this search type. Set <see cref="P:YandexMusicResolver.IYandexMusicMainResolver.PlainTextIsSearchQuery"/> to <code>false</code> to disable this
+            </summary>
+        </member>
+        <member name="P:YandexMusicResolver.IYandexMusicMainResolver.PlainTextIsSearchQuery">
+            <summary>
+            Will plain text be interpreted as a search query in <see cref="M:YandexMusicResolver.IYandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/>
+            </summary>
+        </member>
+        <member name="M:YandexMusicResolver.IYandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})">
+            <summary>
+            Resolves yandex query. Can directly resolve playlists, albums, tracks by url and search queries
+            </summary>
+            <param name="query">Direct url or search query</param>
+            <param name="allowSearchOverride">Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> can be resolved with search. This parameter overrides <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/></param>
+            <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/></param>
+            <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> it will be interpreted as search query with this search type</param>
+            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/> is false.</returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicDirectUrlLoader.GetDirectUrl(System.String,System.String)">
+            <summary>
+            Get direct url to download track
+            </summary>
+            <remarks>If you not authorized will return 30s track version. This is YandexMusic restriction</remarks>
+            <param name="trackId">Target track id</param>
+            <param name="codec">Target codec. mp3 by default</param>
+            <returns>Direct url to download track</returns>
+            <exception cref="T:System.Exception">Couldn't find supported track format</exception>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicPlaylistLoader.LoadPlaylist(System.String,System.String)">
+            <summary>
+            Loads the playlist from Yandex Music
+            </summary>
+            <param name="userId">Id of user who created the playlist</param>
+            <param name="playlistKind">Target playlist id</param>
+            <returns>Playlist instance</returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicPlaylistLoader.LoadAlbum(System.String)">
+            <summary>
+            Loads the album from Yandex Music
+            </summary>
+            <param name="albumId">Target album id</param>
+            <returns>Playlist instance</returns>
+        </member>
+        <member name="P:YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader.SearchPrefix">
+            <summary>
+            Special prefix for complicated requests
+            </summary>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader.SetSearchPrefix(System.String)">
+            <summary>
+            Set a new search prefix for complicated queries
+            </summary>
+            <param name="prefix">New prefix. <code>null</code> will be replaced with "ymsearch"</param>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader.LoadSearchResult(System.String)">
+            <summary>
+            Perform search request on Yandex Music
+            </summary>
+            <remarks>Complicated query is <see cref="P:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.SearchPrefix"/>:<see cref="T:YandexMusicResolver.YandexSearchType"/>:limit:text</remarks>
+            <param name="query">Search query. May be complicated or default values will be used</param>
+            <returns>Instance of YandexMusicSearchResult</returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader.LoadSearchResult(YandexMusicResolver.YandexSearchType,System.String,System.Int32)">
+            <summary>
+            Perform search request on Yandex Music
+            </summary>
+            <param name="type">Search type</param>
+            <param name="query">Search text</param>
+            <param name="limit">Search results limit count</param>
+            <returns>Instance of YandexMusicSearchResult</returns>
+            <exception cref="T:System.Exception">Throws exception if something went wrong</exception>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader.TryParseQuery(System.String,System.String@,YandexMusicResolver.YandexSearchType@,System.Int32@)">
+            <summary>
+            Parse complicated query into pieces
+            </summary>
+            <remarks>Complicated query is <see cref="P:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.SearchPrefix"/>:<see cref="T:YandexMusicResolver.YandexSearchType"/>:limit:text</remarks>
+            <param name="query">Target query</param>
+            <param name="text">Search text</param>
+            <param name="type">Search type</param>
+            <param name="limit">Search limit</param>
+            <returns>True if is this complicated query</returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicTrackLoader.LoadTrack(System.String)">
+            <summary>
+            Load track info
+            </summary>
+            <param name="trackId">Target track id</param>
+            <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
+        </member>
+        <member name="M:YandexMusicResolver.Loaders.IYandexMusicTrackLoader.LoadTracks(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Load track infos
+            </summary>
+            <param name="trackIds">Target track ids</param>
+            <returns>List of instances of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicTrack"/></returns>
+        </member>
         <member name="T:YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader">
             <summary>
             Represents class to getting direct links from tracks
@@ -416,7 +540,7 @@
             </summary>
             <param name="config">Config instance for performing requests</param>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.YandexMusicTrackLoader)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.IYandexMusicTrackLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:YandexMusicResolver.Loaders.YandexMusicPlaylistLoader"/> class.
             </summary>
@@ -453,7 +577,7 @@
             Special prefix for complicated requests
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader)">
+        <member name="M:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.IYandexMusicPlaylistLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader"/> class.
             </summary>
@@ -621,7 +745,7 @@
             Instance of <see cref="T:YandexMusicResolver.Loaders.YandexMusicSearchResultLoader"/>
             </summary>
         </member>
-        <member name="M:YandexMusicResolver.YandexMusicMainResolver.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.YandexMusicPlaylistLoader,YandexMusicResolver.Loaders.YandexMusicTrackLoader,YandexMusicResolver.Loaders.YandexMusicDirectUrlLoader,YandexMusicResolver.Loaders.YandexMusicSearchResultLoader)">
+        <member name="M:YandexMusicResolver.YandexMusicMainResolver.#ctor(YandexMusicResolver.Config.IYandexConfig,YandexMusicResolver.Loaders.IYandexMusicPlaylistLoader,YandexMusicResolver.Loaders.IYandexMusicTrackLoader,YandexMusicResolver.Loaders.IYandexMusicDirectUrlLoader,YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader)">
             <summary>
             Initializes a new instance of the <see cref="T:YandexMusicResolver.YandexMusicMainResolver"/> class.
             </summary>
@@ -655,6 +779,16 @@
             <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/></param>
             <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> it will be interpreted as search query with this search type</param>
             <returns>Instance of <see cref="T:YandexMusicResolver.AudioItems.YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/> is false.</returns>
+        </member>
+        <member name="M:YandexMusicResolver.YandexMusicMainResolver.CanResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})">
+            <summary>
+            Determine is query can be resolved with target parameters
+            </summary>
+            <param name="query">Direct url or search query</param>
+            <param name="allowSearchOverride">Is query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> can be resolved with search. This parameter overrides <see cref="P:YandexMusicResolver.YandexMusicMainResolver.AllowSearch"/></param>
+            <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/></param>
+            <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="M:YandexMusicResolver.YandexMusicMainResolver.ResolveQuery(System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{YandexMusicResolver.YandexSearchType})"/> it will be interpreted as search query with this search type</param>
+            <returns>True if query can be resolved</returns>
         </member>
         <member name="T:YandexMusicResolver.YandexSearchType">
             <summary>
