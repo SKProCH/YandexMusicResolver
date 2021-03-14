@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 
 namespace YandexMusicResolver.Loaders {
+    /// <summary>
+    /// Represents search on Yandex Music
+    /// </summary>
     public interface IYandexMusicSearchResultLoader {
         /// <summary>
         /// Special prefix for complicated requests

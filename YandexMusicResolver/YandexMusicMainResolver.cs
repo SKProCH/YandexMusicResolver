@@ -7,9 +7,7 @@ using YandexMusicResolver.Config;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver {
-    /// <summary>
-    /// Represent main class for interacting with Yandex Music
-    /// </summary>
+    /// <inheritdoc />
     public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
         private const string TrackUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)$";
         private const string AlbumUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)$";
@@ -22,24 +20,16 @@ namespace YandexMusicResolver {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IYandexConfig _config;
 
-        /// <summary>
-        /// Instance of <see cref="YandexMusicPlaylistLoader"/>
-        /// </summary>
+        /// <inheritdoc />
         public IYandexMusicPlaylistLoader PlaylistLoader { get; }
 
-        /// <summary>
-        /// Instance of <see cref="YandexMusicTrackLoader"/>
-        /// </summary>
+        /// <inheritdoc />
         public IYandexMusicTrackLoader TrackLoader { get; }
 
-        /// <summary>
-        /// Instance of <see cref="YandexMusicDirectUrlLoader"/>
-        /// </summary>
+        /// <inheritdoc />
         public IYandexMusicDirectUrlLoader DirectUrlLoader { get; }
 
-        /// <summary>
-        /// Instance of <see cref="YandexMusicSearchResultLoader"/>
-        /// </summary>
+        /// <inheritdoc />
         public IYandexMusicSearchResultLoader SearchResultLoader { get; }
 
         /// <summary>
@@ -63,29 +53,16 @@ namespace YandexMusicResolver {
             SearchResultLoader = searchResultLoader ??= new YandexMusicSearchResultLoader(_config, playlistLoader);
         }
 
-        /// <summary>
-        /// Is complicated query in <see cref="ResolveQuery"/> can be resolved
-        /// </summary>
+        /// <inheritdoc />
         public bool AllowSearch { get; set; } = true;
 
-        /// <summary>
-        /// If we pass plain text to <see cref="ResolveQuery"/> it will be interpreted as search query with this search type. Set <see cref="PlainTextIsSearchQuery"/> to <code>false</code> to disable this
-        /// </summary>
+        /// <inheritdoc />
         public YandexSearchType PlainTextIsSearchQueryType { get; set; } = YandexSearchType.Track;
 
-        /// <summary>
-        /// Will plain text be interpreted as a search query in <see cref="ResolveQuery"/>
-        /// </summary>
+        /// <inheritdoc />
         public bool PlainTextIsSearchQuery { get; set; } = true;
 
-        /// <summary>
-        /// Resolves yandex query. Can directly resolve playlists, albums, tracks by url and search queries
-        /// </summary>
-        /// <param name="query">Direct url or search query</param>
-        /// <param name="allowSearchOverride">Is query in <see cref="ResolveQuery"/> can be resolved with search. This parameter overrides <see cref="AllowSearch"/></param>
-        /// <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="ResolveQuery"/></param>
-        /// <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="ResolveQuery"/> it will be interpreted as search query with this search type</param>
-        /// <returns>Instance of <see cref="YandexMusicSearchResult"/>. Null if track will now an valid url and <see cref="AllowSearch"/> is false.</returns>
+        /// <inheritdoc />
         public async Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null,
                                                                  bool? plainTextIsSearchQueryOverride = null,
                                                                  YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
@@ -135,14 +112,7 @@ namespace YandexMusicResolver {
             return null;
         }
 
-        /// <summary>
-        /// Determine is query can be resolved with target parameters
-        /// </summary>
-        /// <param name="query">Direct url or search query</param>
-        /// <param name="allowSearchOverride">Is query in <see cref="ResolveQuery"/> can be resolved with search. This parameter overrides <see cref="AllowSearch"/></param>
-        /// <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="ResolveQuery"/></param>
-        /// <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="ResolveQuery"/> it will be interpreted as search query with this search type</param>
-        /// <returns>True if query can be resolved</returns>
+        /// <inheritdoc />
         public bool CanResolveQuery(string query, bool? allowSearchOverride = null,
                                     bool? plainTextIsSearchQueryOverride = null,
                                     YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {

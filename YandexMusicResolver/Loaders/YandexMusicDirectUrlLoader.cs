@@ -9,9 +9,7 @@ using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
-    /// <summary>
-    /// Represents class to getting direct links from tracks
-    /// </summary>
+    /// <inheritdoc />
     public class YandexMusicDirectUrlLoader : IYandexMusicDirectUrlLoader {
         private IYandexConfig _config;
 
@@ -28,14 +26,7 @@ namespace YandexMusicResolver.Loaders {
         private const string DirectUrlFormat = "https://{0}/get-{1}/{2}/{3}{4}";
         private const string Mp3Salt = "XGRlBW9FXlekgbPrRHuSiA";
 
-        /// <summary>
-        /// Get direct url to download track
-        /// </summary>
-        /// <remarks>If you not authorized will return 30s track version. This is YandexMusic restriction</remarks>
-        /// <param name="trackId">Target track id</param>
-        /// <param name="codec">Target codec. mp3 by default</param>
-        /// <returns>Direct url to download track</returns>
-        /// <exception cref="Exception">Couldn't find supported track format</exception>
+        /// <inheritdoc />
         public async Task<string> GetDirectUrl(string trackId, string codec = "mp3") {
             try {
                 var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId))

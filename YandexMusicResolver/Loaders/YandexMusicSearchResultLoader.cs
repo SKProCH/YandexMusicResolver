@@ -8,9 +8,7 @@ using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
-    /// <summary>
-    /// Represents search on Yandex Music
-    /// </summary>
+    /// <inheritdoc />
     public class YandexMusicSearchResultLoader : IYandexMusicSearchResultLoader {
         /// <summary>
         /// Default limit for searching
@@ -25,9 +23,7 @@ namespace YandexMusicResolver.Loaders {
         private readonly IYandexMusicPlaylistLoader _playlistLoader;
         #pragma warning restore 1591
 
-        /// <summary>
-        /// Special prefix for complicated requests
-        /// </summary>
+        /// <inheritdoc />
         public string SearchPrefix => _searchPrefix;
 
         /// <summary>
@@ -41,35 +37,19 @@ namespace YandexMusicResolver.Loaders {
             _config = config;
         }
 
-        /// <summary>
-        /// Set a new search prefix for complicated queries
-        /// </summary>
-        /// <param name="prefix">New prefix. <code>null</code> will be replaced with "ymsearch"</param>
+        /// <inheritdoc />
         public void SetSearchPrefix(string? prefix = null) {
             _searchPrefix = prefix ?? "ymsearch";
             _searchRegex = new Regex($"{_searchPrefix}(:([a-zA-Z]+))?(:([0-9]+))?:([^:]+)");
         }
 
-        /// <summary>
-        /// Perform search request on Yandex Music
-        /// </summary>
-        /// <remarks>Complicated query is <see cref="SearchPrefix"/>:<see cref="YandexSearchType"/>:limit:text</remarks>
-        /// <param name="query">Search query. May be complicated or default values will be used</param>
-        /// <returns>Instance of YandexMusicSearchResult</returns>
+        /// <inheritdoc />
         public Task<YandexMusicSearchResult?> LoadSearchResult(string query) {
             TryParseQuery(query, out var text, out var type, out var limit);
             return LoadSearchResult(type, text, limit);
         }
 
-        /// <summary>
-        /// Parse complicated query into pieces
-        /// </summary>
-        /// <remarks>Complicated query is <see cref="SearchPrefix"/>:<see cref="YandexSearchType"/>:limit:text</remarks>
-        /// <param name="query">Target query</param>
-        /// <param name="text">Search text</param>
-        /// <param name="type">Search type</param>
-        /// <param name="limit">Search limit</param>
-        /// <returns>True if is this complicated query</returns>
+        /// <inheritdoc />
         public bool TryParseQuery(string query, out string text, out YandexSearchType type, out int limit) {
             type = YandexSearchType.Track;
             limit = DefaultLimit;
@@ -85,14 +65,7 @@ namespace YandexMusicResolver.Loaders {
             return true;
         }
 
-        /// <summary>
-        /// Perform search request on Yandex Music
-        /// </summary>
-        /// <param name="type">Search type</param>
-        /// <param name="query">Search text</param>
-        /// <param name="limit">Search results limit count</param>
-        /// <returns>Instance of YandexMusicSearchResult</returns>
-        /// <exception cref="Exception">Throws exception if something went wrong</exception>
+        /// <inheritdoc />
         public async Task<YandexMusicSearchResult?> LoadSearchResult(YandexSearchType type, string query, int limit = DefaultLimit) {
             try {
                 var searchResponse = await new YandexCustomRequest(_config)

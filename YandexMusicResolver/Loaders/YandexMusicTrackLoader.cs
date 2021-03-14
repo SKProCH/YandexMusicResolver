@@ -8,9 +8,7 @@ using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
-    /// <summary>
-    /// Represents track info loader from Yandex Music
-    /// </summary>
+    /// <inheritdoc />
     public class YandexMusicTrackLoader : IYandexMusicTrackLoader {
         /// <summary>
         /// Config instance for performing requests
@@ -28,11 +26,7 @@ namespace YandexMusicResolver.Loaders {
 
         private const string TracksInfoFormat = "https://api.music.yandex.net/tracks?trackIds=";
 
-        /// <summary>
-        /// Load track info
-        /// </summary>
-        /// <param name="trackId">Target track id</param>
-        /// <returns>Instance of <see cref="YandexMusicTrack"/></returns>
+        /// <inheritdoc />
         public async Task<YandexMusicTrack?> LoadTrack(string trackId) {
             try {
                 var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + trackId).GetResponseAsync<List<MetaTrack>>();
@@ -43,11 +37,7 @@ namespace YandexMusicResolver.Loaders {
             }
         }
 
-        /// <summary>
-        /// Load track infos
-        /// </summary>
-        /// <param name="trackIds">Target track ids</param>
-        /// <returns>List of instances of <see cref="YandexMusicTrack"/></returns>
+        /// <inheritdoc />
         public async Task<List<YandexMusicTrack>> LoadTracks(IEnumerable<string> trackIds) {
             try {
                 var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + string.Join(',', trackIds)).GetResponseAsync<List<MetaTrack>>();

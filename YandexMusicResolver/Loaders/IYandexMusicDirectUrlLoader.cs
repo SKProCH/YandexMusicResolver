@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 
 namespace YandexMusicResolver.Loaders {
+    /// <summary>
+    /// Represents class to getting direct links from tracks
+    /// </summary>
     public interface IYandexMusicDirectUrlLoader {
         /// <summary>
         /// Get direct url to download track

@@ -3,6 +3,9 @@ using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver {
+    /// <summary>
+    /// Represent main class for interacting with Yandex Music
+    /// </summary>
     public interface IYandexMusicMainResolver {
         /// <summary>
         /// Instance of <see cref="YandexMusicPlaylistLoader"/>
@@ -50,5 +53,17 @@ namespace YandexMusicResolver {
         Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null,
                                                     bool? plainTextIsSearchQueryOverride = null,
                                                     YandexSearchType? plainTextAsSearchQueryTypeOverride = null);
+
+        /// <summary>
+        /// Determine is query can be resolved with target parameters
+        /// </summary>
+        /// <param name="query">Direct url or search query</param>
+        /// <param name="allowSearchOverride">Is query in <see cref="YandexMusicMainResolver.ResolveQuery"/> can be resolved with search. This parameter overrides <see cref="YandexMusicMainResolver.AllowSearch"/></param>
+        /// <param name="plainTextIsSearchQueryOverride">Will plain text be interpreted as a search query in <see cref="YandexMusicMainResolver.ResolveQuery"/></param>
+        /// <param name="plainTextAsSearchQueryTypeOverride">If we pass plain text to <see cref="YandexMusicMainResolver.ResolveQuery"/> it will be interpreted as search query with this search type</param>
+        /// <returns>True if query can be resolved</returns>
+        bool CanResolveQuery(string query, bool? allowSearchOverride = null,
+                             bool? plainTextIsSearchQueryOverride = null,
+                             YandexSearchType? plainTextAsSearchQueryTypeOverride = null);
     }
 }

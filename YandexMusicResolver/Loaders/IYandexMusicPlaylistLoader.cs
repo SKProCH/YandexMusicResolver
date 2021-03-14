@@ -2,6 +2,9 @@
 using YandexMusicResolver.AudioItems;
 
 namespace YandexMusicResolver.Loaders {
+    /// <summary>
+    /// Represents class to getting playlists and albums from Yandex Music
+    /// </summary>
     public interface IYandexMusicPlaylistLoader {
         /// <summary>
         /// Loads the playlist from Yandex Music

@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 
 namespace YandexMusicResolver.Loaders {
+    /// <summary>
+    /// Represents track info loader from Yandex Music
+    /// </summary>
     public interface IYandexMusicTrackLoader {
         /// <summary>
         /// Load track info
