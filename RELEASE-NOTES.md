@@ -1,3 +1,10 @@
+#v 4.0.0
+- All loaders methods now throws YandexMusicException instead of just exceptions
+- Throw AuthenticationException when Unauthorized status code returned
+- Add interfaces for all loaders
+- Add CanResolveQuery to MainResolver
+- Fix auth exception
+
 # v3.3.1
 - Fix exceptions in AuthorizeAsync extension method
 
