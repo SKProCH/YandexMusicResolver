@@ -17,7 +17,7 @@
         <PackageReleaseNotes>Please write the package release notes in “RELEASE NOTES.md”</PackageReleaseNotes>
 
         <!--Documentation-->
-        <DocumentationFile>YandexMusicResolver.xml</DocumentationFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     
