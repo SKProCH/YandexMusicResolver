@@ -5,11 +5,11 @@ using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.AudioItems {
     /// <summary>
-    /// Represents playlist from Yandex Music
+    /// Represents album from Yandex Music
     /// </summary>
     public class YandexMusicPlaylist : YandexMusicDataContainer<List<YandexMusicTrack>> {
         internal YandexMusicPlaylist(long uid, long kind, long trackCount, string title, YandexMusicOwner owner, string? artworkUrl,
-                                     YandexMusicPlaylistLoader loader) :
+                                     IYandexMusicPlaylistLoader loader) :
             base(async () => (await loader.LoadPlaylist(owner.Login, kind.ToString()))!.Data.ToList()) {
             Uid = uid;
             Kind = kind;

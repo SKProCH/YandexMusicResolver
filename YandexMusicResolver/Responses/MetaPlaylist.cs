@@ -13,7 +13,7 @@ namespace YandexMusicResolver.Responses {
         }
         
         public Dictionary<string, YandexMusicTrack?> Tracks { get; set; } = null!;
-        public override YandexMusicPlaylist ToYaPlaylist(YandexMusicPlaylistLoader loader) {
+        public override YandexMusicPlaylist ToYaPlaylist(IYandexMusicPlaylistLoader yandexMusicPlaylistLoader) {
             #pragma warning disable 8620
             return new(Uid, Kind, TrackCount, Title, Owner, Cover.GetCoverUrl(), Tracks.Values.Where(track => track != null).ToList());
             #pragma warning restore 8620

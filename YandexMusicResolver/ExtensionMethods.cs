@@ -14,7 +14,7 @@ namespace YandexMusicResolver {
         /// <param name="yandexConfig"></param>
         /// <param name="allowRunWithoutAuth">If false will throw error if we cant authorize</param>
         /// <returns>Task represent current async operation</returns>
-        /// <exception cref="AuthenticationException">Will be thrown if we cant authorize and <see cref="allowRunWithoutAuth"/> is false</exception>
+        /// <exception cref="AuthenticationException">Will be thrown if we cant authorize and allowRunWithoutAuth is false</exception>
         public static async Task AuthorizeAsync(this IYandexConfig yandexConfig, bool allowRunWithoutAuth = true) {
             if (yandexConfig.YandexToken != null)
                 if (await YandexMusicAuth.ValidateTokenAsync(yandexConfig.YandexToken, yandexConfig))

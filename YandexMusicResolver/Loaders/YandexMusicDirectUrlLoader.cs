@@ -9,10 +9,8 @@ using YandexMusicResolver.Requests;
 using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
-    /// <summary>
-    /// Represents class to getting direct links from tracks
-    /// </summary>
-    public class YandexMusicDirectUrlLoader {
+    /// <inheritdoc />
+    public class YandexMusicDirectUrlLoader : IYandexMusicDirectUrlLoader {
         private IYandexConfig _config;
 
         /// <summary>
@@ -28,30 +26,28 @@ namespace YandexMusicResolver.Loaders {
         private const string DirectUrlFormat = "https://{0}/get-{1}/{2}/{3}{4}";
         private const string Mp3Salt = "XGRlBW9FXlekgbPrRHuSiA";
 
-        /// <summary>
-        /// Get direct url to download track
-        /// </summary>
-        /// <remarks>If you not authorized will return 30s track version. This is YandexMusic restriction</remarks>
-        /// <param name="trackId">Target track id</param>
-        /// <param name="codec">Target codec. mp3 by default</param>
-        /// <returns>Direct url to download track</returns>
-        /// <exception cref="Exception">Couldn't find supported track format</exception>
+        /// <inheritdoc />
         public async Task<string> GetDirectUrl(string trackId, string codec = "mp3") {
-            var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId))
-                                                                           .GetResponseAsync<List<MetaTrackDownloadInfo>>();
-            var track = trackDownloadInfos.FirstOrDefault(downloadInfo => downloadInfo.Codec == codec);
-            if (track == null) {
-                throw new Exception("Couldn't find supported track format.");
+            try {
+                var trackDownloadInfos = await new YandexCustomRequest(_config).Create(string.Format(TrackDownloadInfoFormat, trackId))
+                                                                               .GetResponseAsync<List<MetaTrackDownloadInfo>>();
+                var track = trackDownloadInfos.FirstOrDefault(downloadInfo => downloadInfo.Codec == codec);
+                if (track == null) {
+                    throw new Exception("Couldn't find supported track format.");
+                }
+
+                var downloadInfoContent = await new YandexCustomRequest(_config).Create(track.DownloadInfoUrl.ToString()).GetResponseBodyAsync();
+                var serializer = new XmlSerializer(typeof(MetaTrackDownloadInfoXml));
+                using var reader = new StringReader(downloadInfoContent);
+                var info = (MetaTrackDownloadInfoXml) serializer.Deserialize(reader);
+
+                var sign = Utilities.CreateMd5(Mp3Salt + info.Path.Substring(1) + info.S);
+
+                return string.Format(DirectUrlFormat, info.Host, codec, sign, info.Ts, info.Path);
             }
-
-            var downloadInfoContent = await new YandexCustomRequest(_config).Create(track.DownloadInfoUrl.ToString()).GetResponseBodyAsync();
-            var serializer = new XmlSerializer(typeof(MetaTrackDownloadInfoXml));
-            using var reader = new StringReader(downloadInfoContent);
-            var info = (MetaTrackDownloadInfoXml) serializer.Deserialize(reader);
-
-            var sign = Utilities.CreateMd5(Mp3Salt + info.Path.Substring(1) + info.S);
-
-            return string.Format(DirectUrlFormat, info.Host, codec, sign, info.Ts, info.Path);
+            catch (Exception e) {
+                throw new YandexMusicException("Exception while resolving direct url", e);
+            }
         }
     }
 }

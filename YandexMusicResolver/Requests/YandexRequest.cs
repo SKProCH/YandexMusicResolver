@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -80,9 +81,21 @@ namespace YandexMusicResolver.Requests {
         }
 
         public async Task<HttpWebResponse> GetResponseAsync() {
-            if (_fullRequest != null)
+            if (_fullRequest == null)
+                throw new NullReferenceException("Create request before getting response");
+            try
+            {
                 return (HttpWebResponse) await _fullRequest.GetResponseAsync();
-            throw new NullReferenceException("Create request before getting response");
+            }
+            catch (WebException e)
+            {
+                if (e.Response is HttpWebResponse {StatusCode: HttpStatusCode.Unauthorized})
+                {
+                    throw new AuthenticationException(e.Message, e);
+                }
+
+                throw;
+            }
         }
 
         public async Task<T> GetResponseAsync<T>() {
@@ -100,8 +113,8 @@ namespace YandexMusicResolver.Requests {
             throw new Exception("Couldn't get API response result.");
         }
 
-        public async Task<string> GetResponseBodyAsync() {
-            var response = await GetResponseAsync();
+        public async Task<string> GetResponseBodyAsync(HttpWebResponse? response = null) {
+            response ??= await GetResponseAsync();
             using var streamReader = new StreamReader(response.GetResponseStream()!);
             return await streamReader.ReadToEndAsync();
         }
