@@ -1,5 +1,4 @@
 ﻿using Xunit;
-using YandexMusicResolver.AudioItems;
 
 namespace YandexMusicResolver.Tests {
     public class YandexMusicPlaylistLoaderTest : YandexTestBase {

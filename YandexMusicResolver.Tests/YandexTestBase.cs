@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using YandexMusicResolver.AudioItems;
+﻿using System.IO;
 using YandexMusicResolver.Config;
 
 namespace YandexMusicResolver.Tests {
@@ -15,7 +13,7 @@ namespace YandexMusicResolver.Tests {
             else {
                 Config = new EnvironmentConfig();
             }
-            
+
             MainResolver = new YandexMusicMainResolver(Config);
         }
     }

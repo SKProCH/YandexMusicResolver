@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace YandexMusicResolver.AudioItems {
     /// <summary>
@@ -10,8 +9,8 @@ namespace YandexMusicResolver.AudioItems {
                                          bool isSearchResult,
                                          YandexSearchType type,
                                          IReadOnlyCollection<YandexMusicAlbum>? albums,
-                                         IReadOnlyCollection<YandexMusicPlaylist>? playlists, 
-                                         IReadOnlyCollection<YandexMusicTrack>? tracks, 
+                                         IReadOnlyCollection<YandexMusicPlaylist>? playlists,
+                                         IReadOnlyCollection<YandexMusicTrack>? tracks,
                                          int? limit = null) {
             Query = query;
             Limit = limit;
