@@ -9,6 +9,8 @@ using YandexMusicResolver.Responses;
 namespace YandexMusicResolver.Loaders {
     /// <inheritdoc />
     public class YandexMusicPlaylistLoader : IYandexMusicPlaylistLoader {
+        private const string PlaylistInfoFormat = "https://api.music.yandex.net/users/{0}/playlists/{1}";
+        private const string AlbumInfoFormat = "https://api.music.yandex.net/albums/{0}/with-tracks";
         private readonly IYandexConfig _config;
         private readonly IYandexMusicTrackLoader _trackLoader;
 
@@ -33,9 +35,6 @@ namespace YandexMusicResolver.Loaders {
             _config = config;
         }
 
-        private const string PlaylistInfoFormat = "https://api.music.yandex.net/users/{0}/playlists/{1}";
-        private const string AlbumInfoFormat = "https://api.music.yandex.net/albums/{0}/with-tracks";
-
         /// <inheritdoc />
         public async Task<YandexMusicPlaylist?> LoadPlaylist(string userId, string playlistKind) {
             try {
@@ -45,17 +44,18 @@ namespace YandexMusicResolver.Loaders {
                     throw new Exception("Empty playlist found.");
                 }
 
-                if (playlistData.Tracks.Any(container => container.Value == null)) {
+                if (playlistData.Tracks.Any(container => container.Track == null)) {
                     if (_trackLoader == null) {
                         throw new Exception("Yandex Music for some reason gives a different response format (no tracks) for some playlists. " +
                                             "Use another ctor and pass YandexMusicTrackLoader to ctor to get proper response");
                     }
 
-                    var yandexMusicTracks = await _trackLoader.LoadTracks(playlistData.Tracks.Where(pair => pair.Value == null)
-                                                                                      .Select(pair => pair.Key));
-                    foreach (var yandexMusicTrack in yandexMusicTracks) {
-                        playlistData.Tracks[yandexMusicTrack.Id] = yandexMusicTrack;
-                    }
+                    var trackIds = playlistData.Tracks
+                        .Where(pair => pair.Track == null)
+                        .Select(pair => pair.Id);
+                    var yandexMusicTracks = await _trackLoader.LoadTracks(trackIds);
+
+                    return playlistData.ToYaPlaylist(yandexMusicTracks);
                 }
 
                 return playlistData.ToYaPlaylist(this);

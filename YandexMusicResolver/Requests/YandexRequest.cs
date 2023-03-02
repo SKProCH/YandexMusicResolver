@@ -6,9 +6,9 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Responses;
 
@@ -83,14 +83,11 @@ namespace YandexMusicResolver.Requests {
         public async Task<HttpWebResponse> GetResponseAsync() {
             if (_fullRequest == null)
                 throw new NullReferenceException("Create request before getting response");
-            try
-            {
-                return (HttpWebResponse) await _fullRequest.GetResponseAsync();
+            try {
+                return (HttpWebResponse)await _fullRequest.GetResponseAsync();
             }
-            catch (WebException e)
-            {
-                if (e.Response is HttpWebResponse {StatusCode: HttpStatusCode.Unauthorized})
-                {
+            catch (WebException e) {
+                if (e.Response is HttpWebResponse { StatusCode: HttpStatusCode.Unauthorized }) {
                     throw new AuthenticationException(e.Message, e);
                 }
 
@@ -99,18 +96,23 @@ namespace YandexMusicResolver.Requests {
         }
 
         public async Task<T> GetResponseAsync<T>() {
-            var content = await GetResponseBodyAsync();
-            YandexApiResponse<T> yandexApiResponse;
+            var response = await GetResponseAsync();
+            return await GetResponseAsync<T>(response);
+        }
+
+        public static async Task<T> GetResponseAsync<T>(WebResponse response) {
             try {
-                yandexApiResponse = JsonConvert.DeserializeObject<YandexApiResponse<T>>(content);
+                var responseStream = response.GetResponseStream()!;
+                var yandexApiResponse = await JsonSerializer.DeserializeAsync<YandexApiResponse<T>>(responseStream, Utilities.DefaultJsonSerializerOptions)
+                                     ?? throw new InvalidOperationException();
+
+                if (yandexApiResponse.Result != null) return yandexApiResponse.Result;
+                if (yandexApiResponse.Error != null) throw new YandexApiResponseException("Couldn't get API response result.", yandexApiResponse.Error);
+                throw new Exception("Couldn't get API response result.");
             }
             catch (Exception e) {
                 throw new Exception("Couldn't get valid API response.", e);
             }
-
-            if (yandexApiResponse.Result != null) return yandexApiResponse.Result;
-            if (yandexApiResponse.Error != null) throw new YandexApiResponseException("Couldn't get API response result.", yandexApiResponse.Error);
-            throw new Exception("Couldn't get API response result.");
         }
 
         public async Task<string> GetResponseBodyAsync(HttpWebResponse? response = null) {

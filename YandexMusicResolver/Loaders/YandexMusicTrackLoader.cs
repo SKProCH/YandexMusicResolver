@@ -10,6 +10,7 @@ using YandexMusicResolver.Responses;
 namespace YandexMusicResolver.Loaders {
     /// <inheritdoc />
     public class YandexMusicTrackLoader : IYandexMusicTrackLoader {
+        private const string TracksInfoFormat = "https://api.music.yandex.net/tracks?trackIds=";
         /// <summary>
         /// Config instance for performing requests
         /// </summary>
@@ -24,10 +25,8 @@ namespace YandexMusicResolver.Loaders {
             Config = config;
         }
 
-        private const string TracksInfoFormat = "https://api.music.yandex.net/tracks?trackIds=";
-
         /// <inheritdoc />
-        public async Task<YandexMusicTrack?> LoadTrack(string trackId) {
+        public async Task<YandexMusicTrack?> LoadTrack(long trackId) {
             try {
                 var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + trackId).GetResponseAsync<List<MetaTrack>>();
                 return response.FirstOrDefault()?.ToYmTrack();
@@ -38,9 +37,10 @@ namespace YandexMusicResolver.Loaders {
         }
 
         /// <inheritdoc />
-        public async Task<List<YandexMusicTrack>> LoadTracks(IEnumerable<string> trackIds) {
+        public async Task<List<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) {
             try {
-                var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + string.Join(',', trackIds)).GetResponseAsync<List<MetaTrack>>();
+                var trackIdsString = string.Join(",", trackIds);
+                var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + trackIdsString).GetResponseAsync<List<MetaTrack>>();
                 return response.Select(track => track.ToYmTrack()).ToList();
             }
             catch (Exception e) {

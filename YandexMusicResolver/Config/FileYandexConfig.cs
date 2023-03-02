@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace YandexMusicResolver.Config {
     /// <summary>
@@ -9,7 +10,7 @@ namespace YandexMusicResolver.Config {
     /// </summary>
     public class FileYandexConfig : IYandexConfig {
         private string _filePath;
-        private bool isLoaded;
+        private bool _isLoaded;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileYandexConfig"/> class.
@@ -19,12 +20,17 @@ namespace YandexMusicResolver.Config {
             _filePath = filePath ?? "YandexConfig.json";
         }
 
+        /// <summary>
+        /// Uri to create proxy
+        /// </summary>
+        public string? YandexProxyAddress { get; set; }
+
         /// <inheritdoc />
         public virtual void Load() {
-            if (isLoaded) return;
+            if (_isLoaded) return;
             try {
                 if (File.Exists(_filePath)) {
-                    var fileYandexConfig = JsonConvert.DeserializeObject<FileYandexConfig>(File.ReadAllText(_filePath));
+                    var fileYandexConfig = JsonSerializer.Deserialize<FileYandexConfig>(File.ReadAllText(_filePath), Utilities.DefaultJsonSerializerOptions)!;
                     YandexLogin = fileYandexConfig.YandexLogin;
                     YandexPassword = fileYandexConfig.YandexPassword;
                     YandexToken = fileYandexConfig.YandexToken;
@@ -42,12 +48,12 @@ namespace YandexMusicResolver.Config {
                 // ignored
             }
 
-            isLoaded = true;
+            _isLoaded = true;
         }
 
         /// <inheritdoc />
         public virtual void Save() {
-            File.WriteAllText(_filePath, JsonConvert.SerializeObject(this, Formatting.Indented));
+            File.WriteAllText(_filePath, JsonSerializer.Serialize(this, Utilities.DefaultJsonSerializerOptions));
         }
 
         /// <inheritdoc />
@@ -58,11 +64,6 @@ namespace YandexMusicResolver.Config {
 
         /// <inheritdoc />
         public string? YandexToken { get; set; }
-
-        /// <summary>
-        /// Uri to create proxy
-        /// </summary>
-        public string? YandexProxyAddress { get; set; }
 
         /// <inheritdoc />
         [JsonIgnore]

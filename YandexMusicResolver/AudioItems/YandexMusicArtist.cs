@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace YandexMusicResolver.AudioItems {
+﻿namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// Represent a artist in Yandex Music
     /// </summary>
@@ -8,13 +6,11 @@ namespace YandexMusicResolver.AudioItems {
         /// <summary>
         /// Artist ID
         /// </summary>
-        [JsonProperty("id")]
         public long Id { get; set; }
 
         /// <summary>
         /// Artist name
         /// </summary>
-        [JsonProperty("name")]
         public string Name { get; set; } = null!;
     }
 }

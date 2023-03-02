@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// AudioTrackInfo wrapper to resolve track direct url
     /// </summary>
-    public class YandexMusicTrack  {
-        internal YandexMusicTrack(string title, List<YandexMusicArtist> authors, TimeSpan length, string id, string uri, string? artworkUrl = null) {
+    public class YandexMusicTrack {
+        internal YandexMusicTrack(string title, List<YandexMusicArtist> authors, TimeSpan length, long id, string? uri, bool isAvailable, string? artworkUrl = null) {
             Title = title;
             Authors = authors;
             Length = length;
             Id = id;
             Uri = uri;
+            IsAvailable = isAvailable;
             ArtworkUrl = artworkUrl;
         }
-        
+
         /// <summary>
         /// Track title
         /// </summary>
@@ -41,16 +40,22 @@ namespace YandexMusicResolver.AudioItems {
         /// <summary>
         /// Track id
         /// </summary>
-        public string Id { get; }
+        public long Id { get; }
 
         /// <summary>
         /// Track link
         /// </summary>
-        public string Uri { get; }
+        /// <remarks>Can be <c>null</c> if <see cref="IsAvailable"/> is <c>false</c></remarks>
+        public string? Uri { get; }
 
         /// <summary>
         /// Track image uri
         /// </summary>
         public string? ArtworkUrl { get; }
+
+        /// <summary>
+        /// Is track available
+        /// </summary>
+        public bool IsAvailable { get; }
     }
 }

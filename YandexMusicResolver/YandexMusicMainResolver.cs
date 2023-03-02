@@ -20,18 +20,6 @@ namespace YandexMusicResolver {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IYandexConfig _config;
 
-        /// <inheritdoc />
-        public IYandexMusicPlaylistLoader PlaylistLoader { get; }
-
-        /// <inheritdoc />
-        public IYandexMusicTrackLoader TrackLoader { get; }
-
-        /// <inheritdoc />
-        public IYandexMusicDirectUrlLoader DirectUrlLoader { get; }
-
-        /// <inheritdoc />
-        public IYandexMusicSearchResultLoader SearchResultLoader { get; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
         /// </summary>
@@ -54,6 +42,18 @@ namespace YandexMusicResolver {
         }
 
         /// <inheritdoc />
+        public IYandexMusicPlaylistLoader PlaylistLoader { get; }
+
+        /// <inheritdoc />
+        public IYandexMusicTrackLoader TrackLoader { get; }
+
+        /// <inheritdoc />
+        public IYandexMusicDirectUrlLoader DirectUrlLoader { get; }
+
+        /// <inheritdoc />
+        public IYandexMusicSearchResultLoader SearchResultLoader { get; }
+
+        /// <inheritdoc />
         public bool AllowSearch { get; set; } = true;
 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace YandexMusicResolver {
             if (trackMatch.Success) {
                 var tracks = new List<YandexMusicTrack>();
 
-                var yandexMusicTrack = await TrackLoader.LoadTrack(trackMatch.Groups[2].Value);
+                var yandexMusicTrack = await TrackLoader.LoadTrack(Convert.ToInt64(trackMatch.Groups[2].Value));
                 if (yandexMusicTrack != null) tracks.Add(yandexMusicTrack);
 
                 return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null, tracks.AsReadOnly());

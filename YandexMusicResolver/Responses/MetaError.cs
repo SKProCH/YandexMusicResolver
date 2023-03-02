@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace YandexMusicResolver.Responses {
+﻿namespace YandexMusicResolver.Responses {
     /// <summary>
     /// Represents error that returned from Yandex Music
     /// </summary>
@@ -8,13 +6,11 @@ namespace YandexMusicResolver.Responses {
         /// <summary>
         /// Error name
         /// </summary>
-        [JsonProperty("name")]
         public string Name { get; set; } = null!;
 
         /// <summary>
         /// Error message
         /// </summary>
-        [JsonProperty("message")]
         public string Message { get; set; } = null!;
     }
 }
