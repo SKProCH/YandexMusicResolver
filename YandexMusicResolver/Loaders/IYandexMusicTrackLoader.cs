@@ -19,6 +19,6 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="trackIds">Target track ids</param>
         /// <returns>List of instances of <see cref="YandexMusicTrack"/></returns>
-        Task<List<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds);
+        Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds);
     }
 }

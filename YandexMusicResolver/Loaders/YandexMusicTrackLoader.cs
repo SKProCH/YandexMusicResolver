@@ -37,7 +37,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         /// <inheritdoc />
-        public async Task<List<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) {
+        public async Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) {
             try {
                 var trackIdsString = string.Join(",", trackIds);
                 var response = await new YandexCustomRequest(Config).Create(TracksInfoFormat + trackIdsString).GetResponseAsync<List<MetaTrack>>();

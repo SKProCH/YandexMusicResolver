@@ -43,7 +43,7 @@ namespace YandexMusicResolver.AudioItems {
         /// <summary>
         /// Album artists
         /// </summary>
-        public List<YandexMusicArtist> Artists { get; }
+        public IReadOnlyCollection<YandexMusicArtist> Artists { get; }
 
         /// <summary>
         /// Track image uri
