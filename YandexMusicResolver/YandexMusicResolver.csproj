@@ -12,17 +12,10 @@
       <Description>A library aimed at searching, resolving and getting direct links to tracks, playlists or albums in Yandex.Music. Can work without authorization.</Description>
       <RepositoryType>Git</RepositoryType>
       <PackageProjectUrl>https://github.com/SKProCH/YandexMusicResolver</PackageProjectUrl>
-      <Version>5.0.1</Version>
+      <Version>5.1.0</Version>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <PackageReleaseNotes>
-- Removed all `IYandexConfig` infrastructure. Use `IYandexCredentialProvider` or implement your own.
-- Remove YandexMusicAuth class, use IYandexMusicAuthService or implement your own.
-- All List replaced with IReadOnlyCollections in API
-- Make `YandexMusicTrack` ID long instead of string
-- Migrate to System.Text.Json and IHttpClientFactory (still can be used with just HttpClient)
-- Remove Proxy specifying. Set proxy in IHttpClientFactory or HttpClient.
-- Target framework lowered to netstandard2.0
-- Change type of IYandexMusicDirectUrlLoader.GetDirectUrl TrackId parameter to long
+- Add YandexCredentials class for YandexCredentialsProvider
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <PackageIcon>icon.png</PackageIcon>
@@ -37,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../README.md" Pack="true" PackagePath="\"/>
+    <None Include="../README.md" Pack="true" PackagePath="\" />
     <None Include="../icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 </Project>

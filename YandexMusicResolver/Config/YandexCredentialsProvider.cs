@@ -38,9 +38,12 @@ public class YandexCredentialsProvider : IYandexCredentialsProvider {
     /// <summary>
     /// Initializes a new <see cref="YandexCredentialsProvider"/> with anonymizes access
     /// </summary>
-    public YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService) {
+    public YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, YandexCredentials credentials) {
         _yandexMusicAuthService = yandexMusicAuthService;
-        AllowAnonymous = true;
+        _login = credentials.Login;
+        _password = credentials.Login;
+        _token = credentials.Token;
+        AllowAnonymous = credentials.AllowAnonymous;
     }
 
     /// <inheritdoc />
