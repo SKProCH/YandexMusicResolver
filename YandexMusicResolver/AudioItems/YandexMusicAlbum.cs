@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.AudioItems {
@@ -45,7 +43,7 @@ namespace YandexMusicResolver.AudioItems {
         /// <summary>
         /// Album artists
         /// </summary>
-        public List<YandexMusicArtist> Artists { get; }
+        public IReadOnlyCollection<YandexMusicArtist> Artists { get; }
 
         /// <summary>
         /// Track image uri

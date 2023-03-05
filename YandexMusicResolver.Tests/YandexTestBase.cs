@@ -1,22 +1,18 @@
-﻿using System;
-using System.IO;
-using YandexMusicResolver.AudioItems;
+﻿using System.IO;
+using System.Net.Http;
+using Moq;
+using Moq.AutoMock;
 using YandexMusicResolver.Config;
 
 namespace YandexMusicResolver.Tests {
     public class YandexTestBase {
-        public IYandexConfig Config;
+        public AutoMocker AutoMocker = new();
+        public Mock<IYandexCredentialsProvider> YandexCredentialsProviderMock;
         public YandexMusicMainResolver MainResolver;
 
         public YandexTestBase() {
-            if (File.Exists("TestData.json")) {
-                Config = new FileYandexConfig("TestData.json");
-            }
-            else {
-                Config = new EnvironmentConfig();
-            }
-            
-            MainResolver = new YandexMusicMainResolver(Config);
+            YandexCredentialsProviderMock = AutoMocker.GetMock<IYandexCredentialsProvider>();
+            MainResolver = new YandexMusicMainResolver(YandexCredentialsProviderMock.Object, new HttpClient());
         }
     }
 }

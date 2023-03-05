@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using YandexMusicResolver.Loaders;
 
@@ -7,7 +6,7 @@ namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// Represents album from Yandex Music
     /// </summary>
-    public class YandexMusicPlaylist : YandexMusicDataContainer<List<YandexMusicTrack>> {
+    public class YandexMusicPlaylist : YandexMusicDataContainer<IReadOnlyCollection<YandexMusicTrack>> {
         internal YandexMusicPlaylist(long uid, long kind, long trackCount, string title, YandexMusicOwner owner, string? artworkUrl,
                                      IYandexMusicPlaylistLoader loader) :
             base(async () => (await loader.LoadPlaylist(owner.Login, kind.ToString()))!.Data.ToList()) {
@@ -20,7 +19,7 @@ namespace YandexMusicResolver.AudioItems {
         }
 
         internal YandexMusicPlaylist(long uid, long kind, long trackCount, string title, YandexMusicOwner owner, string? artworkUrl,
-                                     List<YandexMusicTrack> tracks) : base(tracks) {
+                                     IReadOnlyCollection<YandexMusicTrack> tracks) : base(tracks) {
             Uid = uid;
             Kind = kind;
             TrackCount = trackCount;
