@@ -21,16 +21,17 @@
     </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="7.0.2"/>
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="YandexMusicResolver.xml"/>
+    <None Remove="YandexMusicResolver.xml" />
   </ItemGroup>
 
   <Target Name="PreparePackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec">
     <ReadLinesFromFile File="../RELEASE-NOTES.md">
-      <Output TaskParameter="Lines" ItemName="ReleaseNoteLines"/>
+      <Output TaskParameter="Lines" ItemName="ReleaseNoteLines" />
     </ReadLinesFromFile>
     <PropertyGroup>
       <PackageReleaseNotes>@(ReleaseNoteLines, '%0a')</PackageReleaseNotes>

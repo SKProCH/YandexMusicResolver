@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Net.Http;
 using Xunit;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Loaders;
@@ -41,7 +42,7 @@ namespace YandexMusicResolver.Tests {
         [InlineData("myprefix")]
         public void TestPrefixes(string? prefix) {
             #pragma warning disable 8625
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(new EmptyYandexConfig(), null);
+            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(YandexCredentialsProviderMock.Object, new HttpClient(), AutoMocker.Get<IYandexMusicPlaylistLoader>());
             yandexMusicSearchResultLoader.SetSearchPrefix(prefix);
             #pragma warning restore 8625
             prefix ??= "ymsearch";
