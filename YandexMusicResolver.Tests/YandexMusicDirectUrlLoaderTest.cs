@@ -10,9 +10,9 @@ namespace YandexMusicResolver.Tests {
         }
 
         [Theory]
-        [InlineData("43413021")]
-        [InlineData("37637150")]
-        public void DirectLoadTest(string trackId) {
+        [InlineData(43413021)]
+        [InlineData(37637150)]
+        public void DirectLoadTest(long trackId) {
             var result = MainResolver.DirectUrlLoader.GetDirectUrl(trackId, "mp3").GetAwaiter().GetResult();
             var webRequest = (HttpWebResponse)WebRequest.Create(result).GetResponse();
             Assert.Equal(HttpStatusCode.OK, webRequest.StatusCode);
