@@ -38,7 +38,7 @@ namespace YandexMusicResolver.Loaders {
         }
 
         /// <inheritdoc />
-        public async Task<string> GetDirectUrl(string trackId, string codec = "mp3") {
+        public async Task<string> GetDirectUrl(long trackId, string codec = "mp3") {
             try {
                 var url = string.Format(TrackDownloadInfoFormat, trackId);
                 var trackDownloadInfos = await _httpClient.PerformYMusicRequestAsync<List<MetaTrackDownloadInfo>>(_credentialsProvider, url);

@@ -14,6 +14,6 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="codec">Target codec. mp3 by default</param>
         /// <returns>Direct url to download track</returns>
         /// <exception cref="Exception">Couldn't find supported track format</exception>
-        Task<string> GetDirectUrl(string trackId, string codec = "mp3");
+        Task<string> GetDirectUrl(long trackId, string codec = "mp3");
     }
 }
