@@ -71,7 +71,7 @@ namespace YandexMusicResolver.Loaders {
             var match = _searchRegex.Match(query);
             if (!match.Success) return false;
 
-            type = Enum.TryParse(typeof(YandexSearchType), match.Groups[2].Value, true, out var o) ? (YandexSearchType) o : YandexSearchType.Track;
+            type = Enum.TryParse<YandexSearchType>(match.Groups[2].Value, true, out var o) ? o : YandexSearchType.Track;
             limit = int.TryParse(match.Groups[4].Value, out var i) ? i : DefaultLimit;
             text = match.Groups[5].Value;
             return true;

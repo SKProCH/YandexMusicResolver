@@ -51,7 +51,7 @@ namespace YandexMusicResolver.Loaders {
                 var serializer = new XmlSerializer(typeof(MetaTrackDownloadInfoXml));
                 var info = (MetaTrackDownloadInfoXml)serializer.Deserialize(await downloadInfoContent.Content.ReadAsStreamAsync());
 
-                var sign = YandexMusicUtilities.CreateMd5(Mp3Salt + info.Path[1..] + info.S);
+                var sign = YandexMusicUtilities.CreateMd5(Mp3Salt + info.Path.Substring(1) + info.S);
 
                 return string.Format(DirectUrlFormat, info.Host, codec, sign, info.Ts, info.Path);
             }
