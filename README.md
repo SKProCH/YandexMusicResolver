@@ -1,4 +1,4 @@
-# ![](https://raw.githubusercontent.com/SKProCH/YandexMusicResolver/dev/icon.svg) YandexMusicResolver
+# ![](https://raw.githubusercontent.com/SKProCH/YandexMusicResolver/dev/icon.png) YandexMusicResolver
 A library aimed at searching, resolving and getting direct links to tracks, playlists or albums in Yandex.Music.  
 Can work without authorization.
 
