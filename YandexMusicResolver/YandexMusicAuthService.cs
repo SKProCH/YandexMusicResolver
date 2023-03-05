@@ -26,6 +26,14 @@ public class YandexMusicAuthService : IYandexMusicAuthService {
         _httpClient = httpClientFactory.GetYMusicHttpClient();
     }
 
+    /// <summary>
+    /// Create instance of <see cref="YandexMusicAuthService"/>
+    /// </summary>
+    /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
+    public YandexMusicAuthService(HttpClient httpClient) {
+        _httpClient = httpClient;
+    }
+
     /// <inheritdoc />
     public async Task<bool> ValidateTokenAsync(string token) {
         var metaAccountResponse = await _httpClient.PerformYMusicRequestAsync<MetaAccountResponse>(null, StatusUrl);
