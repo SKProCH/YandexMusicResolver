@@ -21,8 +21,11 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="yandexCredentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/> for resolving some strange playlists</param>
-        public YandexMusicPlaylistLoader(IYandexCredentialsProvider yandexCredentialsProvider, IHttpClientFactory httpClientFactory, IYandexMusicTrackLoader? trackLoader = null) {
-            _httpClient = httpClientFactory.GetYMusicHttpClient();
+        public YandexMusicPlaylistLoader(IYandexCredentialsProvider yandexCredentialsProvider, IHttpClientFactory httpClientFactory, IYandexMusicTrackLoader? trackLoader = null)
+            : this(yandexCredentialsProvider, httpClientFactory.GetYMusicHttpClient(), trackLoader) { }
+
+        private YandexMusicPlaylistLoader(IYandexCredentialsProvider yandexCredentialsProvider, HttpClient httpClient, IYandexMusicTrackLoader? trackLoader = null) {
+            _httpClient = httpClient;
             _trackLoader = trackLoader;
             _yandexCredentialsProvider = yandexCredentialsProvider;
         }
@@ -33,10 +36,8 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="yandexCredentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/> for resolving some strange playlists</param>
-        public YandexMusicPlaylistLoader(IYandexCredentialsProvider yandexCredentialsProvider, HttpClient httpClient, IYandexMusicTrackLoader? trackLoader = null) {
-            _httpClient = httpClient;
-            _trackLoader = trackLoader;
-            _yandexCredentialsProvider = yandexCredentialsProvider;
+        public static YandexMusicPlaylistLoader CreateWithHttpClient(IYandexCredentialsProvider yandexCredentialsProvider, HttpClient httpClient, IYandexMusicTrackLoader? trackLoader = null) {
+            return new YandexMusicPlaylistLoader(yandexCredentialsProvider, httpClient, trackLoader);
         }
 
         /// <inheritdoc />

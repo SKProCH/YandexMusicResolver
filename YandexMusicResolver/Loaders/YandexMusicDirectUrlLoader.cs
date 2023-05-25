@@ -22,8 +22,11 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
-        public YandexMusicDirectUrlLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory) {
-            _httpClient = httpClientFactory.GetYMusicHttpClient();
+        public YandexMusicDirectUrlLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory)
+            : this(credentialsProvider, httpClientFactory.GetYMusicHttpClient()) { }
+
+        private YandexMusicDirectUrlLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
+            _httpClient = httpClient;
             _credentialsProvider = credentialsProvider;
         }
 
@@ -32,9 +35,8 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
-        public YandexMusicDirectUrlLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
-            _httpClient = httpClient;
-            _credentialsProvider = credentialsProvider;
+        public static YandexMusicDirectUrlLoader CreateWithHttpClient(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
+            return new YandexMusicDirectUrlLoader(credentialsProvider, httpClient);
         }
 
         /// <inheritdoc />

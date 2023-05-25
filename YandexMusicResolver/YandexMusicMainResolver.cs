@@ -54,10 +54,10 @@ namespace YandexMusicResolver {
                                        IYandexMusicTrackLoader? trackLoader = null,
                                        IYandexMusicDirectUrlLoader? directUrlLoader = null,
                                        IYandexMusicSearchResultLoader? searchResultLoader = null) {
-            TrackLoader = trackLoader ??= new YandexMusicTrackLoader(credentialsProvider, client);
-            DirectUrlLoader = directUrlLoader ??= new YandexMusicDirectUrlLoader(credentialsProvider, client);
-            PlaylistLoader = playlistLoader ??= new YandexMusicPlaylistLoader(credentialsProvider, client, trackLoader);
-            SearchResultLoader = searchResultLoader ??= new YandexMusicSearchResultLoader(credentialsProvider, client, playlistLoader);
+            TrackLoader = trackLoader ??= YandexMusicTrackLoader.CreateWithHttpClient(credentialsProvider, client);
+            DirectUrlLoader = directUrlLoader ??= YandexMusicDirectUrlLoader.CreateWithHttpClient(credentialsProvider, client);
+            PlaylistLoader = playlistLoader ??= YandexMusicPlaylistLoader.CreateWithHttpClient(credentialsProvider, client, trackLoader);
+            SearchResultLoader = searchResultLoader ??= YandexMusicSearchResultLoader.CreateWithHttpClient(credentialsProvider, client, playlistLoader);
         }
 
         /// <inheritdoc />

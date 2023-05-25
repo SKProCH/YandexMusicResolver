@@ -22,19 +22,21 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
-        public YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory) {
+        public YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory)
+            : this(credentialsProvider, httpClientFactory.GetYMusicHttpClient()) { }
+
+        private YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
             _credentialsProvider = credentialsProvider;
-            _httpClient = httpClientFactory.GetYMusicHttpClient();
-        }        
-        
+            _httpClient = httpClient;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicTrackLoader"/> class.
         /// </summary>
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
-        public YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
-            _credentialsProvider = credentialsProvider;
-            _httpClient = httpClient;
+        public static YandexMusicTrackLoader CreateWithHttpClient(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
+            return new YandexMusicTrackLoader(credentialsProvider, httpClient);
         }
 
         /// <inheritdoc />

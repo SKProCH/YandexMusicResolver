@@ -42,7 +42,7 @@ namespace YandexMusicResolver.Tests {
         [InlineData("myprefix")]
         public void TestPrefixes(string? prefix) {
             #pragma warning disable 8625
-            var yandexMusicSearchResultLoader = new YandexMusicSearchResultLoader(YandexCredentialsProviderMock.Object, new HttpClient(), AutoMocker.Get<IYandexMusicPlaylistLoader>());
+            var yandexMusicSearchResultLoader = YandexMusicSearchResultLoader.CreateWithHttpClient(YandexCredentialsProviderMock.Object, new HttpClient(), AutoMocker.Get<IYandexMusicPlaylistLoader>());
             yandexMusicSearchResultLoader.SetSearchPrefix(prefix);
             #pragma warning restore 8625
             prefix ??= "ymsearch";
