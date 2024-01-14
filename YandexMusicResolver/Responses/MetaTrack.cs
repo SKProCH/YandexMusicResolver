@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using YandexMusicResolver.AudioItems;
+using YandexMusicResolver.Ids;
 
 namespace YandexMusicResolver.Responses {
     /// <summary>
@@ -11,8 +12,8 @@ namespace YandexMusicResolver.Responses {
     internal class MetaTrack {
         private const string TrackUrlFormat = "https://music.yandex.ru/album/{0}/track/{1}";
 
-        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public long Id { get; set; }
+        [JsonConverter(typeof(YandexIdConverter))]
+        public YandexId Id { get; set; }
 
         public string Title { get; set; } = null!;
 
