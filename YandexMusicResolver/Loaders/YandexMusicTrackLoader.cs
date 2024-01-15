@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Config;
+using YandexMusicResolver.Ids;
 using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
@@ -40,7 +41,16 @@ namespace YandexMusicResolver.Loaders {
         }
 
         /// <inheritdoc />
-        public async Task<YandexMusicTrack?> LoadTrack(long trackId) {
+        public Task<YandexMusicTrack?> LoadTrack(long trackId) => LoadTrack(trackId.ToString());
+
+        /// <inheritdoc />
+        public Task<YandexMusicTrack?> LoadTrack(Guid trackId) => LoadTrack(trackId.ToString());
+
+        /// <inheritdoc />
+        public Task<YandexMusicTrack?> LoadTrack(YandexId trackId) => LoadTrack(trackId.ToString());
+
+        /// <inheritdoc />
+        public async Task<YandexMusicTrack?> LoadTrack(string trackId) {
             try {
                 var url = TracksInfoFormat + trackId;
                 var response = await _httpClient.PerformYMusicRequestAsync<List<MetaTrack>>(_credentialsProvider, url);
@@ -52,7 +62,16 @@ namespace YandexMusicResolver.Loaders {
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) {
+        public Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) => LoadTracks(trackIds.Select(l => l.ToString()));
+
+        /// <inheritdoc />
+        public Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<Guid> trackIds) => LoadTracks(trackIds.Select(l => l.ToString()));
+
+        /// <inheritdoc />
+        public Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<YandexId> trackIds) => LoadTracks(trackIds.Select(l => l.ToString()));
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<string> trackIds) {
             try {
                 var trackIdsString = string.Join(",", trackIds);
                 var url = TracksInfoFormat + trackIdsString;
