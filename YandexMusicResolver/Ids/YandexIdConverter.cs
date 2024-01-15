@@ -10,14 +10,20 @@ namespace YandexMusicResolver.Ids;
 public class YandexIdConverter : JsonConverter<YandexId> {
     /// <inheritdoc />
     public override YandexId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        if (reader.TryGetInt64(out var l)) {
-            return new YandexId(l);
-        }
+        if (reader.TokenType == JsonTokenType.String) {
+            var s = reader.GetString();
+            if (long.TryParse(s, out var l)) {
+                return new YandexId(l);
+            }
 
-        if (reader.TryGetGuid(out var guid)) {
-            return new YandexId(guid);
+            if (Guid.TryParse(s, out var guid)) {
+                return new YandexId(guid);
+            }
         }
-
+        else if (reader.TokenType == JsonTokenType.Number) {
+            var int64 = reader.GetInt64();
+            return new YandexId(int64);
+        }
         throw new NotSupportedException("Current value seems doesn't look like any known YandexId type");
     }
     /// <inheritdoc />
