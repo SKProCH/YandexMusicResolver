@@ -4,7 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <Nullable>enable</Nullable>
       <LangVersion>11</LangVersion>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      
       <Authors>SKProCH</Authors>
       <PackageTags>yandex;music;yandexmusic;yandex.music</PackageTags>
       <RepositoryUrl>https://github.com/SKProCH/YandexMusicResolver.git</RepositoryUrl>
@@ -12,11 +12,7 @@
       <Description>A library aimed at searching, resolving and getting direct links to tracks, playlists or albums in Yandex.Music. Can work without authorization.</Description>
       <RepositoryType>Git</RepositoryType>
       <PackageProjectUrl>https://github.com/SKProCH/YandexMusicResolver</PackageProjectUrl>
-      <Version>6.0.0-preview1</Version>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
-      <PackageReleaseNotes>
-- Move ctors with HttpClient to factory methods
-      </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <PackageIcon>icon.png</PackageIcon>
 
