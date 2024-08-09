@@ -31,8 +31,11 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
         /// <param name="playlistLoader">Playlist loader instance for resolving albums and playlists</param>
-        public YandexMusicSearchResultLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory, IYandexMusicPlaylistLoader playlistLoader) {
-            _httpClient = httpClientFactory.GetYMusicHttpClient();
+        public YandexMusicSearchResultLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory, IYandexMusicPlaylistLoader playlistLoader)
+            : this(credentialsProvider, httpClientFactory.GetYMusicHttpClient(), playlistLoader) { }
+
+        private YandexMusicSearchResultLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient, IYandexMusicPlaylistLoader playlistLoader) {
+            _httpClient = httpClient;
             _playlistLoader = playlistLoader;
             _credentialsProvider = credentialsProvider;
         }
@@ -43,10 +46,8 @@ namespace YandexMusicResolver.Loaders {
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
         /// <param name="playlistLoader">Playlist loader instance for resolving albums and playlists</param>
-        public YandexMusicSearchResultLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient, IYandexMusicPlaylistLoader playlistLoader) {
-            _httpClient = httpClient;
-            _playlistLoader = playlistLoader;
-            _credentialsProvider = credentialsProvider;
+        public static YandexMusicSearchResultLoader CreateWithHttpClient(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient, IYandexMusicPlaylistLoader playlistLoader) {
+            return new YandexMusicSearchResultLoader(credentialsProvider, httpClient, playlistLoader);
         }
 
         /// <inheritdoc />

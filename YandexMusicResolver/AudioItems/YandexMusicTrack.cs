@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using YandexMusicResolver.Ids;
 
 namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// AudioTrackInfo wrapper to resolve track direct url
     /// </summary>
     public class YandexMusicTrack {
-        internal YandexMusicTrack(string title, List<YandexMusicArtist> authors, TimeSpan length, long id, string? uri, bool isAvailable, string? artworkUrl = null) {
+        internal YandexMusicTrack(string title, List<YandexMusicArtist> authors, TimeSpan length, YandexId id, string? uri, bool isAvailable, string? artworkUrl = null) {
             Title = title;
             Authors = authors;
             Length = length;
@@ -40,7 +41,7 @@ namespace YandexMusicResolver.AudioItems {
         /// <summary>
         /// Track id
         /// </summary>
-        public long Id { get; }
+        public YandexId Id { get; }
 
         /// <summary>
         /// Track link

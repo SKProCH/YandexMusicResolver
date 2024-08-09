@@ -12,10 +12,10 @@
       <Description>A library aimed at searching, resolving and getting direct links to tracks, playlists or albums in Yandex.Music. Can work without authorization.</Description>
       <RepositoryType>Git</RepositoryType>
       <PackageProjectUrl>https://github.com/SKProCH/YandexMusicResolver</PackageProjectUrl>
-      <Version>5.1.0</Version>
+      <Version>6.0.0-preview1</Version>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <PackageReleaseNotes>
-- Add YandexCredentials class for YandexCredentialsProvider
+- Move ctors with HttpClient to factory methods
       </PackageReleaseNotes>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <PackageIcon>icon.png</PackageIcon>

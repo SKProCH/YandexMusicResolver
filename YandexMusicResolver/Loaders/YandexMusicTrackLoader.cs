@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Config;
+using YandexMusicResolver.Ids;
 using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Loaders {
@@ -22,23 +23,34 @@ namespace YandexMusicResolver.Loaders {
         /// </summary>
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
-        public YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory) {
+        public YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, IHttpClientFactory httpClientFactory)
+            : this(credentialsProvider, httpClientFactory.GetYMusicHttpClient()) { }
+
+        private YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
             _credentialsProvider = credentialsProvider;
-            _httpClient = httpClientFactory.GetYMusicHttpClient();
-        }        
-        
+            _httpClient = httpClient;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicTrackLoader"/> class.
         /// </summary>
         /// <param name="credentialsProvider">Config instance for performing requests</param>
         /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
-        public YandexMusicTrackLoader(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
-            _credentialsProvider = credentialsProvider;
-            _httpClient = httpClient;
+        public static YandexMusicTrackLoader CreateWithHttpClient(IYandexCredentialsProvider credentialsProvider, HttpClient httpClient) {
+            return new YandexMusicTrackLoader(credentialsProvider, httpClient);
         }
 
         /// <inheritdoc />
-        public async Task<YandexMusicTrack?> LoadTrack(long trackId) {
+        public Task<YandexMusicTrack?> LoadTrack(long trackId) => LoadTrack(trackId.ToString());
+
+        /// <inheritdoc />
+        public Task<YandexMusicTrack?> LoadTrack(Guid trackId) => LoadTrack(trackId.ToString());
+
+        /// <inheritdoc />
+        public Task<YandexMusicTrack?> LoadTrack(YandexId trackId) => LoadTrack(trackId.ToString());
+
+        /// <inheritdoc />
+        public async Task<YandexMusicTrack?> LoadTrack(string trackId) {
             try {
                 var url = TracksInfoFormat + trackId;
                 var response = await _httpClient.PerformYMusicRequestAsync<List<MetaTrack>>(_credentialsProvider, url);
@@ -50,7 +62,16 @@ namespace YandexMusicResolver.Loaders {
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) {
+        public Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<long> trackIds) => LoadTracks(trackIds.Select(l => l.ToString()));
+
+        /// <inheritdoc />
+        public Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<Guid> trackIds) => LoadTracks(trackIds.Select(l => l.ToString()));
+
+        /// <inheritdoc />
+        public Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<YandexId> trackIds) => LoadTracks(trackIds.Select(l => l.ToString()));
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyCollection<YandexMusicTrack>> LoadTracks(IEnumerable<string> trackIds) {
             try {
                 var trackIdsString = string.Join(",", trackIds);
                 var url = TracksInfoFormat + trackIdsString;

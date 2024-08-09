@@ -1,4 +1,7 @@
-﻿namespace YandexMusicResolver.AudioItems {
+﻿using System.Text.Json.Serialization;
+using YandexMusicResolver.Ids;
+
+namespace YandexMusicResolver.AudioItems {
     /// <summary>
     /// Represent a artist in Yandex Music
     /// </summary>
@@ -6,7 +9,8 @@
         /// <summary>
         /// Artist ID
         /// </summary>
-        public long Id { get; set; }
+        [JsonConverter(typeof(YandexIdConverter))]
+        public YandexId Id { get; set; }
 
         /// <summary>
         /// Artist name
