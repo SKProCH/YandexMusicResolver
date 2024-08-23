@@ -3,7 +3,7 @@ using Xunit;
 using YandexMusicResolver.AudioItems;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicMainResolverTest : YandexTestBase{
+    public class MainResolverTest : YandexTestBase{
         [Theory]
         [InlineData("https://music.yandex.ru/album/9425747/track/55561798")]
         public void GetTrack(string url) {
@@ -47,7 +47,8 @@ namespace YandexMusicResolver.Tests {
         [InlineData("Take over")]
         [InlineData("ymsearch:Track:10:Take over")]
         public void TestDisabledSearch(string query) {
-            var yandexMusicMainResolver = new YandexMusicMainResolver(YandexCredentialsProviderMock.Object, new HttpClient()) {AllowSearch = false};
+            var yandexMusicMainResolver = YandexMusicMainResolver.Create(YandexCredentialsProviderMock.Object, new HttpClient());
+            yandexMusicMainResolver.AllowSearch = false;
             var audioItem = yandexMusicMainResolver.ResolveQuery(query).GetAwaiter().GetResult();
             Assert.Null(audioItem);
         }
@@ -56,7 +57,8 @@ namespace YandexMusicResolver.Tests {
         [InlineData("Take over", true)]
         [InlineData("ymsearch:Track:10:Take over", false)]
         public void TestDisabledPlainTextSearch(string query, bool isPlainText) {
-            var yandexMusicMainResolver = new YandexMusicMainResolver(YandexCredentialsProviderMock.Object, new HttpClient()) {PlainTextIsSearchQuery = false};
+            var yandexMusicMainResolver = YandexMusicMainResolver.Create(YandexCredentialsProviderMock.Object, new HttpClient());
+            yandexMusicMainResolver.PlainTextIsSearchQuery = false;
             var audioItem = yandexMusicMainResolver.ResolveQuery(query).GetAwaiter().GetResult();
             Assert.Equal(isPlainText, audioItem == null);
         }

@@ -12,7 +12,7 @@ namespace YandexMusicResolver.Tests {
 
         public YandexTestBase() {
             YandexCredentialsProviderMock = AutoMocker.GetMock<IYandexCredentialsProvider>();
-            MainResolver = new YandexMusicMainResolver(YandexCredentialsProviderMock.Object, new HttpClient());
+            MainResolver = YandexMusicMainResolver.Create(YandexCredentialsProviderMock.Object, new HttpClient());
         }
     }
 }

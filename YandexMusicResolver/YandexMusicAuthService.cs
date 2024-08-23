@@ -30,8 +30,16 @@ public class YandexMusicAuthService : IYandexMusicAuthService {
     /// Create instance of <see cref="YandexMusicAuthService"/>
     /// </summary>
     /// <param name="httpClient">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
-    public YandexMusicAuthService(HttpClient httpClient) {
+    private YandexMusicAuthService(HttpClient httpClient) {
         _httpClient = httpClient;
+    }
+
+    /// <summary>
+    /// Create instance of <see cref="YandexMusicAuthService"/>
+    /// </summary>
+    /// <param name="httpClient">HttpClient for performing requests. But preferred way is use ctor and pass <see cref="IHttpClientFactory"/></param>
+    public static YandexMusicAuthService Create(HttpClient httpClient) {
+        return new YandexMusicAuthService(httpClient);
     }
 
     /// <inheritdoc />

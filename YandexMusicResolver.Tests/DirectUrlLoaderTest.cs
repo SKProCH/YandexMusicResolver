@@ -3,9 +3,9 @@ using Xunit;
 using Xunit.Abstractions;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicDirectUrlLoaderTest : YandexTestBase{
+    public class DirectUrlLoaderTest : YandexTestBase{
         private readonly ITestOutputHelper _output;
-        public YandexMusicDirectUrlLoaderTest(ITestOutputHelper output) {
+        public DirectUrlLoaderTest(ITestOutputHelper output) {
             _output = output;
         }
 

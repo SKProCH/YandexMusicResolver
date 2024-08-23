@@ -1,7 +1,7 @@
 ﻿using Xunit;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicPlaylistLoaderTest : YandexTestBase {
+    public class PlaylistLoaderTest : YandexTestBase {
         [Theory]
         [InlineData("9425747", "Renovatio", 12)]
         [InlineData("12033669", "Take Over", 1)]
