@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Authentication;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace YandexMusicResolver.Config;
 
@@ -18,33 +19,60 @@ public class YandexCredentialsProvider : IYandexCredentialsProvider {
     /// <summary>
     /// Initializes a new <see cref="YandexCredentialsProvider"/> with login, password, token and <see cref="IYandexMusicAuthService"/>
     /// </summary>
-    public YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, string login, string password, string? token = null) {
+    private YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, string login, string password, string? token = null) {
         _yandexMusicAuthService = yandexMusicAuthService;
         _login = login;
         _password = password;
         _token = token;
         AllowAnonymous = false;
     }
-    
+
+    /// <summary>
+    /// Initializes a new <see cref="YandexCredentialsProvider"/> with login, password, token and <see cref="IYandexMusicAuthService"/>
+    /// </summary>
+    public static YandexCredentialsProvider Create(IYandexMusicAuthService yandexMusicAuthService, string login, string password, string? token = null) {
+        return new YandexCredentialsProvider(yandexMusicAuthService, login, password, token);
+    }
+
     /// <summary>
     /// Initializes a new <see cref="YandexCredentialsProvider"/>
     /// </summary>
-    public YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, string token, bool allowAnonymous) {
+    private YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, string token, bool allowAnonymous) {
         _yandexMusicAuthService = yandexMusicAuthService;
         _token = token;
         AllowAnonymous = allowAnonymous;
     }
-    
+
     /// <summary>
-    /// Initializes a new <see cref="YandexCredentialsProvider"/> with anonymizes access
+    /// Initializes a new <see cref="YandexCredentialsProvider"/> using token
     /// </summary>
-    public YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, YandexCredentials credentials) {
+    public static YandexCredentialsProvider Create(IYandexMusicAuthService yandexMusicAuthService, string token, bool allowAnonymous) {
+        return new YandexCredentialsProvider(yandexMusicAuthService, token, allowAnonymous);
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="YandexCredentialsProvider"/>
+    /// </summary>
+    private YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService, YandexCredentials credentials) {
         _yandexMusicAuthService = yandexMusicAuthService;
         _login = credentials.Login;
         _password = credentials.Login;
         _token = credentials.Token;
         AllowAnonymous = credentials.AllowAnonymous;
     }
+
+    /// <summary>
+    /// Initializes a new <see cref="YandexCredentialsProvider"/>
+    /// </summary>
+    public static YandexCredentialsProvider Create(IYandexMusicAuthService yandexMusicAuthService, YandexCredentials credentials) {
+        return new YandexCredentialsProvider(yandexMusicAuthService, credentials);
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="YandexCredentialsProvider"/>
+    /// </summary>
+    public YandexCredentialsProvider(IYandexMusicAuthService yandexMusicAuthService,
+        IOptions<YandexCredentials> credentials) : this(yandexMusicAuthService, credentials.Value) { }
 
     /// <inheritdoc />
     public async Task<string?> GetTokenAsync() {

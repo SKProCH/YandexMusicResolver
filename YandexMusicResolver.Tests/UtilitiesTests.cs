@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Moq.AutoMock;
 using Moq.Contrib.HttpClient;
@@ -8,7 +9,7 @@ using Xunit;
 using YandexMusicResolver.Config;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicUtilitiesTests {
+    public class UtilitiesTests {
         [Fact]
         public async Task PerformYMusicRequestAsync_ShouldCallTokenVerifyIfUnauthorized() {
             var autoMocker = new AutoMocker();
@@ -30,6 +31,17 @@ namespace YandexMusicResolver.Tests {
             credProviderMock.Verify(provider => provider.ValidateOrRetrieveTokenAsync(), Times.Once);
             
             httpClientMock.VerifyAnyRequest(Times.Exactly(2));
+        }
+
+        [Fact]
+        public void ShouldPropertyRegisterAllServices()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddYandexMusicResolver();
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var yandexMusicMainResolver = serviceProvider.GetRequiredService<IYandexMusicMainResolver>();
         }
     }
 }

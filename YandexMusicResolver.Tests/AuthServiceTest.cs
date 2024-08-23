@@ -3,11 +3,11 @@ using System.Security.Authentication;
 using Xunit;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicAuthServiceTest : YandexTestBase {
+    public class AuthServiceTest : YandexTestBase {
         [Fact]
         public async System.Threading.Tasks.Task AuthFailure() {
             await Assert.ThrowsAsync<InvalidCredentialException>(async () => {
-                await new YandexMusicAuthService(new HttpClient()).LoginAsync("Invalid", "Invalid");
+                await YandexMusicAuthService.Create(new HttpClient()).LoginAsync("Invalid", "Invalid");
             });
         }
     }

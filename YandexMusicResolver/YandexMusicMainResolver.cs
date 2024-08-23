@@ -27,37 +27,53 @@ namespace YandexMusicResolver {
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
         /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
         /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
-        public YandexMusicMainResolver(IYandexCredentialsProvider credentialsProvider,
-                                       IHttpClientFactory clientFactory,
-                                       IYandexMusicPlaylistLoader? playlistLoader = null,
-                                       IYandexMusicTrackLoader? trackLoader = null,
-                                       IYandexMusicDirectUrlLoader? directUrlLoader = null,
-                                       IYandexMusicSearchResultLoader? searchResultLoader = null) {
-            TrackLoader = trackLoader ??= new YandexMusicTrackLoader(credentialsProvider, clientFactory);
-            DirectUrlLoader = directUrlLoader ??= new YandexMusicDirectUrlLoader(credentialsProvider, clientFactory);
-            PlaylistLoader = playlistLoader ??= new YandexMusicPlaylistLoader(credentialsProvider, clientFactory, trackLoader);
-            SearchResultLoader = searchResultLoader ??= new YandexMusicSearchResultLoader(credentialsProvider, clientFactory, playlistLoader);
+        public YandexMusicMainResolver(IYandexMusicPlaylistLoader playlistLoader, IYandexMusicTrackLoader trackLoader,
+            IYandexMusicDirectUrlLoader directUrlLoader, IYandexMusicSearchResultLoader searchResultLoader) {
+            TrackLoader = trackLoader;
+            DirectUrlLoader = directUrlLoader;
+            PlaylistLoader = playlistLoader;
+            SearchResultLoader = searchResultLoader;
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
         /// </summary>
         /// <param name="credentialsProvider">Yandex config instance</param>
-        /// <param name="client">HttpClient for performing requests. But preferred way is use another ctor and pass <see cref="IHttpClientFactory"/></param>
+        /// <param name="clientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
         /// <param name="playlistLoader">Instance of <see cref="YandexMusicPlaylistLoader"/></param>
         /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
         /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
         /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
-        public YandexMusicMainResolver(IYandexCredentialsProvider credentialsProvider,
-                                       HttpClient client,
-                                       IYandexMusicPlaylistLoader? playlistLoader = null,
-                                       IYandexMusicTrackLoader? trackLoader = null,
-                                       IYandexMusicDirectUrlLoader? directUrlLoader = null,
-                                       IYandexMusicSearchResultLoader? searchResultLoader = null) {
-            TrackLoader = trackLoader ??= YandexMusicTrackLoader.CreateWithHttpClient(credentialsProvider, client);
-            DirectUrlLoader = directUrlLoader ??= YandexMusicDirectUrlLoader.CreateWithHttpClient(credentialsProvider, client);
-            PlaylistLoader = playlistLoader ??= YandexMusicPlaylistLoader.CreateWithHttpClient(credentialsProvider, client, trackLoader);
-            SearchResultLoader = searchResultLoader ??= YandexMusicSearchResultLoader.CreateWithHttpClient(credentialsProvider, client, playlistLoader);
+        public static YandexMusicMainResolver Create(IYandexCredentialsProvider credentialsProvider,
+            IHttpClientFactory clientFactory, IYandexMusicPlaylistLoader? playlistLoader = null,
+            IYandexMusicTrackLoader? trackLoader = null, IYandexMusicDirectUrlLoader? directUrlLoader = null,
+            IYandexMusicSearchResultLoader? searchResultLoader = null) =>
+            Create(credentialsProvider, clientFactory.GetYMusicHttpClient(),
+                playlistLoader, trackLoader, directUrlLoader, searchResultLoader);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
+        /// </summary>
+        /// <param name="credentialsProvider">Yandex config instance</param>
+        /// <param name="client">HttpClient for performing requests. But preferred way is use
+        /// <see cref="Create(YandexMusicResolver.Config.IYandexCredentialsProvider,System.Net.Http.IHttpClientFactory,YandexMusicResolver.Loaders.IYandexMusicPlaylistLoader?,YandexMusicResolver.Loaders.IYandexMusicTrackLoader?,YandexMusicResolver.Loaders.IYandexMusicDirectUrlLoader?,YandexMusicResolver.Loaders.IYandexMusicSearchResultLoader?)"/>
+        /// and pass <see cref="IHttpClientFactory"/></param>
+        /// <param name="playlistLoader">Instance of <see cref="YandexMusicPlaylistLoader"/></param>
+        /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
+        /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
+        /// <param name="searchResultLoader">Instance of <see cref="YandexMusicSearchResultLoader"/></param>
+        public static YandexMusicMainResolver Create(IYandexCredentialsProvider credentialsProvider,
+            HttpClient client,
+            IYandexMusicPlaylistLoader? playlistLoader = null,
+            IYandexMusicTrackLoader? trackLoader = null,
+            IYandexMusicDirectUrlLoader? directUrlLoader = null,
+            IYandexMusicSearchResultLoader? searchResultLoader = null) {
+            trackLoader ??= YandexMusicTrackLoader.CreateWithHttpClient(credentialsProvider, client);
+            directUrlLoader ??= YandexMusicDirectUrlLoader.CreateWithHttpClient(credentialsProvider, client);
+            playlistLoader ??= YandexMusicPlaylistLoader.CreateWithHttpClient(credentialsProvider, client, trackLoader);
+            searchResultLoader ??= YandexMusicSearchResultLoader.CreateWithHttpClient(credentialsProvider, client, playlistLoader);
+
+            return new YandexMusicMainResolver(playlistLoader, trackLoader, directUrlLoader, searchResultLoader);
         }
 
         /// <inheritdoc />
@@ -83,8 +99,8 @@ namespace YandexMusicResolver {
 
         /// <inheritdoc />
         public async Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null,
-                                                                 bool? plainTextIsSearchQueryOverride = null,
-                                                                 YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
+            bool? plainTextIsSearchQueryOverride = null,
+            YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
             var trackMatch = TrackUrlRegex.Match(query);
             if (trackMatch.Success) {
                 var tracks = new List<YandexMusicTrack>();
@@ -92,17 +108,20 @@ namespace YandexMusicResolver {
                 var yandexMusicTrack = await TrackLoader.LoadTrack(Convert.ToInt64(trackMatch.Groups[2].Value));
                 if (yandexMusicTrack != null) tracks.Add(yandexMusicTrack);
 
-                return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null, tracks.AsReadOnly());
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null,
+                    tracks.AsReadOnly());
             }
 
             var playlistMatch = PlaylistUrlRegex.Match(query);
             if (playlistMatch.Success) {
                 var playlists = new List<YandexMusicPlaylist>();
 
-                var playlist = await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
+                var playlist =
+                    await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
                 if (playlist != null) playlists.Add(playlist);
 
-                return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null, playlists.AsReadOnly(), null);
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,
+                    playlists.AsReadOnly(), null);
             }
 
             var albumMatch = AlbumUrlRegex.Match(query);
@@ -112,7 +131,8 @@ namespace YandexMusicResolver {
                 var album = await PlaylistLoader.LoadAlbum(albumMatch.Groups[1].Value);
                 if (album != null) albums.Add(album);
 
-                return new YandexMusicSearchResult(query, false, YandexSearchType.Album, albums.AsReadOnly(), null, null);
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Album, albums.AsReadOnly(), null,
+                    null);
             }
 
             if (!(allowSearchOverride ?? AllowSearch)) return null;
@@ -133,8 +153,8 @@ namespace YandexMusicResolver {
 
         /// <inheritdoc />
         public bool CanResolveQuery(string query, bool? allowSearchOverride = null,
-                                    bool? plainTextIsSearchQueryOverride = null,
-                                    YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
+            bool? plainTextIsSearchQueryOverride = null,
+            YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
             var trackMatch = TrackUrlRegex.Match(query);
             if (trackMatch.Success) return true;
 

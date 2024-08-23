@@ -5,7 +5,7 @@ using YandexMusicResolver.Config;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicSearchResultLoaderTest : YandexTestBase {
+    public class SearchResultLoaderTest : YandexTestBase {
         [Fact]
         public void DoTrackSearch() {
             var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over").GetAwaiter().GetResult();

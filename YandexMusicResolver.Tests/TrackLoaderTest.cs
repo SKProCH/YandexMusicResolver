@@ -4,7 +4,7 @@ using Xunit;
 using YandexMusicResolver.Loaders;
 
 namespace YandexMusicResolver.Tests {
-    public class YandexMusicTrackLoaderTest : YandexTestBase {
+    public class TrackLoaderTest : YandexTestBase {
         [Theory]
         [InlineData(9425747, 55561798)]
         [InlineData(12033669, 70937156)]
