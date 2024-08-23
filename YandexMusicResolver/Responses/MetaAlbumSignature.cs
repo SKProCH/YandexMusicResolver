@@ -2,28 +2,28 @@
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
-namespace YandexMusicResolver.Responses {
-    internal class MetaAlbumSignature {
-        public long Id { get; set; }
+namespace YandexMusicResolver.Responses;
 
-        public long Year { get; set; }
+internal class MetaAlbumSignature {
+    public long Id { get; set; }
 
-        public List<YandexMusicArtist> Artists { get; set; } = null!;
+    public long Year { get; set; }
 
-        public string? CoverUri { get; set; }
+    public List<YandexMusicArtist> Artists { get; set; } = null!;
 
-        public long TrackCount { get; set; }
+    public string? CoverUri { get; set; }
 
-        public string Genre { get; set; } = null!;
+    public long TrackCount { get; set; }
 
-        public bool Available { get; set; }
+    public string Genre { get; set; } = null!;
 
-        public bool AvailableForPremiumUsers { get; set; }
+    public bool Available { get; set; }
 
-        public string Title { get; set; }
+    public bool AvailableForPremiumUsers { get; set; }
 
-        public virtual YandexMusicAlbum ToYmAlbum(IYandexMusicPlaylistLoader loader) {
-            return new(Id, Year, Artists, CoverUri, TrackCount, Genre, Title, loader);
-        }
+    public string Title { get; set; }
+
+    public virtual YandexMusicAlbum ToYmAlbum(IYandexMusicPlaylistLoader loader) {
+        return new(Id, Year, Artists, CoverUri, TrackCount, Genre, Title, loader);
     }
 }

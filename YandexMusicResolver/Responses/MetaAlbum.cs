@@ -4,21 +4,21 @@ using System.Text.Json.Serialization;
 using YandexMusicResolver.AudioItems;
 using YandexMusicResolver.Loaders;
 
-namespace YandexMusicResolver.Responses {
-    internal class MetaAlbum : MetaAlbumSignature {
-        [JsonPropertyName("volumes")]
-        public List<List<MetaTrack>> Tracks { get; set; } = new();
+namespace YandexMusicResolver.Responses;
 
-        public string OgImage { get; set; }
+internal class MetaAlbum : MetaAlbumSignature {
+    [JsonPropertyName("volumes")]
+    public List<List<MetaTrack>> Tracks { get; set; } = new();
 
-        public override YandexMusicAlbum ToYmAlbum(IYandexMusicPlaylistLoader loader) {
-            var artwork = CoverUri;
-            if (string.IsNullOrEmpty(artwork)) {
-                artwork = OgImage;
-            }
+    public string OgImage { get; set; }
 
-            return new YandexMusicAlbum(Id, Year, Artists, artwork, TrackCount, Genre, Title,
-                Tracks.SelectMany(list => list).Select(track => track.ToYmTrack()).ToList());
+    public override YandexMusicAlbum ToYmAlbum(IYandexMusicPlaylistLoader loader) {
+        var artwork = CoverUri;
+        if (string.IsNullOrEmpty(artwork)) {
+            artwork = OgImage;
         }
+
+        return new YandexMusicAlbum(Id, Year, Artists, artwork, TrackCount, Genre, Title,
+            Tracks.SelectMany(list => list).Select(track => track.ToYmTrack()).ToList());
     }
 }

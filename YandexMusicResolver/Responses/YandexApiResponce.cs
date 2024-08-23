@@ -1,7 +1,7 @@
-﻿namespace YandexMusicResolver.Responses {
-    internal class YandexApiResponse<T> {
-        public T? Result { get; set; }
+﻿namespace YandexMusicResolver.Responses;
 
-        public MetaError? Error { get; set; }
-    }
+internal class YandexApiResponse<T> {
+    public T? Result { get; set; }
+
+    public MetaError? Error { get; set; }
 }

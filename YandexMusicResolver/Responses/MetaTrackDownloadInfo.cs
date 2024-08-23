@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace YandexMusicResolver.Responses {
-    internal class MetaTrackDownloadInfo {
-        public string Codec { get; set; } = null!;
+namespace YandexMusicResolver.Responses;
 
-        public bool Gain { get; set; }
+internal class MetaTrackDownloadInfo {
+    public string Codec { get; set; } = null!;
 
-        public bool Preview { get; set; }
+    public bool Gain { get; set; }
 
-        public Uri DownloadInfoUrl { get; set; } = null!;
+    public bool Preview { get; set; }
 
-        public bool Direct { get; set; }
+    public Uri DownloadInfoUrl { get; set; } = null!;
 
-        public long BitrateInKbps { get; set; }
-    }
+    public bool Direct { get; set; }
+
+    public long BitrateInKbps { get; set; }
 }
