@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,11 +13,11 @@ public class DirectUrlLoaderTest : YandexTestBase{
     }
 
     [Theory]
-    [InlineData(43413021)]
+    [InlineData(135525714)]
     [InlineData(37637150)]
-    public void DirectLoadTest(long trackId) {
-        var result = MainResolver.DirectUrlLoader.GetDirectUrl(trackId, "mp3").GetAwaiter().GetResult();
-        var webRequest = (HttpWebResponse)WebRequest.Create(result).GetResponse();
+    public async Task DirectLoadTest(long trackId) {
+        var result = await MainResolver.DirectUrlLoader.GetDirectUrl(trackId, "mp3");
+        var webRequest = await new HttpClient().GetAsync(result, HttpCompletionOption.ResponseHeadersRead);
         Assert.Equal(HttpStatusCode.OK, webRequest.StatusCode);
         _output.WriteLine(result);
     }

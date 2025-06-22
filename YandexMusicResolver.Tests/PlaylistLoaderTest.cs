@@ -1,13 +1,14 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace YandexMusicResolver.Tests;
 
 public class PlaylistLoaderTest : YandexTestBase {
     [Theory]
     [InlineData("9425747", "Renovatio", 12)]
-    [InlineData("12033669", "Take Over", 1)]
-    public void LoadAlbum(string albumId, string expectedName, int trackCount) {
-        var album = MainResolver.PlaylistLoader.LoadAlbum(albumId).GetAwaiter().GetResult();
+    [InlineData("35135225", "Atomic Heart, Vol.5", 23)]
+    public async Task LoadAlbum(string albumId, string expectedName, int trackCount) {
+        var album = await MainResolver.PlaylistLoader.LoadAlbum(albumId);
         Assert.NotNull(album);
         Assert.Equal(expectedName, album.Title);
         Assert.Equal(trackCount, album.Data.Count);
@@ -18,8 +19,8 @@ public class PlaylistLoaderTest : YandexTestBase {
     [InlineData("universe0122", "1000")]
     [InlineData("olga--g", "1001")]
     [InlineData("ShadowKillerProPro", "1006")]
-    public void LoadPlaylist(string userId, string playlistId) {
-        var playlist = MainResolver.PlaylistLoader.LoadPlaylist(userId, playlistId).GetAwaiter().GetResult();
+    public async Task LoadPlaylist(string userId, string playlistId) {
+        var playlist = await MainResolver.PlaylistLoader.LoadPlaylist(userId, playlistId);
         Assert.NotNull(playlist);
         Assert.False(string.IsNullOrWhiteSpace(playlist.Title));
         Assert.True(playlist.Data.Count > 0);

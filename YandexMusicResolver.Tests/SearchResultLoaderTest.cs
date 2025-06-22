@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 using YandexMusicResolver.Config;
 using YandexMusicResolver.Loaders;
@@ -8,22 +9,22 @@ namespace YandexMusicResolver.Tests;
 
 public class SearchResultLoaderTest : YandexTestBase {
     [Fact]
-    public void DoTrackSearch() {
-        var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over").GetAwaiter().GetResult();
+    public async Task DoTrackSearch() {
+        var trackSearchResult = await MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Track, "Take Over");
         Assert.NotNull(trackSearchResult);
         Assert.NotNull(trackSearchResult?.Tracks);
     }
         
     [Fact]
-    public void DoAlbumSearch() {
-        var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over").GetAwaiter().GetResult();
+    public async Task DoAlbumSearch() {
+        var trackSearchResult = await MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Album, "Take Over");
         Assert.NotNull(trackSearchResult);
         Assert.NotNull(trackSearchResult?.Albums);
     }
         
     [Fact]
-    public void DoAllSearch() {
-        var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over").GetAwaiter().GetResult();
+    public async Task DoAllSearch() {
+        var trackSearchResult = await MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.All, "Take Over");
         Assert.NotNull(trackSearchResult);
         Assert.NotNull(trackSearchResult?.Albums);
         Assert.NotNull(trackSearchResult?.Playlists);
@@ -31,8 +32,8 @@ public class SearchResultLoaderTest : YandexTestBase {
     }
         
     [Fact]
-    public void DoPlaylistSearch() {
-        var trackSearchResult = MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over").GetAwaiter().GetResult();
+    public async Task DoPlaylistSearch() {
+        var trackSearchResult = await MainResolver.SearchResultLoader.LoadSearchResult(YandexSearchType.Playlist, "Take Over");
         Assert.NotNull(trackSearchResult);
         Assert.NotNull(trackSearchResult?.Playlists);
     }

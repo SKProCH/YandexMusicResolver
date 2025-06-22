@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 using YandexMusicResolver.AudioItems;
 
@@ -7,8 +8,8 @@ namespace YandexMusicResolver.Tests;
 public class MainResolverTest : YandexTestBase{
     [Theory]
     [InlineData("https://music.yandex.ru/album/9425747/track/55561798")]
-    public void GetTrack(string url) {
-        var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
+    public async Task GetTrack(string url) {
+        var audioItem = await MainResolver.ResolveQuery(url);
         Assert.NotNull(audioItem);
         Assert.False(audioItem.IsSearchResult);
         Assert.NotNull(audioItem.Tracks);
@@ -20,8 +21,8 @@ public class MainResolverTest : YandexTestBase{
         
     [Theory]
     [InlineData("https://music.yandex.ru/album/9425747")]
-    public void GetAlbum(string url) {
-        var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
+    public async Task GetAlbum(string url) {
+        var audioItem = await MainResolver.ResolveQuery(url);
         Assert.NotNull(audioItem);
         Assert.False(audioItem.IsSearchResult);
         Assert.NotNull(audioItem.Albums);
@@ -33,8 +34,8 @@ public class MainResolverTest : YandexTestBase{
         
     [Theory]
     [InlineData("https://music.yandex.ru/users/enlivenbot/playlists/1000")]
-    public void GetPlaylist(string url) {
-        var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
+    public async Task GetPlaylist(string url) {
+        var audioItem = await MainResolver.ResolveQuery(url);
         Assert.NotNull(audioItem);
         Assert.False(audioItem.IsSearchResult);
         Assert.NotNull(audioItem.Playlists);
@@ -47,27 +48,27 @@ public class MainResolverTest : YandexTestBase{
     [Theory]
     [InlineData("Take over")]
     [InlineData("ymsearch:Track:10:Take over")]
-    public void TestDisabledSearch(string query) {
+    public async Task TestDisabledSearch(string query) {
         var yandexMusicMainResolver = YandexMusicMainResolver.Create(YandexCredentialsProviderMock.Object, new HttpClient());
         yandexMusicMainResolver.AllowSearch = false;
-        var audioItem = yandexMusicMainResolver.ResolveQuery(query).GetAwaiter().GetResult();
+        var audioItem = await yandexMusicMainResolver.ResolveQuery(query);
         Assert.Null(audioItem);
     }
 
     [Theory]
     [InlineData("Take over", true)]
     [InlineData("ymsearch:Track:10:Take over", false)]
-    public void TestDisabledPlainTextSearch(string query, bool isPlainText) {
+    public async Task TestDisabledPlainTextSearch(string query, bool isPlainText) {
         var yandexMusicMainResolver = YandexMusicMainResolver.Create(YandexCredentialsProviderMock.Object, new HttpClient());
         yandexMusicMainResolver.PlainTextIsSearchQuery = false;
-        var audioItem = yandexMusicMainResolver.ResolveQuery(query).GetAwaiter().GetResult();
+        var audioItem = await yandexMusicMainResolver.ResolveQuery(query);
         Assert.Equal(isPlainText, audioItem == null);
     }
 
     [Theory]
     [InlineData("Take Over")]
-    public void TestSearch(string url) {
-        var audioItem = MainResolver.ResolveQuery(url).GetAwaiter().GetResult();
+    public async Task TestSearch(string url) {
+        var audioItem = await MainResolver.ResolveQuery(url);
         Assert.NotNull(audioItem);
         Assert.IsType<YandexMusicSearchResult>(audioItem);
     }
