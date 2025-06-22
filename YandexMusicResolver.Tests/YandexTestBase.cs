@@ -14,5 +14,6 @@ public class YandexTestBase {
     public YandexTestBase() {
         YandexCredentialsProviderMock = AutoMocker.GetMock<IYandexCredentialsProvider>();
         MainResolver = YandexMusicMainResolver.Create(YandexCredentialsProviderMock.Object, new HttpClient());
+        MainResolver.PlainTextIsSearchQuery = false;
     }
 }
