@@ -66,13 +66,16 @@ public static class YandexMusicUtilities {
         
     internal static async Task<T> ParseYMusicResponseAsync<T>(this HttpResponseMessage response) {
         var responseStream = await response.Content.ReadAsStreamAsync();
-        var yandexApiResponse = await JsonSerializer.DeserializeAsync<YandexApiResponse<T>>(responseStream, DefaultJsonSerializerOptions)
+        if (response.IsSuccessStatusCode) {
+            var yandexApiResponse = await JsonSerializer.DeserializeAsync<YandexApiResponse<T>>(responseStream, DefaultJsonSerializerOptions)
+                                    ?? throw new InvalidOperationException();
+            if (yandexApiResponse.Result != null) return yandexApiResponse.Result;
+            throw new Exception("YandexMusic API returned success code and missing result");
+        }
+        
+        var errorResult = await JsonSerializer.DeserializeAsync<YandexApiResponse<MetaError>>(responseStream, DefaultJsonSerializerOptions)
                                 ?? throw new InvalidOperationException();
-
-        if (yandexApiResponse.Result != null) return yandexApiResponse.Result;
-        if (yandexApiResponse.Error != null) throw new YandexApiResponseException("Couldn't get API response result.", yandexApiResponse.Error);
-        response.EnsureSuccessStatusCode();
-        throw new Exception("Couldn't get API response result.");
+        throw new YandexApiResponseException(errorResult.Result!, response.StatusCode);
     }
 
     private static HttpRequestMessage FormHttpRequestMessage(string url, string? token, HttpContent? httpContent, HttpMethod? method) {
