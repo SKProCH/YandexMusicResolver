@@ -11,9 +11,9 @@ namespace YandexMusicResolver;
 
 /// <inheritdoc />
 public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
-    private const string TrackUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)$";
-    private const string AlbumUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/album/([0-9]+)$";
-    private const string PlaylistUrlPattern = "^https?://music\\.yandex\\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)$";
+    private const string TrackUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)";
+    private const string AlbumUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/album/([0-9]+)";
+    private const string PlaylistUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)";
 
     private static readonly Regex TrackUrlRegex = new(TrackUrlPattern);
     private static readonly Regex AlbumUrlRegex = new(AlbumUrlPattern);
