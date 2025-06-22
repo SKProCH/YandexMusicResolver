@@ -22,26 +22,28 @@ Can work without authorization.
    - Or instantiate it as usually:
      1. Create auth service instance (`YandexMusicAuthService` this is the default implementation):
          ```csharp#
-         var authService = new YandexMusicAuthService(httpClient);
+         var authService = YandexMusicAuthService.Create(httpClient);
+         // or
+         var authService = new YandexMusicAuthService(httpClientFactory);
          ```
          Actually, **preferred way is to use `IHttpClientFactory`** to pass it to all services.
          If you use `IHttpClientFactory` default HttpClient name is `YandexMusic`.
     
      2. Create credentials provider instance (`YandexCredentialsProvider` this is the default implementation):
          ```csharp#
-         var credentialProvider = new YandexMusicAuthService(authService, "Login", "Pass");
+         var credentialProvider = YandexCredentialsProvider.Create(authService, "Login", "Pass");
          ```
 
      3. Create an instance of `YandexMusicMainResolver` and pass config to it
          ```csharp
-         var yandexMusicMainResolver = new YandexMusicMainResolver(credentialProvider, httpClient);
+         var yandexMusicMainResolver = YandexMusicMainResolver.Create(credentialProvider, httpClient);
          ```
      Full example:
      ```csharp
      var httpClient = new HttpClient();
-     var authService = new YandexMusicAuthService.Create(httpClient);
-     var credentialProvider = new YandexMusicAuthService.Create(authService, "Login", "Pass");
-     var yandexMusicMainResolver = new YandexMusicMainResolver.Create(credentialProvider, httpClient);
+     var authService = YandexMusicAuthService.Create(httpClient);
+     var credentialProvider = YandexCredentialsProvider.Create(authService, "Login", "Pass");
+     var yandexMusicMainResolver = YandexMusicMainResolver.Create(credentialProvider, httpClient);
      ```
 3. After that you can use different methods and properties of `IYandexMusicMainResolver`.
    Example code for getting direct track download url:
