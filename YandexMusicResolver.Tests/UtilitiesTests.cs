@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Moq.AutoMock;
 using Moq.Contrib.HttpClient;
 using Xunit;
 using YandexMusicResolver.Config;
+using YandexMusicResolver.Responses;
 
 namespace YandexMusicResolver.Tests;
 
@@ -43,5 +45,19 @@ public class UtilitiesTests {
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var yandexMusicMainResolver = serviceProvider.GetRequiredService<IYandexMusicMainResolver>();
+    }
+    
+    [Fact]
+    public async Task PerformYMusicRequestAsync_ShouldHandleErrors()
+    {
+        var httpClient = new HttpClient();
+        // Unavailable track
+        var exception = await Assert.ThrowsAsync<YandexApiResponseException>(() =>
+            httpClient.PerformYMusicRequestAsync<List<MetaTrackDownloadInfo>>(
+                YandexAnonymousCredentialProvider.Instance,
+                "https://api.music.yandex.net/tracks/43413021/download-info"));
+        
+        Assert.Equal("no-rights", exception.ApiMetaError?.Message);
+        Assert.Equal(HttpStatusCode.Forbidden, exception.HttpStatusCode);
     }
 }
