@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,10 @@ public static class YandexMusicUtilities {
     /// Name for resolving <see cref="HttpClient"/> from <see cref="IHttpClientFactory.CreateClient"/>
     /// </summary>
     public const string HttpClientName = "YandexMusic";
-    internal static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
+
+    internal static readonly JsonSerializerOptions DefaultJsonSerializerOptions =
+        new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
+
     internal static string CreateMd5(string input) {
         // Use input string to calculate MD5 hash
         using var md5 = MD5.Create();
@@ -40,13 +44,15 @@ public static class YandexMusicUtilities {
     internal static HttpClient GetYMusicHttpClient(this IHttpClientFactory factory)
         => factory.CreateClient(HttpClientName);
 
-    internal static async Task<T> PerformYMusicRequestAsync<T>(this HttpClient httpClient, IYandexCredentialsProvider? credentialsProvider,
+    internal static async Task<T> PerformYMusicRequestAsync<T>(this HttpClient httpClient,
+        IYandexCredentialsProvider? credentialsProvider,
         string url, HttpContent? httpContent = null, HttpMethod? method = null) {
         var response = await PerformYMusicRequestAsync(httpClient, credentialsProvider, url, httpContent, method);
         return await ParseYMusicResponseAsync<T>(response);
     }
 
-    internal static async Task<HttpResponseMessage> PerformYMusicRequestAsync(this HttpClient httpClient, IYandexCredentialsProvider? credentialsProvider,
+    internal static async Task<HttpResponseMessage> PerformYMusicRequestAsync(this HttpClient httpClient,
+        IYandexCredentialsProvider? credentialsProvider,
         string url, HttpContent? httpContent = null, HttpMethod? method = null) {
         var token = credentialsProvider == null ? null : await credentialsProvider.GetTokenAsync();
         var httpRequestMessage = FormHttpRequestMessage(url, token, httpContent, method);
@@ -63,22 +69,36 @@ public static class YandexMusicUtilities {
 
         return response;
     }
-        
+
     internal static async Task<T> ParseYMusicResponseAsync<T>(this HttpResponseMessage response) {
         var responseStream = await response.Content.ReadAsStreamAsync();
         if (response.IsSuccessStatusCode) {
-            var yandexApiResponse = await JsonSerializer.DeserializeAsync<YandexApiResponse<T>>(responseStream, DefaultJsonSerializerOptions)
-                                    ?? throw new InvalidOperationException();
+            var yandexApiResponse =
+                await JsonSerializer.DeserializeAsync<YandexApiResponse<T>>(responseStream,
+                    DefaultJsonSerializerOptions)
+                ?? throw new InvalidOperationException();
             if (yandexApiResponse.Result != null) return yandexApiResponse.Result;
             throw new Exception("YandexMusic API returned success code and missing result");
         }
-        
-        var errorResult = await JsonSerializer.DeserializeAsync<YandexApiResponse<MetaError>>(responseStream, DefaultJsonSerializerOptions)
-                                ?? throw new InvalidOperationException();
-        throw new YandexApiResponseException(errorResult.Result!, response.StatusCode);
+
+        using var streamReader = new StreamReader(responseStream);
+        var errorString = await streamReader.ReadToEndAsync();
+
+        try {
+            var errorResult =
+                JsonSerializer.Deserialize<YandexApiResponse<MetaError>>(errorString, DefaultJsonSerializerOptions)
+                ?? throw new InvalidOperationException();
+
+            throw new YandexApiResponseException(errorResult.Result!, response.StatusCode);
+        }
+        catch (Exception) {
+            var apiMetaError = new MetaError { Name = "Unparseable error from Yandex Music API", Message = errorString };
+            throw new YandexApiResponseException(apiMetaError, response.StatusCode);
+        }
     }
 
-    private static HttpRequestMessage FormHttpRequestMessage(string url, string? token, HttpContent? httpContent, HttpMethod? method) {
+    private static HttpRequestMessage FormHttpRequestMessage(string url, string? token, HttpContent? httpContent,
+        HttpMethod? method) {
         var httpRequestMessage = new HttpRequestMessage(method ?? HttpMethod.Get, url);
         httpRequestMessage.Headers.Add("User-Agent", "Yandex-Music-API");
         httpRequestMessage.Headers.Add("X-Yandex-Music-Client", "WindowsPhone/3.20");
@@ -86,9 +106,11 @@ public static class YandexMusicUtilities {
         if (token != null) {
             httpRequestMessage.Headers.Add("Authorization", "OAuth " + token);
         }
+
         if (httpContent != null) {
             httpRequestMessage.Content = httpContent;
         }
+
         return httpRequestMessage;
     }
 }
