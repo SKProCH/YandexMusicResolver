@@ -171,6 +171,9 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
         YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
         var trackMatch = TrackUrlRegex.Match(query);
         if (trackMatch.Success) return true;
+        
+        var playlistUuidMatch = PlaylistUuidUrlRegex.Match(query);
+        if (playlistUuidMatch.Success) return true;
 
         var playlistMatch = PlaylistUrlRegex.Match(query);
         if (playlistMatch.Success) return true;
