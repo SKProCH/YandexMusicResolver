@@ -25,4 +25,14 @@ public class PlaylistLoaderTest : YandexTestBase {
         Assert.False(string.IsNullOrWhiteSpace(playlist.Title));
         Assert.True(playlist.Data.Count > 0);
     }
+    
+    [Theory]
+    [InlineData("lk.aa3d0094-6960-405c-bcc0-60b3c3c8cf5e")]
+    [InlineData("lk.e82a550e-63f9-4c8d-8ed0-ae15056051d8")]
+    public async Task LoadPlaylistByGuid(string playlistGuid) {
+        var playlist = await MainResolver.PlaylistLoader.LoadPlaylist(playlistGuid);
+        Assert.NotNull(playlist);
+        Assert.False(string.IsNullOrWhiteSpace(playlist.Title));
+        Assert.True(playlist.Data.Count > 0);
+    }
 }

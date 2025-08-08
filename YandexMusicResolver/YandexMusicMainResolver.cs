@@ -14,10 +14,12 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
     private const string TrackUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)";
     private const string AlbumUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/album/([0-9]+)";
     private const string PlaylistUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)";
+    private const string PlaylistUuidUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/playlists/(\S+)";
 
     private static readonly Regex TrackUrlRegex = new(TrackUrlPattern);
     private static readonly Regex AlbumUrlRegex = new(AlbumUrlPattern);
     private static readonly Regex PlaylistUrlRegex = new(PlaylistUrlPattern);
+    private static readonly Regex PlaylistUuidUrlRegex = new(PlaylistUuidUrlPattern);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
@@ -112,13 +114,24 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
             return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null,
                 tracks.AsReadOnly());
         }
+        
+        var playlistUuidMatch = PlaylistUuidUrlRegex.Match(query);
+        if (playlistUuidMatch.Success) {
+            var playlists = new List<YandexMusicPlaylist>();
+
+            var playlist = await PlaylistLoader.LoadPlaylist(playlistUuidMatch.Groups[1].Value);
+            if (playlist != null) playlists.Add(playlist);
+
+            return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,
+                playlists.AsReadOnly(), null);
+        }
 
         var playlistMatch = PlaylistUrlRegex.Match(query);
         if (playlistMatch.Success) {
             var playlists = new List<YandexMusicPlaylist>();
 
-            var playlist =
-                await PlaylistLoader.LoadPlaylist(playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
+            var playlist = await PlaylistLoader.LoadPlaylist(
+                playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
             if (playlist != null) playlists.Add(playlist);
 
             return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,

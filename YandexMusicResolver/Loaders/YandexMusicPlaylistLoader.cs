@@ -11,10 +11,11 @@ namespace YandexMusicResolver.Loaders;
 /// <inheritdoc />
 public class YandexMusicPlaylistLoader : IYandexMusicPlaylistLoader {
     private const string PlaylistInfoFormat = "https://api.music.yandex.net/users/{0}/playlists/{1}";
+    private const string PlaylistUuidInfoFormat = "https://api.music.yandex.net/playlist/{0}";
     private const string AlbumInfoFormat = "https://api.music.yandex.net/albums/{0}/with-tracks";
     private readonly IYandexCredentialsProvider _yandexCredentialsProvider;
     private readonly IYandexMusicTrackLoader? _trackLoader;
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YandexMusicPlaylistLoader"/> class.
@@ -40,11 +41,20 @@ public class YandexMusicPlaylistLoader : IYandexMusicPlaylistLoader {
     public static YandexMusicPlaylistLoader CreateWithHttpClient(IYandexCredentialsProvider yandexCredentialsProvider, HttpClient httpClient, IYandexMusicTrackLoader? trackLoader = null) {
         return new YandexMusicPlaylistLoader(yandexCredentialsProvider, httpClient, trackLoader);
     }
+    
+    /// <inheritdoc />
+    public async Task<YandexMusicPlaylist?> LoadPlaylist(string playlistUuid) {
+        return await LoadPlaylistCore(string.Format(PlaylistUuidInfoFormat, playlistUuid));
+    }
 
     /// <inheritdoc />
     public async Task<YandexMusicPlaylist?> LoadPlaylist(string userId, string playlistKind) {
+        return await LoadPlaylistCore(string.Format(PlaylistInfoFormat, userId, playlistKind));
+    }
+
+    private async Task<YandexMusicPlaylist?> LoadPlaylistCore(string url)
+    {
         try {
-            string url = string.Format(PlaylistInfoFormat, userId, playlistKind);
             var playlistData = await _httpClient.PerformYMusicRequestAsync<MetaPlaylist>(_yandexCredentialsProvider, url);
             if (playlistData.Tracks == null) {
                 throw new Exception("Empty playlist found.");
