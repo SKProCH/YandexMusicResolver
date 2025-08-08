@@ -84,17 +84,16 @@ public static class YandexMusicUtilities {
         using var streamReader = new StreamReader(responseStream);
         var errorString = await streamReader.ReadToEndAsync();
 
+        YandexApiResponse<MetaError> errorResult;
         try {
-            var errorResult =
-                JsonSerializer.Deserialize<YandexApiResponse<MetaError>>(errorString, DefaultJsonSerializerOptions)
-                ?? throw new InvalidOperationException();
-
-            throw new YandexApiResponseException(errorResult.Result!, response.StatusCode);
+            errorResult = JsonSerializer.Deserialize<YandexApiResponse<MetaError>>(errorString, DefaultJsonSerializerOptions)
+                          ?? throw new InvalidOperationException();
         }
         catch (Exception) {
             var apiMetaError = new MetaError { Name = "Unparseable error from Yandex Music API", Message = errorString };
             throw new YandexApiResponseException(apiMetaError, response.StatusCode);
         }
+        throw new YandexApiResponseException(errorResult.Result!, response.StatusCode);
     }
 
     private static HttpRequestMessage FormHttpRequestMessage(string url, string? token, HttpContent? httpContent,
