@@ -37,6 +37,7 @@ public class MainResolverTest : YandexTestBase
 
     [Theory]
     [InlineData("https://music.yandex.ru/users/enlivenbot/playlists/1000")]
+    [InlineData("https://music.yandex.ru/playlists/lk.e82a550e-63f9-4c8d-8ed0-ae15056051d8")]
     public async Task GetPlaylist(string url)
     {
         var audioItem = await MainResolver.ResolveQuery(url);
