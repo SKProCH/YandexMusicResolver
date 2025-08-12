@@ -10,22 +10,22 @@ using YandexMusicResolver.Loaders;
 namespace YandexMusicResolver;
 
 /// <inheritdoc />
-public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
-    private const string TrackUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/album/([0-9]+)/track/([0-9]+)";
-    private const string AlbumUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/album/([0-9]+)";
-    private const string PlaylistUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/users/(.+)/playlists/([0-9]+)";
-    private const string PlaylistUuidUrlPattern = @"^https?://music\.yandex\.[a-zA-Z]+/playlists/(\S+)";
-
-    private static readonly Regex TrackUrlRegex = new(TrackUrlPattern);
-    private static readonly Regex AlbumUrlRegex = new(AlbumUrlPattern);
-    private static readonly Regex PlaylistUrlRegex = new(PlaylistUrlPattern);
-    private static readonly Regex PlaylistUuidUrlRegex = new(PlaylistUuidUrlPattern);
+public sealed partial class YandexMusicMainResolver : IYandexMusicMainResolver {
+    private const string UrlRegexPattern =
+        @"^https?://music\.yandex\.[a-zA-Z]+/" + 
+        "(?:(?:album/(?<albumId>[0-9]+)/track/(?<trackId>[0-9]+))" +
+        "|(?:album/(?<albumOnlyId>[0-9]+))" +
+        "|(?:users/(?<userId>[^/]+)/playlists/(?<playlistId>[0-9]+))" +
+        "|(?:playlists/(?<playlistUuid>\\S+)))";
+#if NET9_0_OR_GREATER
+    [GeneratedRegex(UrlRegexPattern)] private static partial Regex UrlParserRegex { get; }
+#else
+    private static Regex UrlParserRegex { get; } = new(UrlRegexPattern);
+#endif
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YandexMusicMainResolver"/> class.
     /// </summary>
-    /// <param name="credentialsProvider">Yandex config instance</param>
-    /// <param name="clientFactory">Factory for resolving HttpClient. Client name is <see cref="YandexMusicUtilities.HttpClientName"/></param>
     /// <param name="playlistLoader">Instance of <see cref="YandexMusicPlaylistLoader"/></param>
     /// <param name="trackLoader">Instance of <see cref="YandexMusicTrackLoader"/></param>
     /// <param name="directUrlLoader">Instance of <see cref="YandexMusicDirectUrlLoader"/></param>
@@ -74,7 +74,8 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
         trackLoader ??= YandexMusicTrackLoader.CreateWithHttpClient(credentialsProvider, client);
         directUrlLoader ??= YandexMusicDirectUrlLoader.CreateWithHttpClient(credentialsProvider, client);
         playlistLoader ??= YandexMusicPlaylistLoader.CreateWithHttpClient(credentialsProvider, client, trackLoader);
-        searchResultLoader ??= YandexMusicSearchResultLoader.CreateWithHttpClient(credentialsProvider, client, playlistLoader);
+        searchResultLoader ??=
+            YandexMusicSearchResultLoader.CreateWithHttpClient(credentialsProvider, client, playlistLoader);
 
         return new YandexMusicMainResolver(playlistLoader, trackLoader, directUrlLoader, searchResultLoader);
     }
@@ -104,53 +105,64 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
     public async Task<YandexMusicSearchResult?> ResolveQuery(string query, bool? allowSearchOverride = null,
         bool? plainTextIsSearchQueryOverride = null,
         YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
-        var trackMatch = TrackUrlRegex.Match(query);
-        if (trackMatch.Success) {
-            var tracks = new List<YandexMusicTrack>();
+        var match = UrlParserRegex.Match(query);
 
-            var yandexMusicTrack = await TrackLoader.LoadTrack(Convert.ToInt64(trackMatch.Groups[2].Value));
-            if (yandexMusicTrack != null) tracks.Add(yandexMusicTrack);
+        if (match.Success) {
+            if (match.Groups["trackId"].Success) {
+                var tracks = new List<YandexMusicTrack>(1);
 
-            return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null,
-                tracks.AsReadOnly());
+                var yandexMusicTrack = await TrackLoader.LoadTrack(Convert.ToInt64(match.Groups["trackId"].Value));
+                if (yandexMusicTrack != null) {
+                    tracks.Add(yandexMusicTrack);
+                }
+
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Track, null, null,
+                    tracks.AsReadOnly());
+            }
+
+            if (match.Groups["albumOnlyId"].Success) {
+                var albums = new List<YandexMusicAlbum>(1);
+
+                var album = await PlaylistLoader.LoadAlbum(match.Groups["albumOnlyId"].Value);
+                if (album != null) {
+                    albums.Add(album);
+                }
+
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Album, albums.AsReadOnly(), null,
+                    null);
+            }
+
+            if (match.Groups["playlistId"].Success) {
+                var playlists = new List<YandexMusicPlaylist>(1);
+
+                var playlist = await PlaylistLoader.LoadPlaylist(
+                    match.Groups["userId"].Value, match.Groups["playlistId"].Value);
+                if (playlist != null) {
+                    playlists.Add(playlist);
+                }
+
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,
+                    playlists.AsReadOnly(), null);
+            }
+
+            if (match.Groups["playlistUuid"].Success) {
+                var playlists = new List<YandexMusicPlaylist>();
+
+                var playlist = await PlaylistLoader.LoadPlaylist(match.Groups["playlistUuid"].Value);
+                if (playlist != null) {
+                    playlists.Add(playlist);
+                }
+
+                return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,
+                    playlists.AsReadOnly(), null);
+            }
         }
-        
-        var playlistUuidMatch = PlaylistUuidUrlRegex.Match(query);
-        if (playlistUuidMatch.Success) {
-            var playlists = new List<YandexMusicPlaylist>();
 
-            var playlist = await PlaylistLoader.LoadPlaylist(playlistUuidMatch.Groups[1].Value);
-            if (playlist != null) playlists.Add(playlist);
-
-            return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,
-                playlists.AsReadOnly(), null);
+        if (!(allowSearchOverride ?? AllowSearch)) {
+            return null;
         }
 
-        var playlistMatch = PlaylistUrlRegex.Match(query);
-        if (playlistMatch.Success) {
-            var playlists = new List<YandexMusicPlaylist>();
-
-            var playlist = await PlaylistLoader.LoadPlaylist(
-                playlistMatch.Groups[1].Value, playlistMatch.Groups[2].Value);
-            if (playlist != null) playlists.Add(playlist);
-
-            return new YandexMusicSearchResult(query, false, YandexSearchType.Playlist, null,
-                playlists.AsReadOnly(), null);
-        }
-
-        var albumMatch = AlbumUrlRegex.Match(query);
-        if (albumMatch.Success) {
-            var albums = new List<YandexMusicAlbum>();
-
-            var album = await PlaylistLoader.LoadAlbum(albumMatch.Groups[1].Value);
-            if (album != null) albums.Add(album);
-
-            return new YandexMusicSearchResult(query, false, YandexSearchType.Album, albums.AsReadOnly(), null,
-                null);
-        }
-
-        if (!(allowSearchOverride ?? AllowSearch)) return null;
-        string searchText = query;
+        var searchText = query;
         var searchType = plainTextAsSearchQueryTypeOverride ?? PlainTextIsSearchQueryType;
         var searchLimit = 10;
         var needSearch = plainTextIsSearchQueryOverride ?? PlainTextIsSearchQuery;
@@ -161,7 +173,10 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
             needSearch = true;
         }
 
-        if (needSearch) return await SearchResultLoader.LoadSearchResult(searchType, searchText, searchLimit);
+        if (needSearch) {
+            return await SearchResultLoader.LoadSearchResult(searchType, searchText, searchLimit);
+        }
+
         return null;
     }
 
@@ -169,17 +184,9 @@ public sealed class YandexMusicMainResolver : IYandexMusicMainResolver {
     public bool CanResolveQuery(string query, bool? allowSearchOverride = null,
         bool? plainTextIsSearchQueryOverride = null,
         YandexSearchType? plainTextAsSearchQueryTypeOverride = null) {
-        var trackMatch = TrackUrlRegex.Match(query);
-        if (trackMatch.Success) return true;
-        
-        var playlistUuidMatch = PlaylistUuidUrlRegex.Match(query);
-        if (playlistUuidMatch.Success) return true;
-
-        var playlistMatch = PlaylistUrlRegex.Match(query);
-        if (playlistMatch.Success) return true;
-
-        var albumMatch = AlbumUrlRegex.Match(query);
-        if (albumMatch.Success) return true;
+        if (UrlParserRegex.IsMatch(query)) {
+            return true;
+        }
 
         if (!(allowSearchOverride ?? AllowSearch)) return false;
         var needSearch = plainTextIsSearchQueryOverride ?? PlainTextIsSearchQuery;
