@@ -15,6 +15,7 @@ public sealed partial class YandexMusicMainResolver : IYandexMusicMainResolver {
         @"^https?://music\.yandex\.[a-zA-Z]+/" + 
         "(?:(?:album/(?<albumId>[0-9]+)/track/(?<trackId>[0-9]+))" +
         "|(?:album/(?<albumOnlyId>[0-9]+))" +
+        "|(?:track/(?<trackId>[0-9]+))" +
         "|(?:users/(?<userId>[^/]+)/playlists/(?<playlistId>[0-9]+))" +
         "|(?:playlists/(?<playlistUuid>\\S+)))";
 #if NET9_0_OR_GREATER

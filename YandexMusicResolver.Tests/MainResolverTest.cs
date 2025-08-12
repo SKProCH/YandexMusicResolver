@@ -9,6 +9,8 @@ public class MainResolverTest : YandexTestBase
 {
     [Theory]
     [InlineData("https://music.yandex.ru/album/9425747/track/55561798")]
+    [InlineData("https://music.yandex.ru/track/139704442")]
+    [InlineData("https://music.yandex.ru/track/139704442?utm_source=desktop&utm_medium=copy_link")]
     public async Task GetTrack(string url)
     {
         var audioItem = await MainResolver.ResolveQuery(url);
@@ -85,11 +87,13 @@ public class MainResolverTest : YandexTestBase
     }
 
     [Theory]
-    [InlineData("https://music.yandex.ru/album/9425747/track/55561798")]
-    [InlineData("https://music.yandex.ru/album/9425747")]
-    [InlineData("https://music.yandex.ru/users/enlivenbot/playlists/1000")]
     [InlineData("ymsearch:Track:10:Take over")]
+    [InlineData("https://music.yandex.ru/album/9425747")]
+    [InlineData("https://music.yandex.ru/album/9425747/track/55561798")]
     [InlineData("https://music.yandex.ru/album/36938610/track/139888583?utm_source=desktop&utm_medium=copy_link")]
+    [InlineData("https://music.yandex.ru/track/139704442")]
+    [InlineData("https://music.yandex.ru/track/139704442?utm_source=desktop&utm_medium=copy_link")]
+    [InlineData("https://music.yandex.ru/users/enlivenbot/playlists/1000")]
     [InlineData("https://music.yandex.ru/playlists/lk.e82a550e-63f9-4c8d-8ed0-ae15056051d8")]
     public void CanResolveQuery(string url)
     {
