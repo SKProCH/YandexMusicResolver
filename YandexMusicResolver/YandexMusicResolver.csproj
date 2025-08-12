@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-      <TargetFramework>netstandard2.0</TargetFramework>
+      <TargetFrameworks>net9.0;netstandard2.0</TargetFrameworks>
       <Nullable>enable</Nullable>
-      <LangVersion>11</LangVersion>
+      <LangVersion>13</LangVersion>
       
       <Authors>SKProCH</Authors>
       <PackageTags>yandex;music;yandexmusic;yandex.music</PackageTags>
@@ -21,7 +21,7 @@
     </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
